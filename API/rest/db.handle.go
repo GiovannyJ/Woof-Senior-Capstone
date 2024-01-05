@@ -1,7 +1,7 @@
 package rest
 
 import (
-	db "API/conn"
+	db "API/database"
 	s "API/models"
 	"fmt"
 	"net/http"

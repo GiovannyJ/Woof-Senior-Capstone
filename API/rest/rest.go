@@ -21,29 +21,45 @@ func API(mode string){
 	// fmt.Println(GenerateToken("2"))
 	
 	/*
-	*=========================DATA BASE ROUTES================================
+	*=========================GET ROUTES================================
 	*/
+	
+	router.GET("users", )
+	router.GET("users/:userid/savedbusiness", )
+	router.GET("businesses", )
+	router.GET("businesses/:businessid/reviews", )
+	router.GET("businesses/:businessid/events", )
 
-	/*
-	no params = all values
-	options, base, grip, position, rotation, impact, muscle
-	? ex: http://localhost:8080/data/workout?base=barbell%20bench%20press&impact=8
-	*/
-	router.GET("/data/workout", PlaceHolder)
-
-
-	/*
-	*TESTED WORKING
-	JSON body: shaped like account struct
-	*/
-	router.POST("push/account", PlaceHolder)
 	
 
 	/*
-	*TESTED WORKING
-	JSON body: shaped like patch_account struct
+	*=========================POST ROUTES================================
 	*/
-	router.PATCH("update/account", PlaceHolder)
+	router.POST("users", )
+	router.POST("businesses", )
+	router.POST("businesses/:businessid/reviews", )
+	router.POST("businesses/:businessid/event", )
+	router.POST("users/:userid/savedbusiness", )
+	
+
+	/*
+	*=========================PATCH ROUTES================================
+	*/
+	router.PATCH("users", )
+	router.PATCH("businesses", )
+	router.PATCH("businesses/:businessid/reviews", )
+	router.PATCH("businesses/:businessid/event", )
+	router.PATCH("users/:userid/savedbusiness/:savedbusinessid", )
+
+
+	/*
+	*=========================DELETE ROUTES================================
+	*/
+	router.DELETE("users", )
+	router.DELETE("businesses", )
+	router.DELETE("businesses/:businessid/reviews", )
+	router.DELETE("businesses/:businessid/event", )
+	router.DELETE("users/:userid/savedbusiness/:savedbusinessid", )
 
 	
 	/*
