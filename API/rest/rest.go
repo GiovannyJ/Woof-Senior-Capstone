@@ -66,18 +66,18 @@ func API(mode string){
 	*=========================FILE HANDLER ROUTES================================
 	*/
 
-	/*
-	*WORKING
-	!NEEDS MORE TESTS
-	upload files in JSON FORMAT
-	*/
-	router.POST("/uploads", PlaceHolder)
+	// /*
+	// *WORKING
+	// !NEEDS MORE TESTS
+	// upload files in JSON FORMAT
+	// */
+	// router.POST("/uploads", PlaceHolder)
 
-	/*
-	*WORKING
-	retrieve file in JSON
-	*/
-	router.GET("/uploads/:file", PlaceHolder)
+	// /*
+	// *WORKING
+	// retrieve file in JSON
+	// */
+	// router.GET("/uploads/:file", PlaceHolder)
 
 
 	/*

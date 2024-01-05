@@ -14,14 +14,11 @@ returns .env variable
 */
 func EnvVar(key string) string {
 
-  if _, runningInsideContainer := os.LookupEnv("DOCKER_CONTAINER"); !runningInsideContainer {
-    // load .env file
-    err := godotenv.Load(".env")
-  
-    if err != nil {
-      log.Fatalf("Error loading .env file")
-    } 
-  }
+  err := godotenv.Load(".env")
+
+  if err != nil {
+    log.Fatalf("Error loading .env file")
+  } 
   
   return os.Getenv(key)
 }

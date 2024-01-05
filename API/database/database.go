@@ -11,12 +11,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type account = s.Account
-type posts = s.Posts
-type comments = s.Comment
-type commentfullcontext = s.CommentFullContext
-type fullcontextpost = s.FullContextPost
-type images = s.Images
+type user = s.User
+type business = s.Business
+type savedBusiness = s.SavedBusiness
+type event = s.Event
+type review = s.Review
 
 /*
 *TEST PASSING
@@ -52,12 +51,12 @@ func connect(query string) (*sql.Rows, error) {
 
 /*
 *TESTED WORKING
-getting all accounts query
-returns: all accounts in database
+getting all users query
+returns: all users in database
 */
-func Accounts_GET(params map[string]interface{}) ([]account, error) {
+func Users_GET(params map[string]interface{}) ([]user, error) {
     var sql strings.Builder
-    sql.WriteString("SELECT * FROM ACCOUNTS")
+    sql.WriteString("SELECT * FROM USER")
 
 	if len(params) > 0 {
 		var conditions []string
@@ -83,20 +82,16 @@ func Accounts_GET(params map[string]interface{}) ([]account, error) {
     }
     defer result.Close()
 
-    var values []account
+    var values []user
     
     for result.Next(){
-		var t account
+		var t user
 		if err := result.Scan(
-			&t.ID,
-			&t.Fname,
-			&t.Lname,
-			&t.Fullname,
-			&t.Email,
-			&t.Pwd,
-			&t.Pnum,
-			&t.Username,
-			&t.Accesslvl,
+			&t.UserID,
+            &t.Username,
+            &t.Pwd,
+            &t.Email,
+            &t.AccountType,
 		); err != nil {
 			return values, err
 		}
@@ -114,9 +109,9 @@ func Accounts_GET(params map[string]interface{}) ([]account, error) {
 *TESTED WORKING
 Gets all posts from table
 */
-func Posts_GET(params map[string]interface{}) ([]posts, error) {
+func Business_GET(params map[string]interface{}) ([]business, error) {
     var sql strings.Builder
-    sql.WriteString("SELECT * FROM POSTS")
+    sql.WriteString("SELECT * FROM BUSINESSES")
 
 	if len(params) > 0 {
 		var conditions []string
@@ -141,20 +136,20 @@ func Posts_GET(params map[string]interface{}) ([]posts, error) {
     }
     defer result.Close()
 
-    var values []posts
+    var values []business
     
     for result.Next(){
-		var t posts
+		var t business
 		if err := result.Scan(
-				&t.ID, 
-				&t.Title, 
-				&t.Descr,
-				&t.Genre,
-				&t.AuthorID,
-				&t.NumUp,
-				&t.NumDown,
-				&t.PicID,
-				&t.PostedDate,
+            &t.BusinessID,
+            &t.BusinessName,
+            &t.OwnerID,      		
+            &t.BusinessType,
+            &t.BusinessLocation,
+            &t.Contact,	 			
+            &t.Descr,
+            &t.Events,
+            &t.Rating,
 				); err != nil{
 			return values, nil
 		}
@@ -165,78 +160,6 @@ func Posts_GET(params map[string]interface{}) ([]posts, error) {
 		return values, err
     }
         
-    return values, nil
-}
-
-/*
-*TESTED WORKING
-gets all posts from database in full context
-joined POSTS with ACCOUNTS and IMAGES
-*/
-func PostsFullContext_GET(params map[string]interface{}) ([]fullcontextpost, error) {
-    var sql strings.Builder
-    sql.WriteString("SELECT p.*, a.fullname, a.username, a.accesslvl, i.imgname FROM POSTS p")
-    sql.WriteString(" INNER JOIN ACCOUNTS a ON p.authorID = a.id")
-    sql.WriteString(" INNER JOIN IMAGES i ON p.picID = i.id")
-
-    if len(params) > 0 {
-		var conditions []string
-		var orderby string
-        for name, value := range params {
-			if name == "order"{
-				orderby = fmt.Sprintf(" ORDER BY %s", value)
-				}else{
-				condition := fmt.Sprintf("%s='%v'", name, value)
-				conditions = append(conditions, condition)
-			}
-        }
-		if len(conditions) > 0{
-			sql.WriteString(" WHERE ")
-			sql.WriteString(strings.Join(conditions, " AND "))
-		}
-		sql.WriteString(orderby)
-    }
-	
-	result, err := connect(sql.String())
-    if err != nil {
-        return nil, err
-    }
-    defer result.Close()
-
-    var values []fullcontextpost
-
-    for result.Next() {
-        var t fullcontextpost
-        var author account
-        var image images
-
-        if err := result.Scan(
-            &t.ID,
-            &t.Title,
-            &t.Descr,
-            &t.Genre,
-			&author.ID,
-            &t.NumUp,
-            &t.NumDown,
-			&image.ID,
-			&t.PostedDate,
-            &author.Fullname,
-            &author.Username,
-			&author.Accesslvl,
-			&image.ImgName,
-        ); err != nil {
-            return values, err
-        }
-
-        t.AuthorInfo = author
-        t.ImageInfo = image
-        values = append(values, t)
-    }
-
-    if err = result.Err(); err != nil {
-        return values, err
-    }
-
     return values, nil
 }
 
@@ -245,9 +168,9 @@ func PostsFullContext_GET(params map[string]interface{}) ([]fullcontextpost, err
 *TESTED WORKING
 gets all comments associated with postID and query strings
 */
-func Comments_GET(params map[string]interface{}, postID int) ([]comments, error) {
+func SavedBusiness_GET(params map[string]interface{}) ([]savedBusiness, error) {
     var sql strings.Builder
-    sql.WriteString("SELECT * FROM COMMENTS")
+    sql.WriteString("SELECT * FROM SAVEDBUSINESSES")
 
 	if len(params) > 0 {
 		var conditions []string
@@ -263,43 +186,28 @@ func Comments_GET(params map[string]interface{}, postID int) ([]comments, error)
 		if len(conditions) > 0{
 			sql.WriteString(" WHERE ")
 			sql.WriteString(strings.Join(conditions, " AND "))
-			postIDQuery := fmt.Sprintf(" AND postID = %d", postID)
-			sql.WriteString(postIDQuery)
-		}else{
-			postIDQuery := fmt.Sprintf(" WHERE postID = %d", postID)
-			sql.WriteString(postIDQuery)
 		}
 		sql.WriteString(orderby)
-    }else{
-		postIDQuery := fmt.Sprintf(" WHERE postID = %d", postID)
-		sql.WriteString(postIDQuery)
-	}
-
-
+    }
     result, err := connect(sql.String())
     if err != nil {
         return nil, err
     }
     defer result.Close()
 
-    var values []comments
+    var values []savedBusiness
     
     for result.Next(){
-		var t comments
+		var t savedBusiness
 		if err := result.Scan(
-				&t.ID, 
-				&t.PostID,
-				&t.AuthorID,
-				&t.Content,
-				&t.NumUp,
-				&t.NumDown,
-				&t.PostedDate,
+            &t.BusinessID,
+            &t.UserID,
 				); err != nil{
 			return values, nil
 		}
 		values = append(values, t)
 	}
-	
+
     if err = result.Err(); err != nil{
 		return values, err
     }
@@ -308,26 +216,11 @@ func Comments_GET(params map[string]interface{}, postID int) ([]comments, error)
 }
 
 
-/*
-*TESTED WORKING
-gets all comments associated with postID in full context
-*/
-func CommentsFullContext_GET(params map[string]interface{}, postID int) ([]commentfullcontext, error) {
+func Event_GET(params map[string]interface{}) ([]event, error) {
     var sql strings.Builder
-	sql.WriteString("SELECT c.id, c.numUp as numUpComments, c.numDown as numDownComments, ")
-	sql.WriteString("c.postedDate as commentPostedDate, c.content, p.id as postID, p.title,")
-	sql.WriteString("p.descr, p.genre, p.numUp, p.numDown, p.postedDate as postPostedDate,")
-	sql.WriteString("i.imgname, ")
-	sql.WriteString("a.username as posterAuthor, a.email as posterEmail, a.id, a.accesslvl  ")
-	sql.WriteString(",a2.username as commenterAuthor, a2.email as commenterEmail, a2.id, a2.accesslvl")
-	sql.WriteString(" FROM COMMENTS c" )
-	sql.WriteString(" INNER JOIN POSTS p ON c.postID = p.id")
-	sql.WriteString(" INNER JOIN IMAGES i ON p.picID = i.id" )
-	sql.WriteString(" INNER JOIN ACCOUNTS a ON a.id  = p.authorID" )
-	sql.WriteString(" INNER JOIN ACCOUNTS a2 on a2.id = c.authorID")
+    sql.WriteString("SELECT * FROM EVENTS")
 
-
-    if len(params) > 0 {
+	if len(params) > 0 {
 		var conditions []string
 		var orderby string
         for name, value := range params {
@@ -341,128 +234,150 @@ func CommentsFullContext_GET(params map[string]interface{}, postID int) ([]comme
 		if len(conditions) > 0{
 			sql.WriteString(" WHERE ")
 			sql.WriteString(strings.Join(conditions, " AND "))
-			postIDQuery := fmt.Sprintf(" AND postID = %d", postID)
-			sql.WriteString(postIDQuery)
-		}else{
-			postIDQuery := fmt.Sprintf(" WHERE postID = %d", postID)
-			sql.WriteString(postIDQuery)
 		}
 		sql.WriteString(orderby)
-    }else{
-		postIDQuery := fmt.Sprintf(" WHERE postID = %d", postID)
-		sql.WriteString(postIDQuery)
-	}
-
-	result, err := connect(sql.String())
+    }
+    result, err := connect(sql.String())
     if err != nil {
         return nil, err
     }
     defer result.Close()
 
-    var values []commentfullcontext
+    var values []event
+    
+    for result.Next(){
+		var t event
+		if err := result.Scan(
+            &t.EventID,
+            &t.BusinessID,
+            &t.EventName,
+            &t.EventDescr,
+            &t.EventDate,
+            &t.Location,
+            &t.Contact,
+				); err != nil{
+			return values, nil
+		}
+		values = append(values, t)
+	}
 
-    for result.Next() {
-        var t commentfullcontext
-		var commentInfo comments
-		var postAuthor account
-		var commentAuthor account
-		var i images
-		var postInfo posts
-
-        if err := result.Scan(
-			&commentInfo.ID,
-			&commentInfo.NumUp,
-			&commentInfo.NumDown,
-			&commentInfo.PostedDate,
-			&commentInfo.Content,
-			&postInfo.ID,
-			&postInfo.Title,
-			&postInfo.Descr,
-			&postInfo.Genre,
-			&postInfo.NumUp,
-			&postInfo.NumDown,
-			&postInfo.PostedDate,
-			&i.ImgName,
-			&postAuthor.Username,
-			&postAuthor.Email,
-			&postAuthor.ID,
-			&postAuthor.Accesslvl,
-			&commentAuthor.Username,
-			&commentAuthor.Email,
-			&commentAuthor.ID,
-			&commentAuthor.Accesslvl,
-        ); err != nil {
-            return values, err
-        }
-		t.CommentInfo = commentInfo
-		t.CommenterInfo = commentAuthor
-		t.PostInfo = postInfo
-		t.PostAuthorInfo = postAuthor
-		t.ImageInfo = i
-		t.CommentInfo.PostID = t.PostInfo.ID
-
-        values = append(values, t)
+    if err = result.Err(); err != nil{
+		return values, err
     }
-
-    if err = result.Err(); err != nil {
-        return values, err
-    }
-
+        
     return values, nil
 }
+
+func Reviews_GET(params map[string]interface{}) ([]review, error) {
+    var sql strings.Builder
+    sql.WriteString("SELECT * FROM EVENTS")
+
+	if len(params) > 0 {
+		var conditions []string
+		var orderby string
+        for name, value := range params {
+			if name == "order"{
+				orderby = fmt.Sprintf(" ORDER BY %s", value)
+				}else{
+				condition := fmt.Sprintf("%s='%v'", name, value)
+				conditions = append(conditions, condition)
+			}
+        }
+		if len(conditions) > 0{
+			sql.WriteString(" WHERE ")
+			sql.WriteString(strings.Join(conditions, " AND "))
+		}
+		sql.WriteString(orderby)
+    }
+    result, err := connect(sql.String())
+    if err != nil {
+        return nil, err
+    }
+    defer result.Close()
+
+    var values []review
+    
+    for result.Next(){
+		var t review
+		if err := result.Scan(
+            &t.ReviewID,
+            &t.UserID,
+            &t.BusinessID,
+            &t.Rating,
+            &t.Comment,
+            &t.DateCreated,
+				); err != nil{
+			return values, nil
+		}
+		values = append(values, t)
+	}
+
+    if err = result.Err(); err != nil{
+		return values, err
+    }
+        
+    return values, nil
+}
+
+
+
+//JOINED TABLES
+//GET saved business user relation
+//GET All events for business
+//Get All reviews for business
 
 /*
 *TESTED WORKING
 gets all info from IMAGES table
 */
-func Images_GET(params map[string]interface{}) ([]images, error) {
-    var sql strings.Builder
-    sql.WriteString("SELECT * FROM IMAGES")
+// func Images_GET(params map[string]interface{}) ([]images, error) {
+//     var sql strings.Builder
+//     sql.WriteString("SELECT * FROM IMAGES")
 
-	if len(params) > 0 {
-		var conditions []string
-		var orderby string
-        for name, value := range params {
-			if name == "order"{
-				orderby = fmt.Sprintf(" ORDER BY %s", value)
-				}else{
-				condition := fmt.Sprintf("%s='%v'", name, value)
-				conditions = append(conditions, condition)
-			}
-        }
-		if len(conditions) > 0{
-			sql.WriteString(" WHERE ")
-			sql.WriteString(strings.Join(conditions, " AND "))
-		}
-		sql.WriteString(orderby)
-    }
-    result, err := connect(sql.String())
-    if err != nil {
-        return nil, err
-    }
-    defer result.Close()
+// 	if len(params) > 0 {
+// 		var conditions []string
+// 		var orderby string
+//         for name, value := range params {
+// 			if name == "order"{
+// 				orderby = fmt.Sprintf(" ORDER BY %s", value)
+// 				}else{
+// 				condition := fmt.Sprintf("%s='%v'", name, value)
+// 				conditions = append(conditions, condition)
+// 			}
+//         }
+// 		if len(conditions) > 0{
+// 			sql.WriteString(" WHERE ")
+// 			sql.WriteString(strings.Join(conditions, " AND "))
+// 		}
+// 		sql.WriteString(orderby)
+//     }
+//     result, err := connect(sql.String())
+//     if err != nil {
+//         return nil, err
+//     }
+//     defer result.Close()
 
-    var values []images
+//     var values []images
     
-    for result.Next(){
-		var t images
-		if err := result.Scan(
-				&t.ID, 
-				&t.ImgName, 
-				&t.Size,
-				&t.Date,
-				); err != nil{
-			return values, nil
-		}
-		values = append(values, t)
-	}
+//     for result.Next(){
+// 		var t images
+// 		if err := result.Scan(
+// 				&t.ID, 
+// 				&t.ImgName, 
+// 				&t.Size,
+// 				&t.Date,
+// 				); err != nil{
+// 			return values, nil
+// 		}
+// 		values = append(values, t)
+// 	}
 
-    if err = result.Err(); err != nil{
-		return values, err
-    }
+//     if err = result.Err(); err != nil{
+// 		return values, err
+//     }
         
-    return values, nil
-}
+//     return values, nil
+// }
 
 
 //**+++++++++++++++++++++INSERT QUERIES++++++++++++++++++++++++++++
@@ -758,233 +673,8 @@ func DeleteComment(commentID int) error{
 }
 
 
-/*
-*------------------------------------------------------------------------------GET METHODS----------------------------------------------
-*/
-
-/*
-*TEST PASSING
-Getting muscle table data
-params:
-    nil if none
-    interface build like muscle struct if some
-return muscle data
-*/
-func GetMuscleData(params map[string]interface{}) ([]muscle) {
-    var sql strings.Builder
-    sql.WriteString("SELECT * FROM MUSCLE")
-
-    if len(params) > 0 { 
-        sql.WriteString(" WHERE ")
-        var conditions []string
-        for name, value := range params {
-            condition := fmt.Sprintf("%s='%v'", name, value)
-            conditions = append(conditions, condition)
-        }
-
-        sql.WriteString(strings.Join(conditions, " AND "))
-    }
-
-    result, err := connect(sql.String())
-    if err != nil {
-        return nil
-    }
-    defer result.Close()
-
-    var values []muscle
-    
-    for result.Next(){
-		var t muscle
-		if err := result.Scan(
-				&t.ID, 
-				&t.Name, 
-				); err != nil{
-			return values
-		}
-		values = append(values, t)
-	}
-
-    if err = result.Err(); err != nil{
-            return values
-    }
-        
-    return values
-}
 
 
-/*
-* TESTED PASSING
-Getting workout table data
-params:
-    nil if none
-    interface build like workout struct if some
-return workout data
-*/
-func GetWorkoutData(params map[string]interface{}) ([]workout) {
-    var sql strings.Builder
-    sql.WriteString("SELECT * FROM WORKOUT")
-
-    if len(params) > 0 {
-        sql.WriteString(" WHERE ")
-        var conditions []string
-        for name, value := range params {
-            // Build the parameter condition
-            condition := fmt.Sprintf("%s='%v'", name, value)
-            conditions = append(conditions, condition)
-        }
-        
-        sql.WriteString(strings.Join(conditions, " AND "))
-    }
-
-    
-    result, err := connect(sql.String())
-    if err != nil {
-        return nil
-    }
-    defer result.Close()
-
-    var values []workout
-    
-    for result.Next(){
-        var t workout
-        if err := result.Scan(
-                &t.ID, 
-                &t.Base,
-                &t.Grip,
-                &t.Rotation,
-                &t.Position, 
-                ); err != nil{
-            return values
-        }
-        values = append(values, t)
-    }
-
-    if err = result.Err(); err != nil{
-            return values
-    }
-        
-    return values
-}
-
-
-/*
-*TESTED PASSING
-Getting workout_muscle_impact table data
-params:
-    nil if none
-    interface build like wmiw struct if some
-return workout_muscle_impact inner joined w workout data
-*/
-func GetWorkoutMuscleData(params map[string]interface{}) ([]wmiw) {
-    
-    var sql strings.Builder
-    sql.WriteString("SELECT wmi.id, wmi.workoutID, wmi.muscle, wmi.impact, w.base, w.grip, w.pos, w.rot FROM WORKOUT_MUSCLE_IMPACT wmi INNER JOIN WORKOUT w ON w.id = wmi.id ")
-
-    if len(params) > 0 {
-        var conditions []string
-        var orderby string
-        for name, value := range params {
-            if name == "order"{
-                orderby = fmt.Sprintf(" ORDER BY %s", value)
-            }else if name[0:3] == "not"{
-                condition := fmt.Sprintf("%s<>'%v'", name[3:], value)
-                conditions = append(conditions, condition)
-            }else{
-                condition := fmt.Sprintf("%s='%v'", name, value)
-                conditions = append(conditions, condition)
-            }
-        }
-        if len(conditions) > 0 {
-            sql.WriteString(" WHERE ")
-            sql.WriteString(strings.Join(conditions, " AND "))
-        }
-        sql.WriteString(orderby)
-    }
-    
-    result, err := connect(sql.String())
-    if err != nil {
-        return nil
-    }
-    defer result.Close()
-
-    var values []wmiw
-    
-    for result.Next(){
-        var t wmiw
-        if err := result.Scan(
-                &t.ID, 
-                &t.WorkoutID,
-                &t.MuscleName,
-                &t.Impact,
-                &t.Base,
-                &t.Grip,
-                &t.Rotation,
-                &t.Position,
-                ); err != nil{
-            return values
-        }
-        values = append(values, t)
-    }
-
-    if err = result.Err(); err != nil{
-            return values
-    }
-        
-    return values
-}
-
-
-/*
-*TESTED PASSING
-getting all account data
-params:
-    nil if none
-    map like account struct if some
-return account data
-*/
-func GetAccountData(params map[string]interface{}) ([]account) {
-    var sql strings.Builder
-    sql.WriteString("SELECT id, fullname, email, pnum, age, username FROM ACCOUNT_INFO")
-
-    if len(params) > 0 {
-        sql.WriteString(" WHERE ")
-        var conditions []string
-        for name, value := range params {
-            condition := fmt.Sprintf("%s='%v'", name, value)
-            conditions = append(conditions, condition)
-        }
-        sql.WriteString(strings.Join(conditions, " AND "))
-    }
-
-    result, err := connect(sql.String())
-    if err != nil {
-        return nil
-    }
-    defer result.Close()
-
-    var values []account
-    
-    for result.Next(){
-        var t account
-        if err := result.Scan(
-                &t.ID, 
-                &t.Fullname,
-                &t.Email,                
-                &t.Pnum,
-                &t.Age,
-                &t.Username,
-                ); err != nil{
-            return values
-        }
-        values = append(values, t)
-    }
-
-    if err = result.Err(); err != nil{
-            return values
-    }
-        
-    return values
-}
 
 /*
 *TESTED PASSING
@@ -1045,143 +735,7 @@ func GetAccountDataSECURE(username *string, password *string, email *string) (*l
     return nil, nil
 }
 
-/*
-*TESTED PASSING
-getting all health data
-params:
-    nil if none
-    map like AccountHealthData struct if some
-return accHealth values
-*/
-func GetHealthData(params map[string]interface{}) ([]accHealth) {
-    var sql strings.Builder
-    sql.WriteString("SELECT hi.id, hi.accountID, hi.weight, hi.height, hi.BMI, hi.BMR, hi.date, ai.fullname, ai.email, ai.pnum, ai.age, ai.username FROM HEALTH_INFO hi INNER JOIN ACCOUNT_INFO ai ON ai.id = hi.accountID  ")
 
-    if len(params) > 0 {
-        var conditions []string
-        var orderby string
-        for name, value := range params {
-            if name == "order"{
-                orderby = fmt.Sprintf(" ORDER BY %s", value)
-            }else if name[0:3] == "not"{
-                condition := fmt.Sprintf("%s<>'%v'", name[3:], value)
-                conditions = append(conditions, condition)
-            }else{
-                condition := fmt.Sprintf("%s='%v'", name, value)
-                conditions = append(conditions, condition)
-            }
-        }
-        if len(conditions) > 0 {
-            sql.WriteString(" WHERE ")
-            sql.WriteString(strings.Join(conditions, " AND "))
-        }
-        sql.WriteString(orderby)
-    }
-    
-    result, err := connect(sql.String())
-    
-    if err != nil {
-        return nil
-    }
-    defer result.Close()
-
-    var values []accHealth
-
-
-    for result.Next(){
-        var t accHealth
-        if err := result.Scan(
-                &t.ID, 
-                &t.AccountID,
-                &t.Weight,
-                &t.Height,
-                &t.BMI,
-                &t.BMR,
-                &t.Date,
-                &t.Fullname,
-                &t.Email,
-                &t.Pnum,
-                &t.Age,
-                &t.Username,
-                ); err != nil{
-            return values
-        }
-        values = append(values, t)
-    }
-
-    if err = result.Err(); err != nil{
-            return values
-    }
-    return values
-}
-
-
-/*
-*TESTED PASSING
-getting all pr data
-params:
-    nil if none
-    map like PrtrackWorkout struct if some
-return list of pr values
-*/
-func GetPRData(params map[string]interface{}) ([]prworkout) {
-    var sql strings.Builder
-    sql.WriteString("SELECT pt.id, pt.workoutID, pt.accountID, pt.date, pt.reps, pt.weight, w.base, w.grip, w.pos, w.rot FROM PR_TRACKER pt INNER JOIN WORKOUT w ON w.id = pt.workoutID ")
-
-    if len(params) > 0 {
-        var conditions []string
-        var orderby string
-        for name, value := range params {
-            if name == "order"{
-                orderby = fmt.Sprintf(" ORDER BY %s", value)
-            }else if name[0:3] == "not"{
-                condition := fmt.Sprintf("%s<>'%v'", name[3:], value)
-                conditions = append(conditions, condition)
-            }else{
-                condition := fmt.Sprintf("%s='%v'", name, value)
-                conditions = append(conditions, condition)
-            }
-        }
-        if len(conditions) > 0 {
-            sql.WriteString(" WHERE ")
-            sql.WriteString(strings.Join(conditions, " AND "))
-        }
-        sql.WriteString(orderby)
-    }
-    
-    result, err := connect(sql.String())
-    if err != nil {
-        return nil
-    }
-    defer result.Close()
-
-    var values []prworkout
-    
-    for result.Next(){
-        var t prworkout
-        if err := result.Scan(
-                &t.ID, 
-                &t.WorkoutID,
-                &t.AccountID,
-                &t.Date,
-                &t.Reps,
-                &t.Weight,
-                &t.Base,
-                &t.Grip,
-                &t.Rotation,
-                &t.Position,
-                ); err != nil{
-            return values
-        }
-        values = append(values, t)
-    }
-
-    if err = result.Err(); err != nil{
-            return values
-    }
-        
-    return values
-}
 
 
 /*
@@ -1430,11 +984,6 @@ func CheckToken(userID string, tokenString string) bool {
     return false
 }
 
-
-
-// //func UploadForum(entry forumentry) error {
-//
-// }
 //*-------------------------------------------------HELPER METHODS----------------------------------------------------------------------
 func accountExist(id string) bool{
     exist_acc := map[string]interface{}{"username": id}
