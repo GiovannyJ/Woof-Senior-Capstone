@@ -47,10 +47,11 @@ func API(mode string){
 	// /*
 	// *=========================PATCH ROUTES================================
 	// */
-	// router.PATCH("users", )
-	// router.PATCH("businesses", )
-	// router.PATCH("businesses/:businessid/reviews", )
-	// router.PATCH("businesses/:businessid/event", )
+	router.PATCH("update/users", Update)
+	router.PATCH("update/users/password", )
+	router.PATCH("update/business", Update)
+	router.PATCH("update/review", Update)
+	router.PATCH("update/event", Update)
 	// router.PATCH("users/:userid/savedbusiness/:savedbusinessid", )
 
 

@@ -101,3 +101,11 @@ type Admin struct {
 	Token  *string `json:"token"`
 	Passwd *string `json:"passwd"`
 }
+
+type UpdateQuery struct {
+	TableName  string        `json:"tablename"`
+	ColumnsOld []string      `json:"columns_old"`
+	ValuesOld  []interface{} `json:"values_old"`
+	ColumnsNew []string      `json:"columns_new"`
+	ValuesNew  []interface{} `json:"values_new"`
+}

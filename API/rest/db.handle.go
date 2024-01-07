@@ -15,6 +15,8 @@ type business = s.Business
 type savedBusiness = s.SavedBusiness
 type review = s.Review
 type event = s.Event
+type updatequery = s.UpdateQuery
+
 /*
 *=================GET METHOD HANDLERS==================
  */
@@ -632,40 +634,34 @@ func Login(c *gin.Context){
 }
 
 
-// /*
-// *=================PATCH METHOD HANDLERS==================
-//  */
+/*
+*=================PATCH METHOD HANDLERS==================
+ */
 
-// /*
-// *TESTED WORKING
-// updates account in database
-// request body shaped like updateAccount struct
-// */
-// func UpdateAcc(c *gin.Context) {
-// 	c.Header("Access-Control-Allow-Origin", "*")
+/*
+*TESTED WORKING
+updates value in database based on table name
+request body shaped like PATCH_REQUESTS/*.json files
+*/
+func Update(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
 
-// 	var upACC updateAcc
+	var update updatequery
 
-// 	if err := c.BindJSON(&upACC); err != nil {
-// 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
-// 		return
-// 	}
+	if err := c.BindJSON(&update); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
 
-// 	err := db.UpdateData(upACC.Old, upACC.New)
+	err := db.UpdateData(update)
 
-// 	if err != nil {
-// 		if _, ok := err.(*s.UpdateNotCompleteError); ok {
-// 			c.IndentedJSON(http.StatusFailedDependency, gin.H{"error": err})
-// 		} else {
-// 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
-// 			return
-// 		}
-// 		return
-// 	}
-// 	c.IndentedJSON(http.StatusOK, upACC.New)
-// }
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
 
-
+	c.IndentedJSON(http.StatusOK, update)
+}
 
 // /*
 // *=================DELETE METHOD HANDLERS==================

@@ -22,7 +22,7 @@ type businessEvents = s.BusinessEvents
 type review = s.Review
 type businessReview = s.BusinessReview
 type admin = s.Admin
-
+type updatequery = s.UpdateQuery
 /*
 *TEST PASSING
 CONNECTION TO DATABASE
@@ -648,63 +648,44 @@ func GetLoginInfo(username *string, password *string) (*login, error) {
 
 // //**+++++++++++++++++++++UPDATE QUERIES++++++++++++++++++++++++++++
 
-// /*
-// !NEEDS FIXING
-// *TESTED PASSING
-// GENERIC UPDATE METHOD WILL MATCH INTERFACE OF OLD AND NEW DATA
-// RETURN: error if applicable
-// !NEED TO IMPLEMENT WAY TO CHECK IF CHANGES ARE MADE PROPERLY
-// */
-// func UpdateData(oldData interface{}, newData interface{}) error {
-//     var (
-//         tableName   string
-//         setValues   []string
-//         whereValues []string
-//     )
+/*
+!NEEDS FIXING
+*TESTED PASSING
+GENERIC UPDATE METHOD WILL MATCH INTERFACE UPDATEQUERY STRUCT
+RETURN: error if applicable
+!NEED TO IMPLEMENT WAY TO CHECK IF CHANGES ARE MADE PROPERLY
+*/
 
-//     oldType := reflect.TypeOf(oldData)
-//     oldValue := reflect.ValueOf(oldData)
-//     newType := reflect.TypeOf(newData)
-//     newValue := reflect.ValueOf(newData)
+func UpdateData(data updatequery) error {
+	var setValues []string
+	var whereValues []string
 
-//     switch oldType {
-//     case reflect.TypeOf(account{}):
-//         tableName = "ACCOUNTS"
-//     case reflect.TypeOf(posts{}):
-//         tableName = "POSTS"
-//     case reflect.TypeOf(comments{}):
-//         tableName = "COMMENTS"
-//     }
+	// Loop through fields of ColumnsNew to construct SET part of the query
+	for i := 0; i < len(data.ColumnsNew); i++ {
+		columnName := strings.ToLower(data.ColumnsNew[i])
+		columnValue := data.ValuesNew[i]
 
-//     // Loop through fields of newType to construct SET part of the query
-//     for i := 0; i < newType.NumField(); i++ {
-//         field := newType.Field(i)
-//         columnName := strings.ToLower(field.Name)
-//         columnValue := newValue.Field(i).Interface()
+		setValues = append(setValues, fmt.Sprintf("%s='%v'", columnName, columnValue))
+	}
 
-//         setValues = append(setValues, fmt.Sprintf("%s='%v'", columnName, columnValue))
-//     }
+	// Loop through fields of ColumnsOld to construct WHERE part of the query
+	for i := 0; i < len(data.ColumnsOld); i++ {
+		columnName := strings.ToLower(data.ColumnsOld[i])
+		columnValue := data.ValuesOld[i]
 
-//     // Only include id from oldType in WHERE clause
-//     for i := 0; i < oldType.NumField(); i++ {
-//         field := oldType.Field(i)
-//         columnName := strings.ToLower(field.Name)
-//         if columnName == "id" {
-//             columnValue := oldValue.Field(i).Interface()
-//             whereValues = append(whereValues, fmt.Sprintf("%s='%v'", columnName, columnValue))
-//         }
-//     }
+		whereValues = append(whereValues, fmt.Sprintf("%s='%v'", columnName, columnValue))
+	}
 
-//     sql := fmt.Sprintf("UPDATE %s SET %s WHERE %s", tableName, strings.Join(setValues, ","), strings.Join(whereValues, " AND "))
+	sql := fmt.Sprintf("UPDATE %s SET %s WHERE %s", data.TableName, strings.Join(setValues, ","), strings.Join(whereValues, " AND "))
 
-//     result, err := connect(sql)
-//     if err != nil {
-//         return err
-//     }
-//     defer result.Close()
+	result, err := connect(sql)
+	if err != nil {
+		return err
+	}
+	defer result.Close()
 
-//     return nil
-// }
+	return nil
+}
 
 // //**+++++++++++++++++++++DELETE QUERIES++++++++++++++++++++++++++++
 
@@ -759,63 +740,6 @@ func GetLoginInfo(username *string, password *string) (*login, error) {
 // *----------------------------------------------------------UPDATING METHODS-----------------------------------------------
 // */
 
-// /*
-// !NEEDS FIXING
-// *TESTED PASSING
-// UPDATING DATA ON THE health, pr_tracker, and account table
-// old data must grab all values and be shaped like table struct
-// new data must grab all values and be shaped like table struct
-// note: make sure that columns are not empty bc then it will not work
-
-// return bool- true if worked and false if not
-// */
-// func UpdateData(oldData interface{}, newData interface{}) error {
-//     var (
-//         tableName string
-//         setValues []string
-//         whereValues []string
-//     )
-
-//     oldType := reflect.TypeOf(oldData)
-//     oldValue := reflect.ValueOf(oldData)
-//     newType := reflect.TypeOf(newData)
-//     newValue := reflect.ValueOf(newData)
-
-//     switch oldType {
-//         case reflect.TypeOf(account{}):
-//             tableName = "ACCOUNT_INFO"
-//         case reflect.TypeOf(healthdata{}):
-//             tableName = "HEALTH_INFO"
-//         case reflect.TypeOf(pr{}):
-//             tableName = "PR_TRACKER"
-//     }
-
-//     for i := 0; i < newType.NumField(); i++ {
-//         field := newType.Field(i)
-//         columnName := strings.ToLower(field.Name)
-//         columnValue := newValue.Field(i).Interface()
-
-//         setValues = append(setValues, fmt.Sprintf("%s='%v'", columnName, columnValue))
-//     }
-
-//     for i := 0; i < oldType.NumField(); i++ {
-//         field := oldType.Field(i)
-//         columnName := strings.ToLower(field.Name)
-//         columnValue := oldValue.Field(i).Interface()
-
-//         whereValues = append(whereValues, fmt.Sprintf("%s='%v'", columnName, columnValue))
-//     }
-
-//     sql := fmt.Sprintf("UPDATE %s SET %s WHERE %s", tableName, strings.Join(setValues, ","), strings.Join(whereValues, " AND "))
-
-//     result, err := connect(sql)
-//     if err != nil {
-//         return err
-//     }
-//     defer result.Close()
-
-//     return nil
-// }
 
 // //*-------------------------------------------------------AUTH METHODS-------------------------------------------------------
 
