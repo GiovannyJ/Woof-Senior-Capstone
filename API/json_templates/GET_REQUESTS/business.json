@@ -1,0 +1,13 @@
+[
+    {
+        "businessID": 1,
+        "businessName": "Coffee Haven",
+        "ownerUserID": 1,
+        "businessType": "Cafe",
+        "Location": "123 Main St, Cityville",
+        "contact": "123-456-7890",
+        "description": "Cozy coffee shop",
+        "event": "Weekly music nights",
+        "rating": "4"
+    }
+]

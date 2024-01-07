@@ -1,0 +1,11 @@
+[
+    {
+        "eventID": 1,
+        "businessID": 1,
+        "eventName": "Live Music Night",
+        "eventDescription": "Enjoy live acoustic music.",
+        "eventDate": "2024-02-01",
+        "location": "123 Main St, Cityville",
+        "contactInfo": "123-456-7890"
+    }
+]

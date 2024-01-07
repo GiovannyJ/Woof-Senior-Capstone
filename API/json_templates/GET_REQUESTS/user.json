@@ -1,0 +1,9 @@
+[
+    {
+        "userID": 1,
+        "username": "john_doe",
+        "pwd": "",
+        "email": "john@example.com",
+        "accountType": "regular"
+    }
+]

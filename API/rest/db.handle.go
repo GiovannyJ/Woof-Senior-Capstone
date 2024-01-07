@@ -3,47 +3,37 @@ package rest
 import (
 	db "API/database"
 	s "API/models"
-	"fmt"
-	"net/http"
+	"encoding/json"
 	"strconv"
-
+	"net/http"
 	"github.com/gin-gonic/gin"
 )
 
-type account = s.Account
-type updateAcc = s.UpdateAccount
-type post = s.Posts
-type updatePost = s.UpdatePosts
-type comment = s.Comment
-type updateComment = s.UpdateComment
-
-// type images = s.Images
-// type updateImages = s.UpdateImages
-type loginData = s.LogIn
-type jsondata = s.JSONData
-
+type user = s.User
+type login = s.LogIn
+type business = s.Business
+type savedBusiness = s.SavedBusiness
+type review = s.Review
+type event = s.Event
 /*
 *=================GET METHOD HANDLERS==================
  */
 
 /*
 *TESTED WORKING
-GETS all accounts
-can query by id, fname, lname, fullname, email, username, and order
+GETS all users
+can query for userID, username, email, accountType, and order ASC or DESC
 */
-func GetAccounts(c *gin.Context) {
+func GetUsers(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	var query = make(map[string]interface{})
 
 	queryParams := map[string]string{
-		"id":        c.Query("id"),
-		"fname":     c.Query("fname"),
-		"lname":     c.Query("lname"),
-		"fullname":  c.Query("fullname"),
-		"email":     c.Query("email"),
-		"username":  c.Query("username"),
-		"accesslvl": c.Query("accesslvl"),
-		"order":     c.Query("order"),
+		"userID": 		c.Query("userID"),
+		"username":  	c.Query("username"),
+		"email": 		c.Query("email"),
+		"accountType": 	c.Query("accountType"),
+		"order":     	c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -51,34 +41,43 @@ func GetAccounts(c *gin.Context) {
 			query[key] = value
 		}
 	}
+	cacheKey := generateCacheKey(queryParams, "getusers")
 
-	results, err := db.Accounts_GET(query)
+	if data, err := getCacheData(cacheKey); err == nil{
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+
+	results, err := db.Users_GET(query)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 
+	serializedData, err := json.Marshal(results)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
+		return
+	}
+	DataCache.Set(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
 /*
 *TESTED WORKING
-GETS all posts:
-can query by id, title, genre, authorID, numUp, numDown, postedDate, order
+gets all businesses 
+and query for businessID, businessName, ownerID, rating, order (ASC, DESC)
 */
-func GetPosts(c *gin.Context) {
+func GetBusinesses(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	var query = make(map[string]interface{})
 
 	queryParams := map[string]string{
-		"id":         c.Query("id"),
-		"title":      c.Query("title"),
-		"genre":      c.Query("genre"),
-		"authorID":   c.Query("authorID"),
-		"numUp":      c.Query("numUp"),
-		"numDown":    c.Query("numDown"),
-		"postedDate": c.Query("date"),
-		"order":      c.Query("order"),
+		"businessID": 		c.Query("businessID"),
+		"businessName":  	c.Query("businessName"),
+		"ownerID": 			c.Query("ownerID"),
+		"rating": 			c.Query("rating"),
+		"order":     		c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -86,37 +85,111 @@ func GetPosts(c *gin.Context) {
 			query[key] = value
 		}
 	}
+	cacheKey := generateCacheKey(queryParams, "getbusinesses")
 
-	results, err := db.Posts_GET(query)
+	if data, err := getCacheData(cacheKey); err == nil{
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+
+	results, err := db.Business_GET(query)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 
+	serializedData, err := json.Marshal(results)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
+		return
+	}
+	DataCache.Set(cacheKey, serializedData)
+	c.IndentedJSON(http.StatusOK, results)
+}
+
+
+/*
+*TESTED WORKING
+gets all saved businesses in the database
+requires a userID to view their saved businesses
+can query for businessID and order (ASC DESC)
+*/
+func GetSavedBusiness(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	var query = make(map[string]interface{})
+	userID := c.Param("userid")
+	id, err := strconv.Atoi(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	queryParams := map[string]string{
+		"b.businessID": 		c.Query("businessID"),
+		"order":     		c.Query("order"),
+	}
+
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+	cacheKey := generateCacheKey(queryParams, "getsavedbusiness")
+
+	if data, err := getCacheData(cacheKey); err == nil{
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+
+	results, err := db.Users_SavedBusiness_GET(query, id)
+	/*
+	! POSSIBLY MAKE ENDPOINT FOR THIS??
+	! results, err := db.SavedBusiness_GET(query, id)
+	*/ 
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	serializedData, err := json.Marshal(results)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
+		return
+	}
+	DataCache.Set(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
 /*
 *TESTED WORKING
-GETS all posts with author info as well as image info
-can query by, postID, authorID, fullname, username, title, numUp,
-numDown, genre, date, order
+gets all reviews for business based on businessID
+can query by review(id/rating/date) user(id/name/email/accType) business(id/name/type/rating/descr) order(ASC/DESC)
 */
-func GetPostsFullContext(c *gin.Context) {
+func GetBusinessReviews(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	var query = make(map[string]interface{})
+	businessID := c.Param("businessid")
+	id, err := strconv.Atoi(businessID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid business ID"})
+		return
+	}
+
 
 	queryParams := map[string]string{
-		"p.id":       c.Query("postID"),
-		"a.id":       c.Query("authorID"),
-		"fullname":   c.Query("fullname"),
-		"username":   c.Query("username"),
-		"title":      c.Query("title"),
-		"p.numUp":    c.Query("numUp"),
-		"numDown":    c.Query("numDown"),
-		"genre":      c.Query("genre"),
-		"postedDate": c.Query("date"),
-		"order":      c.Query("order"),
+		"r.reviewID":		c.Query("reviewID"),
+		"r.rating":			c.Query("reviewRating"),
+		"r.dateCreated":	c.Query("dateCreated"),
+		"u.userID":			c.Query("userID"),
+		"u.username":		c.Query("username"),
+		"u.email":			c.Query("email"),
+		"u.accountType":	c.Query("accountType"),
+		"b.businessID": 	c.Query("businessID"),
+		"b.businessName":	c.Query("businessName"),
+		"b.businessType":	c.Query("businessType"),
+		"b.rating":			c.Query("businessRating"),
+		"b.description":	c.Query("descr"),
+		"order":     		c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -124,38 +197,45 @@ func GetPostsFullContext(c *gin.Context) {
 			query[key] = value
 		}
 	}
+	cacheKey := generateCacheKey(queryParams, "getbusinessreviews")
 
-	results, err := db.PostsFullContext_GET(query)
+	if data, err := getCacheData(cacheKey); err == nil{
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+
+	results, err := db.Businesses_Reviews_Users_GET(query, id)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+
+	serializedData, err := json.Marshal(results)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
+		return
+	}
+	DataCache.Set(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
+
+
 
 /*
 *TESTED WORKING
-gets all comments under a post
+gets all events from database
+and query by eventID, businessID, eventName, eventDate and order (ASC, DESC)
 */
-func GetPostsComments(c *gin.Context) {
+func GetEvents(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
-	id := c.Param("id")
-
-	postID, err := strconv.Atoi(id)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid post ID"})
-		return
-	}
-
 	var query = make(map[string]interface{})
 
 	queryParams := map[string]string{
-		"id":         c.Query("id"),
-		"authorID":   c.Query("authorID"),
-		"numUp":      c.Query("numUp"),
-		"numDown":    c.Query("numDown"),
-		"postedDate": c.Query("date"),
-		"order":      c.Query("order"),
+		"eventID":			c.Query("eventID"),
+		"businessID": 		c.Query("businessID"),
+		"eventName":	  	c.Query("eventName"),
+		"eventDate": 		c.Query("eventDate"),
+		"order":     		c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -163,39 +243,54 @@ func GetPostsComments(c *gin.Context) {
 			query[key] = value
 		}
 	}
+	cacheKey := generateCacheKey(queryParams, "getevents")
 
-	results, err := db.Comments_GET(query, postID)
+	if data, err := getCacheData(cacheKey); err == nil{
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+
+	results, err := db.Event_GET(query)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 
+	serializedData, err := json.Marshal(results)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
+		return
+	}
+	DataCache.Set(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
+
 
 /*
 *TESTED WORKING
-grabs all comments from post with comments full context
+gets all events for a business using businessID
+can query by eventID, eventName, eventDate, businessID, businessName, businessType, rating, ownerUserID, order(ASC/DESC)
 */
-func GetPostsCommentsFullContext(c *gin.Context) {
+func GetBusinessEvents(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
-	id := c.Param("id")
-
-	postID, err := strconv.Atoi(id)
+	var query = make(map[string]interface{})
+	businessID := c.Param("businessid")
+	id, err := strconv.Atoi(businessID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid post ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid business ID"})
 		return
 	}
 
-	var query = make(map[string]interface{})
-
 	queryParams := map[string]string{
-		"c.id":         c.Query("c.id"),        //comment id
-		"c.numUp":      c.Query("c.numUp"),     //comment upvotes
-		"c.numDown":    c.Query("c.numDown"),   //comment downvotes
-		"c.postedDate": c.Query("c.posteDate"), //comment posted date
-		"a2.id":        c.Query("a2.id"),       //comment author
-		"order":        c.Query("order"),
+		"e.eventID": 			c.Query("eventID"),
+		"e.eventName": 			c.Query("eventName"),
+		"e.eventDate": 			c.Query("eventDate"),
+		"b.businessID": 		c.Query("businessID"),
+		"b.businessName": 		c.Query("businessName"),
+		"b.businessType":		c.Query("businessType"),
+		"b.rating":				c.Query("rating"),
+		"b.OwnerUserID":		c.Query("ownerID"),
+		"order":     			c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -204,29 +299,44 @@ func GetPostsCommentsFullContext(c *gin.Context) {
 		}
 	}
 
-	results, err := db.CommentsFullContext_GET(query, postID)
+	cacheKey := generateCacheKey(queryParams, "getBusinessEvents")
+
+	if data, err := getCacheData(cacheKey); err == nil{
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+
+	results, err := db.Businesses_Events_GET(query, id)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+
+	serializedData, err := json.Marshal(results)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
+		return
+	}
+	DataCache.Set(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
+
 
 /*
 *=================POST METHOD HANDLERS==================
- */
+*/
 
 /*
 *TESTED WORKING
 Creates new account
 Request body shaped like account struct without id and access level
 */
-func NewAccount(c *gin.Context) {
+func NewUser(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
 	c.Header("Access-Control-Allow-Headers", "Content-Type")
 
-	var newAcc account
+	var newAcc login
 
 	if err := c.BindJSON(&newAcc); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, nil)
@@ -243,11 +353,19 @@ func NewAccount(c *gin.Context) {
 		return
 	}
 
-	q := map[string]interface{}{
-		"username": newAcc.Username,
+	var query = make(map[string]interface{})
+
+	queryParams := map[string]string{	
+		"username":  	*newAcc.Username,
 	}
 
-	results, err := db.Accounts_GET(q)
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+
+	results, err := db.Users_GET(query)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -257,280 +375,328 @@ func NewAccount(c *gin.Context) {
 
 /*
 *TESTED WORKING
-CREATES new post
-Request body shaped like posts struct
+creates new business
+Request body shaped like business struct without id, events, rating
 */
-func NewPost(c *gin.Context) {
+func NewBusiness(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Content-Type")
 
-	var newPost post
+	var newBusiness business
 
-	if err := c.BindJSON(&newPost); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+	if err := c.BindJSON(&newBusiness); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, nil)
 		return
 	}
 
-	err := db.CreateNewPost(newPost)
+	err := db.CreateNewBusiness(newBusiness)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
-		return
-	}
-
-	c.IndentedJSON(http.StatusCreated, "post created")
-}
-
-/*
-*TESTED WORKING
-Creates new comment when supplied with request body shaped like comment struct
-*/
-func NewComment(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")
-
-	var newComment comment
-
-	if err := c.BindJSON(&newComment); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
-		return
-	}
-
-	if err := db.CreateNewComment(newComment); err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
-		return
-	}
-
-	data := jsondata{
-		Data: "comment created",
-	}
-	c.IndentedJSON(http.StatusCreated, data)
-
-}
-
-/*
-*TESTED WORKING
-Allows user to login using email or username
-Request body shaped like login struct: must have empty string for username or email if not used
-returns limited version of account struct
-Note: if username and password as passed as guest then its guest login
-*/
-func Login(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")
-	var login loginData
-
-	if err := c.BindJSON(&login); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
-		return
-	}
-
-	logicCheck := func(param *string) bool {
-		return param != nil && *param == ""
-	}
-
-	if (logicCheck(login.Username) || logicCheck(login.Email)) && logicCheck(login.Password) {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "fail logic check"})
-		return
-	}
-
-	if login.Username != nil && *login.Username == "guest" && login.Password != nil && *login.Password == "guest" {
-		result := db.GuestLogin()
-		c.IndentedJSON(http.StatusOK, result)
-		return
-	}
-
-	data, err := db.GetLoginInfo(login.Username, login.Password, login.Email)
-
-	if err != nil {
-		if err.Error() == "Invalid password" {
-			c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": err})
+		if _, ok := err.(*s.BusinessExistsError); ok {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "business already exists"})
 		} else {
-			c.IndentedJSON(http.StatusNotFound, gin.H{"error": err})
+			c.IndentedJSON(http.StatusInternalServerError, nil)
 		}
 		return
 	}
 
-	if data != nil {
-		userQ := map[string]interface{}{
-			"id": data.ID,
-		}
-		userDetails, err := db.Accounts_GET(userQ)
-		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
-			return
-		}
+	var query = make(map[string]interface{})
 
-		c.IndentedJSON(http.StatusOK, userDetails)
-	} else {
-		c.IndentedJSON(http.StatusNotFound, nil)
+	queryParams := map[string]string{	
+		"businessName":  	newBusiness.BusinessName,
+		"location": 		newBusiness.Location,
 	}
+
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+
+	results, err := db.Business_GET(query)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.IndentedJSON(http.StatusCreated, results)
 }
 
 /*
-*=================PATCH METHOD HANDLERS==================
- */
-
-/*
 *TESTED WORKING
-updates account in database
-request body shaped like updateAccount struct
+creates new saved business for account
+Request body shaped like saved business struct without savedID
 */
-func UpdateAcc(c *gin.Context) {
+func NewSavedBusiness(c *gin.Context){	
 	c.Header("Access-Control-Allow-Origin", "*")
-
-	var upACC updateAcc
-
-	if err := c.BindJSON(&upACC); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Content-Type")
+	
+	userID := c.Param("userid")
+	id, err := strconv.Atoi(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
-	err := db.UpdateData(upACC.Old, upACC.New)
+	var newSavedBusiness savedBusiness
 
+	if err := c.BindJSON(&newSavedBusiness); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, nil)
+		return
+	}
+
+	err = db.CreateNewSavedBusiness(newSavedBusiness)
 	if err != nil {
-		if _, ok := err.(*s.UpdateNotCompleteError); ok {
-			c.IndentedJSON(http.StatusFailedDependency, gin.H{"error": err})
+		if _, ok := err.(*s.SavedBusinessExistsError); ok {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "User already saved business"})
 		} else {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
-			return
+			c.IndentedJSON(http.StatusInternalServerError, nil)
 		}
 		return
 	}
-	c.IndentedJSON(http.StatusOK, upACC.New)
+
+	var query = make(map[string]interface{})
+
+	queryParams := map[string]string{	
+		"businessID": 		strconv.Itoa(newSavedBusiness.BusinessID),
+	}
+
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+
+	results, err := db.SavedBusiness_GET(query, id)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.IndentedJSON(http.StatusCreated, results)
 }
 
 /*
 *TESTED WORKING
-Updates post in database
-request body shaped like updatePost Struct
+creates new review for business using account
+Request body shaped like review struct without reviewID, userID, businessID, dateCreated
 */
-func UpdatePost(c *gin.Context) {
+func NewReview(c *gin.Context){	
 	c.Header("Access-Control-Allow-Origin", "*")
-	var upPOST updatePost
-
-	if err := c.BindJSON(&upPOST); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
-		return
-	}
-
-	err := db.UpdateData(upPOST.Old, upPOST.New)
-
+	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Content-Type")
+	
+	userID, err := strconv.Atoi(c.Param("userid"))
 	if err != nil {
-		if _, ok := err.(*s.UpdateNotCompleteError); ok {
-			c.IndentedJSON(http.StatusFailedDependency, gin.H{"error": err})
-		} else {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
-			return
-		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
-	c.IndentedJSON(http.StatusOK, upPOST.New)
-}
-
-/*
-*TESTED WORKING
-UPDATES comment in database
-request must be shaped like updatecomment struct
-*/
-func UpdateComment(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")
-	var upComment updateComment
-
-	if err := c.BindJSON(&upComment); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
-		return
-	}
-
-	err := db.UpdateData(upComment.Old, upComment.New)
-
+	businessID, err := strconv.Atoi(c.Param("businessid"))
 	if err != nil {
-		if _, ok := err.(*s.UpdateNotCompleteError); ok {
-			c.IndentedJSON(http.StatusFailedDependency, gin.H{"error": err})
-		} else {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
-			return
-		}
-		return
-	}
-	c.IndentedJSON(http.StatusOK, upComment.New)
-}
-
-/*
-*=================DELETE METHOD HANDLERS==================
- */
-
-/*
-*TESTED WORKING
-DELETES account from database using id as last tag
-*/
-func DelAccount(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")
-	id := c.Param("id")
-
-	intID, err := strconv.Atoi(id)
-	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid business ID"})
 		return
 	}
 
-	err = db.DeleteAccount(intID)
+	var newReview review
+	newReview.BusinessID = businessID
+	newReview.UserID = userID
 
+	if err := c.BindJSON(&newReview); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, nil)
+		return
+	}
+
+	err = db.CreateNewReview(newReview)
+	
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 
-	data := jsondata{
-		Data: fmt.Sprintf("account %d deleted", intID),
+	var query = make(map[string]interface{})
+
+	queryParams := map[string]string{	
+		"businessID": 		c.Param("businessid"),
+		"userID":			c.Param("userid"),
 	}
-	c.IndentedJSON(http.StatusOK, data)
+
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+
+	results, err := db.Reviews_GET(query)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.IndentedJSON(http.StatusCreated, results)
 }
 
 /*
 *TESTED WORKING
-DELETES post from database using id as last tag
+creates new event for business using businessID
+Request body shaped like event struct
 */
-func DelPost(c *gin.Context) {
+func NewEvent(c *gin.Context){	
 	c.Header("Access-Control-Allow-Origin", "*")
-	id := c.Param("id")
-
-	intID, err := strconv.Atoi(id)
+	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Content-Type")
+	
+	
+	businessID, err := strconv.Atoi(c.Param("businessid"))
 	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid business ID"})
 		return
 	}
 
-	err = db.DeletePost(intID)
+	var newEvent event
+	newEvent.BusinessID = businessID
 
+	if err := c.BindJSON(&newEvent); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, nil)
+		return
+	}
+
+	err = db.CreateNewEvent(newEvent)
+	
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 
-	data := jsondata{
-		Data: fmt.Sprintf("post %d deleted", intID),
-	}
-	c.IndentedJSON(http.StatusOK, data)
-}
+	var query = make(map[string]interface{})
 
-/*
-*TESTED WORKING
-deletes comment from database, need id of comment in path
-*/
-func DelComment(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")
-	id := c.Param("id")
-	intId, err := strconv.Atoi(id)
-	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
-		return
+	queryParams := map[string]string{
+		"eventName":		newEvent.EventName,
+		"businessID": 		c.Param("businessid"),
+		"userID":			c.Param("userid"),
 	}
 
-	err = db.DeleteComment(intId)
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+
+	results, err := db.Event_GET(query)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-
-	data := jsondata{
-		Data: fmt.Sprintf("comment %d deleted", intId),
-	}
-	c.IndentedJSON(http.StatusOK, data)
+	c.IndentedJSON(http.StatusCreated, results)
 }
+
+/*
+*TESTED WORKING
+Checks username and password to database, if they are good then returns account info (without pwd)
+Request body shaped like Login struct without userID, pwd, email, and accountType
+*/
+func Login(c *gin.Context){	
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Content-Type")
+	
+	var newLogin login
+
+	if err := c.BindJSON(&newLogin); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, nil)
+		return
+	}
+
+	u, err := db.GetLoginInfo(newLogin.Username, newLogin.Password)
+	
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var query = make(map[string]interface{})
+
+	queryParams := map[string]string{
+		"username":			*u.Username,
+	}
+
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+
+	results, err := db.Users_GET(query)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.IndentedJSON(http.StatusCreated, results)
+}
+
+
+// /*
+// *=================PATCH METHOD HANDLERS==================
+//  */
+
+// /*
+// *TESTED WORKING
+// updates account in database
+// request body shaped like updateAccount struct
+// */
+// func UpdateAcc(c *gin.Context) {
+// 	c.Header("Access-Control-Allow-Origin", "*")
+
+// 	var upACC updateAcc
+
+// 	if err := c.BindJSON(&upACC); err != nil {
+// 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+// 		return
+// 	}
+
+// 	err := db.UpdateData(upACC.Old, upACC.New)
+
+// 	if err != nil {
+// 		if _, ok := err.(*s.UpdateNotCompleteError); ok {
+// 			c.IndentedJSON(http.StatusFailedDependency, gin.H{"error": err})
+// 		} else {
+// 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+// 			return
+// 		}
+// 		return
+// 	}
+// 	c.IndentedJSON(http.StatusOK, upACC.New)
+// }
+
+
+
+// /*
+// *=================DELETE METHOD HANDLERS==================
+//  */
+
+// /*
+// *TESTED WORKING
+// DELETES account from database using id as last tag
+// */
+// func DelAccount(c *gin.Context) {
+// 	c.Header("Access-Control-Allow-Origin", "*")
+// 	id := c.Param("id")
+
+// 	intID, err := strconv.Atoi(id)
+// 	if err != nil {
+// 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+// 		return
+// 	}
+
+// 	err = db.DeleteAccount(intID)
+
+// 	if err != nil {
+// 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+// 		return
+// 	}
+
+// 	data := jsondata{
+// 		Data: fmt.Sprintf("account %d deleted", intID),
+// 	}
+// 	c.IndentedJSON(http.StatusOK, data)
+// }
+
+
+

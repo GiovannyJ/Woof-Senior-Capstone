@@ -3,6 +3,7 @@ package rest
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	// "fmt"
 )
 
 //router driver make all requests here
@@ -14,9 +15,9 @@ func API(mode string){
 	
 	// gin.SetMode(gin.ReleaseMode)
 	
-	if(mode != "test"){
-		router.Use(Authenticate())
-	}
+	// if(mode != "test"){
+	// 	router.Use(Authenticate())
+	// }
 
 	// fmt.Println(GenerateToken("2"))
 	
@@ -24,42 +25,43 @@ func API(mode string){
 	*=========================GET ROUTES================================
 	*/
 	
-	router.GET("users", )
-	router.GET("users/:userid/savedbusiness", )
-	router.GET("businesses", )
-	router.GET("businesses/:businessid/reviews", )
-	router.GET("businesses/:businessid/events", )
+	router.GET("users", GetUsers)
+	router.GET("users/:userid/savedbusinesses", GetSavedBusiness)
+	router.GET("businesses", GetBusinesses)
+	router.GET("businesses/:businessid/reviews", GetBusinessReviews)
+	router.GET("businesses/:businessid/events", GetBusinessEvents)
+	router.GET("events", GetEvents)
 
+
+	// /*
+	// *=========================POST ROUTES================================
+	// */
+	router.POST("new/user", NewUser)
+	router.POST("new/business", NewBusiness)
+	router.POST("new/review/user/:userid/business/:businessid", NewReview)
+	router.POST("new/savedbuisiness/user/:userid/", NewSavedBusiness)
+	router.POST("new/event/business/:businessid", NewEvent)
+	router.POST("login", Login)
 	
 
-	/*
-	*=========================POST ROUTES================================
-	*/
-	router.POST("users", )
-	router.POST("businesses", )
-	router.POST("businesses/:businessid/reviews", )
-	router.POST("businesses/:businessid/event", )
-	router.POST("users/:userid/savedbusiness", )
-	
-
-	/*
-	*=========================PATCH ROUTES================================
-	*/
-	router.PATCH("users", )
-	router.PATCH("businesses", )
-	router.PATCH("businesses/:businessid/reviews", )
-	router.PATCH("businesses/:businessid/event", )
-	router.PATCH("users/:userid/savedbusiness/:savedbusinessid", )
+	// /*
+	// *=========================PATCH ROUTES================================
+	// */
+	// router.PATCH("users", )
+	// router.PATCH("businesses", )
+	// router.PATCH("businesses/:businessid/reviews", )
+	// router.PATCH("businesses/:businessid/event", )
+	// router.PATCH("users/:userid/savedbusiness/:savedbusinessid", )
 
 
-	/*
-	*=========================DELETE ROUTES================================
-	*/
-	router.DELETE("users", )
-	router.DELETE("businesses", )
-	router.DELETE("businesses/:businessid/reviews", )
-	router.DELETE("businesses/:businessid/event", )
-	router.DELETE("users/:userid/savedbusiness/:savedbusinessid", )
+	// /*
+	// *=========================DELETE ROUTES================================
+	// */
+	// router.DELETE("users", )
+	// router.DELETE("businesses", )
+	// router.DELETE("businesses/:businessid/reviews", )
+	// router.DELETE("businesses/:businessid/event", )
+	// router.DELETE("users/:userid/savedbusiness/:savedbusinessid", )
 
 	
 	/*

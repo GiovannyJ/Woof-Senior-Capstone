@@ -1,0 +1,21 @@
+[
+    {
+        "userinfo": {
+            "userID": 1,
+            "username": "john_doe",
+            "pwd": "",
+            "email": "john@example.com",
+            "accountType": "regular"
+        },
+        "businessinfo": {
+            "businessID": 1,
+            "businessName": "Coffee Haven",
+            "ownerUserID": 1,
+            "businessType": "Cafe",
+            "Location": "123 Main St, Cityville",
+            "contact": "123-456-7890",
+            "description": "Cozy coffee shop",
+            "rating": "4"
+        }
+    }
+]

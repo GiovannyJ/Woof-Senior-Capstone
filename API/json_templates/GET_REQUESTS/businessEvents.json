@@ -1,0 +1,14 @@
+[
+    {
+        "businessinfo": {
+            "businessID": 3,
+            "businessName": "Fashion Boutique",
+            "ownerUserID": 2,
+            "businessType": "Retail",
+            "Location": "789 Fashion Blvd, Trendy Town",
+            "contact": "555-123-4567",
+            "description": "Latest fashion trends",
+            "rating": "3"
+        }
+    }
+]

@@ -4,7 +4,9 @@ import (
 	"github.com/allegro/bigcache"
 	"time"
 	"encoding/json"
-	"github.com/gin-gonic/gin"
+	// "github.com/gin-gonic/gin"
+	"strings"
+	"fmt"
 )
 
 // Define a global BigCache instance
@@ -35,12 +37,33 @@ func init(){
 *HELPER METHOD
 used to get data from the cache
 */
-func getCacheData(cacheKey string) (map[string]interface{}, error){
-	var data map[string]interface{}
-	if cacheData, err := DataCache.Get(cacheKey); err == nil{
-		json.Unmarshal([]byte(cacheData), &data)
-		return data, nil
+func getCacheData(cacheKey string) ([]interface{}, error) {
+    var data []interface{}
+    cacheData, err := DataCache.Get(cacheKey)
+    if err != nil {
+        // Log or print the error for debugging purposes
+        // fmt.Println("Cache Get Error:", err)
+        return nil, err
+    }
+
+    if err := json.Unmarshal([]byte(cacheData), &data); err != nil {
+        // Log or print the error for debugging purposes
+        // fmt.Println("JSON Unmarshal Error:", err)
+        return nil, err
+    }
+
+    return data, nil
+}
+
+
+func generateCacheKey(queryParams map[string]string, uid string) string {
+	var cacheKeyParts []string
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			cacheKeyParts = append(cacheKeyParts, fmt.Sprintf("%s-%s", key, value))
+		}
 	}
 
-	return nil, gin.Error{}
+	key := fmt.Sprintf("%s-%s", uid, strings.Join(cacheKeyParts, "-"))
+	return key
 }
