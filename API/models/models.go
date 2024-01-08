@@ -109,3 +109,9 @@ type UpdateQuery struct {
 	ColumnsNew []string      `json:"columns_new"`
 	ValuesNew  []interface{} `json:"values_new"`
 }
+
+type DeleteQuery struct{
+	TableName  	string      `json:"tablename"`
+	Column		string		`json:"column"`
+	ID			int			`json:"id"`
+}

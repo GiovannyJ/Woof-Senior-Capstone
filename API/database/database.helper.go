@@ -64,14 +64,14 @@ func AccountExist(id string) bool{
 }
 
 //* executes SQL string
-// func execute(sql string) error{
-// 	result, err := connect(sql)
-// 	if err !=nil{
-// 		return err
-// 	}
-// 	defer result.Close()
-// 	return nil
-// }
+func execute(sql string) error{
+	result, err := connect(sql)
+	if err !=nil{
+		return err
+	}
+	defer result.Close()
+	return nil
+}
 
 
 //* Generates generic insert query when columns and values are dynamic
@@ -107,7 +107,7 @@ func GenInsertQuery(tableName string, data interface{}, ignoreColumns []string) 
     return sql, nil
 }
 
-// Helper function to check if a string is in a slice of strings
+//* Helper function to check if a string is in a slice of strings
 func contains(slice []string, val string) bool {
     for _, item := range slice {
         if item == val {

@@ -1,0 +1,7 @@
+{
+    "tablename": "events",
+    "columns_old": ["eventID"],
+    "values_old": [1],
+    "columns_new": ["eventName"],
+    "values_new": ["Charisma concert"]
+  }

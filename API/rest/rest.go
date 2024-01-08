@@ -33,36 +33,36 @@ func API(mode string){
 	router.GET("events", GetEvents)
 
 
-	// /*
-	// *=========================POST ROUTES================================
-	// */
-	router.POST("new/user", NewUser)
-	router.POST("new/business", NewBusiness)
-	router.POST("new/review/user/:userid/business/:businessid", NewReview)
-	router.POST("new/savedbuisiness/user/:userid/", NewSavedBusiness)
-	router.POST("new/event/business/:businessid", NewEvent)
+	/*
+	*=========================POST ROUTES================================
+	*/
+	router.POST("users", NewUser)
+	router.POST("business", NewBusiness)
+	router.POST("reviews/user/:userid/businesses/:businessid", NewReview)
+	router.POST("savedbusinesses/user/:userid/", NewSavedBusiness)
+	router.POST("events/businesses/:businessid", NewEvent)
 	router.POST("login", Login)
 	
 
-	// /*
-	// *=========================PATCH ROUTES================================
-	// */
-	router.PATCH("update/users", Update)
-	router.PATCH("update/users/password", )
-	router.PATCH("update/business", Update)
-	router.PATCH("update/review", Update)
-	router.PATCH("update/event", Update)
-	// router.PATCH("users/:userid/savedbusiness/:savedbusinessid", )
+	/*
+	*=========================PATCH ROUTES================================
+	*/
+	router.PATCH("users", Update)
+	router.PATCH("users/password", )
+	router.PATCH("businesses", Update)
+	router.PATCH("reviews", Update)
+	router.PATCH("events", Update)
+	// router.PATCH("savedbusinesses", Update)
 
 
 	// /*
 	// *=========================DELETE ROUTES================================
 	// */
-	// router.DELETE("users", )
-	// router.DELETE("businesses", )
-	// router.DELETE("businesses/:businessid/reviews", )
-	// router.DELETE("businesses/:businessid/event", )
-	// router.DELETE("users/:userid/savedbusiness/:savedbusinessid", )
+	router.DELETE("users", Delete)
+	router.DELETE("businesses", Delete)
+	router.DELETE("reviews", Delete)
+	router.DELETE("events", Delete)
+	router.DELETE("savedbusinesses", Delete)
 
 	
 	/*

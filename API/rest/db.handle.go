@@ -16,6 +16,8 @@ type savedBusiness = s.SavedBusiness
 type review = s.Review
 type event = s.Event
 type updatequery = s.UpdateQuery
+type deletequery = s.DeleteQuery
+
 
 /*
 *=================GET METHOD HANDLERS==================
@@ -663,36 +665,27 @@ func Update(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, update)
 }
 
-// /*
-// *=================DELETE METHOD HANDLERS==================
-//  */
+/*
+*=================DELETE METHOD HANDLERS==================
+ */
+/*
+*TESTED WORKING
+deletes value in database based on table name cascades if necessary
+request body shaped like DELETE_REQUESTS/*.json files
+*/
+func Delete(c *gin.Context){
+	c.Header("Access-Control-Allow-Origin", "*")
 
-// /*
-// *TESTED WORKING
-// DELETES account from database using id as last tag
-// */
-// func DelAccount(c *gin.Context) {
-// 	c.Header("Access-Control-Allow-Origin", "*")
-// 	id := c.Param("id")
+	var delete deletequery
+	
+	if err := c.BindJSON(&delete); err != nil{
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
 
-// 	intID, err := strconv.Atoi(id)
-// 	if err != nil {
-// 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
-// 		return
-// 	}
-
-// 	err = db.DeleteAccount(intID)
-
-// 	if err != nil {
-// 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
-// 		return
-// 	}
-
-// 	data := jsondata{
-// 		Data: fmt.Sprintf("account %d deleted", intID),
-// 	}
-// 	c.IndentedJSON(http.StatusOK, data)
-// }
-
-
-
+	err := db.DeleteData(delete)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+}

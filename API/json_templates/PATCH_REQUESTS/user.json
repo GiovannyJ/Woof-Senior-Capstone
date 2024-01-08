@@ -1,0 +1,7 @@
+{
+    "tablename": "user",
+    "columns_old": ["userid"],
+    "values_old": [1],
+    "columns_new": ["username"],
+    "values_new": ["ggswag"]
+  }

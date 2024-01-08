@@ -1,0 +1,7 @@
+{
+    "tablename": "reviews",
+    "columns_old": ["reviewID"],
+    "values_old": [1],
+    "columns_new": ["comment", "rating"],
+    "values_new": ["this place is MID", 0]
+  }

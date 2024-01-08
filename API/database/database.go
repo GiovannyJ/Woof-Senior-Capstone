@@ -23,6 +23,9 @@ type review = s.Review
 type businessReview = s.BusinessReview
 type admin = s.Admin
 type updatequery = s.UpdateQuery
+type deleteQuery = s.DeleteQuery
+
+
 /*
 *TEST PASSING
 CONNECTION TO DATABASE
@@ -471,14 +474,7 @@ func CreateNewAccount(data login) error {
 	}
 
 	sql := fmt.Sprintf("INSERT INTO %s(%s) VALUES(%s)", tableName, strings.Join(columns, ","), strings.Join(values, ","))
-	result, err := connect(sql)
-
-	if err != nil {
-		return err
-	}
-	defer result.Close()
-
-	return nil
+	return execute(sql)
 }
 
 /*
@@ -499,14 +495,7 @@ func CreateNewBusiness(data business) error {
 	if err != nil {
 		return err
 	}
-	result, err := connect(sql)
-
-	if err != nil {
-		return err
-	}
-	defer result.Close()
-
-	return nil
+	return execute(sql)
 }
 
 /*
@@ -527,14 +516,7 @@ func CreateNewSavedBusiness(data savedBusiness) error {
 	if err != nil {
 		return err
 	}
-	result, err := connect(sql)
-
-	if err != nil {
-		return err
-	}
-	defer result.Close()
-
-	return nil
+	return execute(sql)
 }
 
 /*
@@ -546,40 +528,13 @@ RETURN: Error when applicable nil if no error
 func CreateNewReview(data review) error {
 	tableName := "reviews"
 
-	valueType := reflect.TypeOf(data)
-	value := reflect.ValueOf(data)
+	ignoreColumns := []string{"reviewid", "reviewID", "datecreated", "dateCreated"}
+	sql, err := GenInsertQuery(tableName, data, ignoreColumns)
 
-	var columns []string
-	var values []string
-
-	for i := 0; i < valueType.NumField(); i++ {
-		field := valueType.Field(i)
-		columnName := strings.ToLower(field.Name)
-		columnValue := value.Field(i).Interface()
-
-		if columnName == "reviewid" || columnName == "reviewID" || columnName == "datecreated" || columnName == "dateCreated" {
-			continue
-		}
-
-		if ptr, ok := columnValue.(*string); ok && ptr != nil {
-			columnValue = *ptr
-		} else if ptr, ok := columnValue.(*int); ok && ptr != nil {
-			columnValue = *ptr
-		}
-
-		columns = append(columns, columnName)
-		values = append(values, fmt.Sprintf("'%v'", columnValue))
-	}
-
-	sql := fmt.Sprintf("INSERT INTO %s(%s, dateCreated) VALUES(%s, CURDATE())", tableName, strings.Join(columns, ","), strings.Join(values, ","))
-	result, err := connect(sql)
-
-	if err != nil {
+	if err !=nil{
 		return err
 	}
-	defer result.Close()
-
-	return nil
+	return execute(sql)
 }
 
 /*
@@ -597,14 +552,7 @@ func CreateNewEvent(data event) error {
 	if err != nil {
 		return err
 	}
-	result, err := connect(sql)
-
-	if err != nil {
-		return err
-	}
-	defer result.Close()
-
-	return nil
+	return execute(sql)
 }
 
 /*
@@ -649,7 +597,6 @@ func GetLoginInfo(username *string, password *string) (*login, error) {
 // //**+++++++++++++++++++++UPDATE QUERIES++++++++++++++++++++++++++++
 
 /*
-!NEEDS FIXING
 *TESTED PASSING
 GENERIC UPDATE METHOD WILL MATCH INTERFACE UPDATEQUERY STRUCT
 RETURN: error if applicable
@@ -660,7 +607,6 @@ func UpdateData(data updatequery) error {
 	var setValues []string
 	var whereValues []string
 
-	// Loop through fields of ColumnsNew to construct SET part of the query
 	for i := 0; i < len(data.ColumnsNew); i++ {
 		columnName := strings.ToLower(data.ColumnsNew[i])
 		columnValue := data.ValuesNew[i]
@@ -668,7 +614,6 @@ func UpdateData(data updatequery) error {
 		setValues = append(setValues, fmt.Sprintf("%s='%v'", columnName, columnValue))
 	}
 
-	// Loop through fields of ColumnsOld to construct WHERE part of the query
 	for i := 0; i < len(data.ColumnsOld); i++ {
 		columnName := strings.ToLower(data.ColumnsOld[i])
 		columnValue := data.ValuesOld[i]
@@ -678,70 +623,58 @@ func UpdateData(data updatequery) error {
 
 	sql := fmt.Sprintf("UPDATE %s SET %s WHERE %s", data.TableName, strings.Join(setValues, ","), strings.Join(whereValues, " AND "))
 
-	result, err := connect(sql)
-	if err != nil {
-		return err
-	}
-	defer result.Close()
-
-	return nil
+	return execute(sql)
 }
 
 // //**+++++++++++++++++++++DELETE QUERIES++++++++++++++++++++++++++++
 
-// /*
-// *TESTED WORKING
-// DELETES ACCOUNT from database
-// returns error if applicable
-// */
-// func DeleteAccount(user int) error{
-// 	// sql := fmt.Sprintf("DELETE a, p, c FROM ACCOUNTS a LEFT JOIN POSTS p ON a.id = p.authorID LEFT JOIN COMMENTS c ON a.id = c.authorID WHERE a.id = %d;", user)
-// 	deleteCommentsFromPostsSQL := fmt.Sprintf("DELETE FROM COMMENTS WHERE postID IN (SELECT id FROM POSTS WHERE authorID = %d)", user)
-// 	deleteCommentsSQL := fmt.Sprintf("DELETE FROM COMMENTS WHERE authorID = %d", user)
-// 	deletePostsSQL := fmt.Sprintf("DELETE FROM POSTS WHERE authorID = %d", user)
-
-// 	deleteAccountSQL := fmt.Sprintf("DELETE FROM ACCOUNTS WHERE id = %d", user)
-
-// 	execute(deleteCommentsFromPostsSQL)
-// 	execute(deleteCommentsSQL)
-// 	execute(deletePostsSQL)
-// 	execute(deleteAccountSQL)
-
-// 	return nil
-// }
-
-// /*
-// *TESTED WORKING
-// DELETES POST from database
-// returns error if applicable
-// */
-// func DeletePost(user int) error{
-// 	deletePostSQL := fmt.Sprintf("DELETE FROM POSTS WHERE id=%d", user)
-// 	deleteCommentsSQL := fmt.Sprintf("DELETE FROM COMMENTS WHERE postID=%d", user)
-
-// 	execute(deleteCommentsSQL)
-// 	execute(deletePostSQL)
-// 	return nil
-// }
-
-// func execute(sql string) error{
-// 	result, err := connect(sql)
-// 	if err !=nil{
-// 		return err
-// 	}
-// 	defer result.Close()
-// 	return nil
-// }
-
-// /*
+/*
+*TESTED WORKING
+deletes data from tables, cascades across all tables when necessary
+!THERE IS NO ERROR CHECKING THIS MIGHT BITE ME IN THE ASS LATER
+*/
+func DeleteData(data deleteQuery) error{
+	user_deleteUser := fmt.Sprintf("DELETE FROM user WHERE userID = %d", data.ID)
+	user_deleteSavedBusiness := fmt.Sprintf("DELETE FROM savedBusinesses WHERE userID = %d", data.ID)
+	user_deleteReview := fmt.Sprintf("DELETE FROM reviews WHERE userID = %d", data.ID)
+	user_deleteBusiness := fmt.Sprintf("DELETE FROM businesses WHERE OwnerUserID = %d", data.ID)
+	user_deleteEvents := fmt.Sprintf("DELETE FROM events WHERE businessID = (SELECT businessID FROM businesses b WHERE OwnerUserID = %d)", data.ID)
 
 
-// /*
-// *----------------------------------------------------------UPDATING METHODS-----------------------------------------------
-// */
+	business_deleteBusiness := fmt.Sprintf("DELETE FROM businesses WHERE businessID = %d", data.ID)
+	business_deleteSavedBusinesses := fmt.Sprintf("DELETE FROM savedBusinesses WHERE businessID = %d", data.ID)
+	business_deleteReviews := fmt.Sprintf("DELETE FROM reviews WHERE businessID = %d",data.ID)
+	business_deleteEvents := fmt.Sprintf("DELETE FROM events WHERE businessID = %d", data.ID)
+
+	genericSQL := fmt.Sprintf("DELETE FROM %s WHERE %s = %d", data.TableName, data.Column, data.ID)
+
+	
+	switch data.TableName{
+	case "user":
+		execute(user_deleteEvents)
+		execute(user_deleteReview)
+		execute(user_deleteSavedBusiness)
+		execute(user_deleteBusiness)
+		execute(user_deleteUser)
+	case "businesses":
+		execute(business_deleteEvents)
+		execute(business_deleteReviews)
+		execute(business_deleteSavedBusinesses)
+		execute(business_deleteBusiness)
+	case "reviews":
+		execute(genericSQL)
+	case "savedBusiness":
+		execute(genericSQL)
+	case "events":
+		execute(genericSQL)
+	}
+
+	return nil
+}
 
 
-// //*-------------------------------------------------------AUTH METHODS-------------------------------------------------------
+
+//*-------------------------------------------------------AUTH METHODS-------------------------------------------------------
 
 /*
  * TESTED WORKING
