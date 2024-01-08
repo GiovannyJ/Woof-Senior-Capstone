@@ -79,6 +79,9 @@ func GetBusinesses(c *gin.Context) {
 	queryParams := map[string]string{
 		"businessID": 		c.Query("businessID"),
 		"businessName":  	c.Query("businessName"),
+		"businessType":		c.Query("businessType"),
+		"location":			c.Query("location"),
+		"contact":			c.Query("contact"),
 		"ownerID": 			c.Query("ownerID"),
 		"rating": 			c.Query("rating"),
 		"order":     		c.Query("order"),
@@ -188,11 +191,6 @@ func GetBusinessReviews(c *gin.Context) {
 		"u.username":		c.Query("username"),
 		"u.email":			c.Query("email"),
 		"u.accountType":	c.Query("accountType"),
-		"b.businessID": 	c.Query("businessID"),
-		"b.businessName":	c.Query("businessName"),
-		"b.businessType":	c.Query("businessType"),
-		"b.rating":			c.Query("businessRating"),
-		"b.description":	c.Query("descr"),
 		"order":     		c.Query("order"),
 	}
 
@@ -289,11 +287,6 @@ func GetBusinessEvents(c *gin.Context) {
 		"e.eventID": 			c.Query("eventID"),
 		"e.eventName": 			c.Query("eventName"),
 		"e.eventDate": 			c.Query("eventDate"),
-		"b.businessID": 		c.Query("businessID"),
-		"b.businessName": 		c.Query("businessName"),
-		"b.businessType":		c.Query("businessType"),
-		"b.rating":				c.Query("rating"),
-		"b.OwnerUserID":		c.Query("ownerID"),
 		"order":     			c.Query("order"),
 	}
 

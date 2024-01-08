@@ -37,7 +37,7 @@ func API(mode string){
 	*=========================POST ROUTES================================
 	*/
 	router.POST("users", NewUser)
-	router.POST("business", NewBusiness)
+	router.POST("businesses", NewBusiness)
 	router.POST("reviews/user/:userid/businesses/:businessid", NewReview)
 	router.POST("savedbusinesses/user/:userid/", NewSavedBusiness)
 	router.POST("events/businesses/:businessid", NewEvent)
