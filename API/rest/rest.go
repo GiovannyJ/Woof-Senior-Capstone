@@ -48,7 +48,7 @@ func API(mode string){
 	*=========================PATCH ROUTES================================
 	*/
 	router.PATCH("users", Update)
-	router.PATCH("users/password", )
+	router.PATCH("users/password", UpdatePWD)
 	router.PATCH("businesses", Update)
 	router.PATCH("reviews", Update)
 	router.PATCH("events", Update)

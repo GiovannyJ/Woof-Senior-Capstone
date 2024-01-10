@@ -17,6 +17,7 @@ type review = s.Review
 type event = s.Event
 type updatequery = s.UpdateQuery
 type deletequery = s.DeleteQuery
+type pwdreset = s.PWDReset
 
 
 /*
@@ -656,6 +657,36 @@ func Update(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, update)
+}
+
+/*
+*TESTED WORKING
+updates password in database
+request body shaped like PATCH_REQUESTS/pwdreset.json files
+*/
+func UpdatePWD(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+
+	var update pwdreset
+
+	if err := c.BindJSON(&update); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	err := db.UpdatePassword(update)
+
+	if err != nil {
+		switch e := err.(type) {
+		case *s.PWDResetError:
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": e.Message})
+		default:
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		}
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, "update successful")
 }
 
 /*

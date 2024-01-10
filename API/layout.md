@@ -90,7 +90,7 @@ These are endpoints to update data in the database. The endpoints are:
   - Update user data (not passwords)
 
 + [http://localhost:8080/users/password](#)
-  - Update password for user (NOT IMPLEMENTED)
+  - Update password for user
 
 + [http://localhost:8080/businesses](#)
   - Update business information

@@ -115,3 +115,15 @@ type DeleteQuery struct{
 	Column		string		`json:"column"`
 	ID			int			`json:"id"`
 }
+
+type PWDReset struct{
+	UserID 		int		 `json:"userID"`
+	OldPwd		string 	`json:"oldpwd"`
+	NewPwd		string  `json:"newpwd"`
+}
+type PWDResetError struct{
+	Message string
+}
+func (e *PWDResetError) Error() string {
+	return e.Message
+}

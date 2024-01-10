@@ -8,7 +8,6 @@ import (
 	"log"
 	"reflect"
 	"strings"
-
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -24,6 +23,7 @@ type businessReview = s.BusinessReview
 type admin = s.Admin
 type updatequery = s.UpdateQuery
 type deleteQuery = s.DeleteQuery
+type pwdreset = s.PWDReset
 
 
 /*
@@ -602,7 +602,6 @@ GENERIC UPDATE METHOD WILL MATCH INTERFACE UPDATEQUERY STRUCT
 RETURN: error if applicable
 !NEED TO IMPLEMENT WAY TO CHECK IF CHANGES ARE MADE PROPERLY
 */
-
 func UpdateData(data updatequery) error {
 	var setValues []string
 	var whereValues []string
@@ -626,6 +625,48 @@ func UpdateData(data updatequery) error {
 	return execute(sql)
 }
 
+
+/*
+*TESTED PASSING
+UPDATE METHOD TO CHANGE PWD MUST BE SHAPED LIKE PWDRESET STRUCT
+RETURN: error if applicable
+*/
+func UpdatePassword(data pwdreset) error{
+	if data.NewPwd == data.OldPwd{
+		return &s.PWDResetError{Message: "password cannot be the same as old"}
+	}
+	
+	checkoldPWd := fmt.Sprintf("SELECT password FROM user WHERE userID=%d", data.UserID)
+	result, err := connect(checkoldPWd)
+	if err != nil{
+		return errors.New("error connecting to database")
+	}
+	defer result.Close()
+
+	if result.Next(){
+		var t pwdreset
+		if err := result.Scan(
+			&t.OldPwd,
+		);err != nil{
+			return err
+		}
+		if err := VerifyPassword([]byte(data.OldPwd), []byte(t.OldPwd)); err != nil{
+			return &s.PWDResetError{Message: "password does not match"}
+		}
+	}
+
+	hashedPwd, err := HashPassword(data.NewPwd)
+	if err != nil{
+		return err
+	}
+
+
+	sql := fmt.Sprintf("UPDATE user SET password = '%s' WHERE userID = %d", hashedPwd, data.UserID)
+	return execute(sql)
+}
+
+
+
 // //**+++++++++++++++++++++DELETE QUERIES++++++++++++++++++++++++++++
 
 /*
@@ -647,7 +688,6 @@ func DeleteData(data deleteQuery) error{
 	business_deleteEvents := fmt.Sprintf("DELETE FROM events WHERE businessID = %d", data.ID)
 
 	genericSQL := fmt.Sprintf("DELETE FROM %s WHERE %s = %d", data.TableName, data.Column, data.ID)
-
 	
 	switch data.TableName{
 	case "user":
