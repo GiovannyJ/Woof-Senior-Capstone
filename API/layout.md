@@ -127,3 +127,6 @@ These are endpoints to delete data from the database.
 
 ### Notes
 In the future this API may be deployed to my production server as a stand alone service rather than a exe that runs on disc. There may also be attempts to transition this API to a cloud service. This must be done in order to have the API constantly serve data when needed.
+
+
+[Deploy Link](https://dev.to/koddr/how-to-deploy-golang-application-on-any-gnu-linux-system-but-without-docker-59m1)
