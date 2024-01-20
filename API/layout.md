@@ -20,7 +20,7 @@ go run main.go
 ```
 
 ### AUTHENTICATION
-Authentication is not yet implemented but, this API will need JWT to interact with for security reasons. Only admins (us swag beasts) have access to token to make requests. This token must be part of the header for each request.
+Authentication is done through JWT (JSON Web Token). A header is required by each request {Key: "Authorization", Value: "Bearer TOKEN_IN_DB"}. Tokens are generated and inserted into the database. This is done in order to not allow people who are not in our development team to use the API since it will be hosted on the server and possibly exposed to threats.
 
 ### GET REQUESTS
 These are endpoints to retrieve data from the database. They can be queried with parameters and in order of ascending or descending. The endpoints are:

@@ -742,13 +742,11 @@ func CheckToken(userID string, tokenString string) bool {
         t.Id = new(string)
         t.Name = new(string)
         t.Token = new(string)
-        t.Passwd = new(string)
 
         if err := result.Scan(
             t.Id,
             t.Name,
             t.Token,
-            t.Passwd,
         ); err != nil {
             fmt.Println(err)
             return false

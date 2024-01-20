@@ -99,7 +99,6 @@ type Admin struct {
 	Id     *string `json:"id"`
 	Name   *string `json:"name"`
 	Token  *string `json:"token"`
-	Passwd *string `json:"passwd"`
 }
 
 type UpdateQuery struct {

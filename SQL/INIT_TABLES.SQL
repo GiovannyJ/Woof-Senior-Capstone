@@ -70,6 +70,5 @@ CREATE TABLE `ADMIN` (
   `id` 		int 			NOT NULL AUTO_INCREMENT,
   `name` 	varchar(100) 	NOT NULL,
   `token` 	varchar(500) 	NOT NULL,
-  `passwd` 	varchar(300) 	NOT NULL,
   PRIMARY KEY (`id`)
 )
