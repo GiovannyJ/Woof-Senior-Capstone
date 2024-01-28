@@ -15,9 +15,9 @@ func API(mode string){
 	
 	// gin.SetMode(gin.ReleaseMode)
 	
-	if(mode != "test"){
-		router.Use(Authenticate())
-	}
+	// if(mode != "test"){
+	// 	router.Use(Authenticate())
+	// }
 
 	// fmt.Println(GenerateToken("2"))
 	
