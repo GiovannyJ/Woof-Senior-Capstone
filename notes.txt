@@ -1,0 +1,42 @@
+NEED TO WORK ON:
+get more business logic
+
+TABLE CHANGES
+NEW images:
+    imageID, imgData, size, dateCreated
+    add: GET solo, GET relational (business, review, event), insert, update
+
+user:
+    imageID
+
+businesses: 
+    data location (foriegn/remote):: update get and insert methods
+    imageID:: update get, insert, and update methods
+    pet size preference
+    leash policy
+    disabled (bool)
+
+reviews: 
+    data location (foriegn/remote):: update get and insert methods
+    imageID:: update get and insert methods
+
+events:
+    data location (foriegn/remote):: update get and insert methods
+    imageID: update get and insert methods
+    user count: int see how many ppl are going to the event
+    pet size preference
+    leash policy
+    disabled (bool)
+
+NEW attendence_count
+    id, userID, eventID NEEDS TO BE UNIUQE
+
+NOTE: 
+    chain methods, GET -> GET img in the swift app
+    POST -> POST img in the swift app
+
+
+Update documentation for API
+
+NOTE: should we store the images in a folder or as a hash value
+Look into: emails (3rd party or can be hosted by server)
