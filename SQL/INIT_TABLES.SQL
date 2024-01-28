@@ -9,6 +9,7 @@ create table images(
   size          int null,
   imgData       varchar(1000) null,
   imgName       varchar(200) not null,
+  imgType ENUM('user', 'business', 'review', 'event') NOT NULL
   dateCreated   DATETIME DEFAULT(CURRENT_DATE()) NOT NULL,
   contraint images_pk primary key(id)
   );
