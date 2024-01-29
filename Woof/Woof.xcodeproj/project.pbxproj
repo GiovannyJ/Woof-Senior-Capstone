@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3FD1074A2B67F20A007968DF /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD107442B67F209007968DF /* Search.swift */; };
+		3FD1074B2B67F20A007968DF /* CreateEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD107452B67F209007968DF /* CreateEvent.swift */; };
+		3FD1074C2B67F20A007968DF /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD107462B67F209007968DF /* Register.swift */; };
+		3FD1074D2B67F20A007968DF /* LocalEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD107472B67F209007968DF /* LocalEvents.swift */; };
+		3FD1074E2B67F20A007968DF /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD107482B67F20A007968DF /* Home.swift */; };
+		3FD1074F2B67F20A007968DF /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD107492B67F20A007968DF /* Profile.swift */; };
 		C0F297842B4851C40096E053 /* WoofApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F297832B4851C40096E053 /* WoofApp.swift */; };
 		C0F297862B4851C40096E053 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F297852B4851C40096E053 /* ContentView.swift */; };
 		C0F297882B4851C70096E053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0F297872B4851C70096E053 /* Assets.xcassets */; };
@@ -35,6 +41,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3FD107442B67F209007968DF /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		3FD107452B67F209007968DF /* CreateEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEvent.swift; sourceTree = "<group>"; };
+		3FD107462B67F209007968DF /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
+		3FD107472B67F209007968DF /* LocalEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalEvents.swift; sourceTree = "<group>"; };
+		3FD107482B67F20A007968DF /* Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		3FD107492B67F20A007968DF /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		C0F297802B4851C40096E053 /* Woof.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Woof.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0F297832B4851C40096E053 /* WoofApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WoofApp.swift; sourceTree = "<group>"; };
 		C0F297852B4851C40096E053 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -96,6 +108,12 @@
 		C0F297822B4851C40096E053 /* Woof */ = {
 			isa = PBXGroup;
 			children = (
+				3FD107452B67F209007968DF /* CreateEvent.swift */,
+				3FD107482B67F20A007968DF /* Home.swift */,
+				3FD107472B67F209007968DF /* LocalEvents.swift */,
+				3FD107492B67F20A007968DF /* Profile.swift */,
+				3FD107462B67F209007968DF /* Register.swift */,
+				3FD107442B67F209007968DF /* Search.swift */,
 				C0F297832B4851C40096E053 /* WoofApp.swift */,
 				C0F297852B4851C40096E053 /* ContentView.swift */,
 				C0F297872B4851C70096E053 /* Assets.xcassets */,
@@ -260,8 +278,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FD1074C2B67F20A007968DF /* Register.swift in Sources */,
 				C0F297862B4851C40096E053 /* ContentView.swift in Sources */,
+				3FD1074A2B67F20A007968DF /* Search.swift in Sources */,
+				3FD1074B2B67F20A007968DF /* CreateEvent.swift in Sources */,
+				3FD1074D2B67F20A007968DF /* LocalEvents.swift in Sources */,
 				C0F297AE2B4857180096E053 /* login.swift in Sources */,
+				3FD1074E2B67F20A007968DF /* Home.swift in Sources */,
+				3FD1074F2B67F20A007968DF /* Profile.swift in Sources */,
 				C0F297842B4851C40096E053 /* WoofApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
