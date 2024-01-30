@@ -1,0 +1,18 @@
+ROUTES:
+added new columns
+added img info
+added attendance counter
+all GET methods work: added new query params to endpoints that needed it as well
+all POST methods work
+    -need to work on POST new img (send file)
+all PATCH methods work
+delete edit: deletes all attendance when an event is deleted
+
+
+Files:
+moved files to correct location under Woof Project
+created file space for uploads (will be used for pictures in the future)
+
+NEED TO WORK ON
+adding images POST/GET (as of rn they img info can be stored but not img themselves)
+documentation

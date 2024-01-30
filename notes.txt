@@ -28,15 +28,23 @@ events:
     leash policy
     disabled (bool)
 
-NEW attendence_count
+NEW attendance_count
     id, userID, eventID NEEDS TO BE UNIUQE
 
 NOTE: 
     chain methods, GET -> GET img in the swift app
     POST -> POST img in the swift app
 
+NEW ENDPOINTS
+    GET: img info, img data
+    POST: img data (will also insert into database img data), attendance
+    PATCH: attendance
+    MAKE SURE THAT WHEN USER SUBSCRIBES TO EVENT THEY CANNOT DO IT AGAIN
+
+
 
 Update documentation for API
+
 
 NOTE: should we store the images in a folder or as a hash value
 Look into: emails (3rd party or can be hosted by server)

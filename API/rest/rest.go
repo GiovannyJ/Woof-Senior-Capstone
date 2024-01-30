@@ -27,10 +27,14 @@ func API(mode string){
 	
 	router.GET("users", GetUsers)
 	router.GET("users/:userid/savedbusinesses", GetSavedBusiness)
+	router.GET("users/:userid/attendance", GetUserAttendance) //*NEW
 	router.GET("businesses", GetBusinesses)
 	router.GET("businesses/:businessid/reviews", GetBusinessReviews)
 	router.GET("businesses/:businessid/events", GetBusinessEvents)
 	router.GET("events", GetEvents)
+	router.GET("events/:eventid/attendance", GetAttendanceCount) //*NEW
+	router.GET("imageInfo", GetImgInfo) //* NEW
+	
 
 
 	/*
@@ -41,6 +45,7 @@ func API(mode string){
 	router.POST("reviews/user/:userid/businesses/:businessid", NewReview)
 	router.POST("savedbusinesses/user/:userid/", NewSavedBusiness)
 	router.POST("events/businesses/:businessid", NewEvent)
+	router.POST("events/attendance", NewAttendance) //*NEW
 	router.POST("login", Login)
 	
 
@@ -63,6 +68,7 @@ func API(mode string){
 	router.DELETE("reviews", Delete)
 	router.DELETE("events", Delete)
 	router.DELETE("savedbusinesses", Delete)
+	router.DELETE("attendance", DeleteAttendance) //* NEW
 
 	
 	/*

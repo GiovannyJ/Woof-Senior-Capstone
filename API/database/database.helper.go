@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"database/sql"
 )
 
 
@@ -63,6 +64,63 @@ func AccountExist(id string) bool{
     return len(exists) > 0
 }
 
+//* checks if user is attending event RETURNS true if they are and false if not
+func AttendanceExist(userID int, eventID int) bool{
+    var query = make(map[string]interface{})
+	queryParams := map[string]string{	
+		"eventID": 		strconv.Itoa(eventID),
+		"userID":		strconv.Itoa(userID),
+	}
+
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+
+    exists, err := attendance_GET(query)
+	if err != nil{
+		return false
+	}
+    
+    return len(exists) > 0
+}
+
+//*this method is here as a helper bc we would never just return the userid and eventID might need it in the future
+//*gets all attendance
+func attendance_GET(params map[string]interface{}) ([]attendance, error) {
+	var sql strings.Builder
+	sql.WriteString("SELECT userID, eventID FROM attendance")
+	sql.WriteString(GenSelectQuery(params, "", 0))
+
+	result, err := connect(sql.String())
+	if err != nil {
+		return nil, err
+	}
+	defer result.Close()
+
+	var values []attendance
+
+	for result.Next() {
+		var t attendance
+		if err := result.Scan(
+			&t.UserID,
+			&t.EventID,
+		); err != nil {
+			return values, err
+		}
+		values = append(values, t)
+	}
+
+	if err = result.Err(); err != nil {
+		return values, err
+	}
+
+	return values, nil
+}
+
+
+
 //* executes SQL string
 func execute(sql string) error{
 	result, err := connect(sql)
@@ -76,36 +134,52 @@ func execute(sql string) error{
 
 //* Generates generic insert query when columns and values are dynamic
 func GenInsertQuery(tableName string, data interface{}, ignoreColumns []string) (string, error) {
-    valueType := reflect.TypeOf(data)
-    value := reflect.ValueOf(data)
+	valueType := reflect.TypeOf(data)
+	value := reflect.ValueOf(data)
 
-    var columns []string
-    var values []string
+	var columns []string
+	var values []string
 
-    for i := 0; i < valueType.NumField(); i++ {
-        field := valueType.Field(i)
-        columnName := strings.ToLower(field.Name)
+	for i := 0; i < valueType.NumField(); i++ {
+		field := valueType.Field(i)
+		columnName := strings.ToLower(field.Name)
 
-        // Check if the column should be ignored
-        if contains(ignoreColumns, columnName) {
-            continue
-        }
+		// Check if the column should be ignored
+		if contains(ignoreColumns, columnName) {
+			continue
+		}
 
-        columnValue := value.Field(i).Interface()
+		columnValue := value.Field(i).Interface()
 
-        if ptr, ok := columnValue.(*string); ok && ptr != nil {
-            columnValue = *ptr
-        } else if ptr, ok := columnValue.(*int); ok && ptr != nil {
-            columnValue = *ptr
-        }
+		if ptr, ok := columnValue.(*string); ok && ptr != nil {
+			columnValue = *ptr
+		} else if ptr, ok := columnValue.(*int); ok && ptr != nil {
+			columnValue = *ptr
+		} else if columnName == "imgid" {
+			// Handle imgID differently for sql.NullInt64 type
+			if imgID, ok := columnValue.(sql.NullInt64); ok {
+				if imgID.Valid {
+					values = append(values, fmt.Sprintf("%d", imgID.Int64))
+				} else {
+					continue
+				}
+				continue
+			}
+		} else if b, ok := columnValue.(bool); ok {
+			// Handle boolean values
+			values = append(values, fmt.Sprintf("%t", b))
+			columns = append(columns, columnName) // Include column name for boolean values
+			continue
+		}
 
-        columns = append(columns, columnName)
-        values = append(values, fmt.Sprintf("'%v'", columnValue))
-    }
+		values = append(values, fmt.Sprintf("'%v'", columnValue))
+		columns = append(columns, columnName)
+	}
 
-    sql := fmt.Sprintf("INSERT INTO %s(%s) VALUES(%s)", tableName, strings.Join(columns, ","), strings.Join(values, ","))
-    return sql, nil
+	sql := fmt.Sprintf("INSERT INTO %s(%s) VALUES(%s)", tableName, strings.Join(columns, ","), strings.Join(values, ","))
+	return sql, nil
 }
+
 
 //* Helper function to check if a string is in a slice of strings
 func contains(slice []string, val string) bool {

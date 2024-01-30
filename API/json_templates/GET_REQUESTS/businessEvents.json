@@ -1,14 +1,40 @@
 [
     {
         "businessinfo": {
-            "businessID": 3,
-            "businessName": "Fashion Boutique",
-            "ownerUserID": 2,
-            "businessType": "Retail",
-            "Location": "789 Fashion Blvd, Trendy Town",
-            "contact": "555-123-4567",
-            "description": "Latest fashion trends",
-            "rating": "3"
+            "businessID": 1,
+            "businessName": "Business 1",
+            "ownerUserID": 1,
+            "businessType": "Type A",
+            "Location": "Location A",
+            "contact": "Contact A",
+            "description": "Description A",
+            "rating": "4",
+            "dataLocation": "",
+            "imgID": {
+                "Int64": 3,
+                "Valid": true
+            },
+            "petSizePref": "medium",
+            "leashPolicy": true,
+            "disabledFriendly": false
+        },
+        "eventinfo": {
+            "eventID": 1,
+            "businessID": 1,
+            "eventName": "Event A",
+            "eventDescription": "Description A",
+            "eventDate": "2024-02-01",
+            "location": "Location A",
+            "contactInfo": "Contact A",
+            "dataLocation": "",
+            "imgID": {
+                "Int64": 3,
+                "Valid": true
+            },
+            "petSizePref": "small",
+            "leashPolicy": true,
+            "disabledFriendly": false,
+            "attendance_count": 1
         }
     }
 ]

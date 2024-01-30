@@ -1,8 +1,12 @@
-{    	
-	"BusinessName": "jucies",	
-	"OwnerID": 1,      		
+{
+	"BusinessName": "ipad mini",	
+	"OwneruserID": 10,      		
 	"BusinessType": "juice bar",	
-	"BusinessLocation": "123 up ya ass",
+	"Location": "123 up ya booty",
 	"Contact": "911-119-0090",	 			
-	"Descr": "juice bar for fit people who like to drink juice"				
+	"Description": "juice bar for fit people who like to drink juice",
+    "DataLocation": "internal",
+    "PetSizePref": "small",
+    "LeashPolicy": true,
+    "DisabledFriendly": true
 }

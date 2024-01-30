@@ -24,6 +24,10 @@ type admin = s.Admin
 type updatequery = s.UpdateQuery
 type deleteQuery = s.DeleteQuery
 type pwdreset = s.PWDReset
+type imgInfo = s.ImgInfo
+type attendanceCount = s.AttendanceCount
+type userAttendBusiness = s.UsersAttendEvent
+type attendance = s.Attendance
 
 
 /*
@@ -64,7 +68,7 @@ returns: all users in database
 */
 func Users_GET(params map[string]interface{}) ([]user, error) {
 	var sql strings.Builder
-	sql.WriteString("SELECT userID, username, email, accountType FROM user")
+	sql.WriteString("SELECT userID, username, email, accountType, imgID FROM user")
 	sql.WriteString(GenSelectQuery(params, "", 0))
 
 	result, err := connect(sql.String())
@@ -83,6 +87,7 @@ func Users_GET(params map[string]interface{}) ([]user, error) {
 			// &t.Pwd,
 			&t.Email,
 			&t.AccountType,
+			&t.ImgID,
 		); err != nil {
 			return values, err
 		}
@@ -125,6 +130,11 @@ func Business_GET(params map[string]interface{}) ([]business, error) {
 			&t.Description,
 			&t.Events,
 			&t.Rating,
+			&t.DataLocation,
+			&t.ImgID,
+			&t.PetSizePref,
+			&t.LeashPolicy,
+			&t.DisabledFriendly,
 		); err != nil {
 			return values, nil
 		}
@@ -180,7 +190,7 @@ gets all events in database
 */
 func Event_GET(params map[string]interface{}) ([]event, error) {
 	var sql strings.Builder
-	sql.WriteString("SELECT * FROM events")
+	sql.WriteString("SELECT eventID , businessID, eventName, eventDescription, eventDate, location, contactInfo, dataLocation, imgID, petSizePref, leashPolicy, disabledFriendly, (SELECT COUNT(userID) FROM attendance WHERE eventID = e.eventID) as num_attend  FROM events e ")
 	
 	sql.WriteString(GenSelectQuery(params, "", 0))
 
@@ -202,6 +212,12 @@ func Event_GET(params map[string]interface{}) ([]event, error) {
 			&t.EventDate,
 			&t.Location,
 			&t.ContactInfo,
+			&t.DataLocation,
+			&t.ImgID,
+			&t.PetSizePref,
+			&t.LeashPolicy,
+			&t.DisabledFriendly,
+			&t.AttendanceCount,
 		); err != nil {
 			return values, nil
 		}
@@ -242,6 +258,8 @@ func Reviews_GET(params map[string]interface{}) ([]review, error) {
 			&t.Rating,
 			&t.Comment,
 			&t.DateCreated,
+			&t.DataLocation,
+			&t.ImgID,
 		); err != nil {
 			return values, nil
 		}
@@ -255,7 +273,170 @@ func Reviews_GET(params map[string]interface{}) ([]review, error) {
 	return values, nil
 }
 
+/*
+*TESTED WORKING
+gets all image info from database
+*/
+func ImgInfo_GET(params map[string]interface{}) ([]imgInfo, error) {
+	var sql strings.Builder
+	sql.WriteString("SELECT * FROM images")
+
+	sql.WriteString(GenSelectQuery(params, "", 0))
+
+	result, err := connect(sql.String())
+	if err != nil {
+		return nil, err
+	}
+	defer result.Close()
+
+	var values []imgInfo
+	
+	for result.Next() {
+		var t imgInfo
+		if err := result.Scan(
+			&t.ImgID,
+			&t.Size,
+			&t.ImgData,
+			&t.ImgName,
+			&t.ImgType,
+			&t.DateCreated,
+		); err != nil {
+			return values, nil
+		}
+		values = append(values, t)
+	}
+
+	if err = result.Err(); err != nil {
+		return values, err
+	}
+
+	return values, nil
+}
+
+
+/*
+*TESTED WORKING
+gets count of all the userIDs attending an event
+*/
+func AttendanceCount_GET(params map[string]interface{}, eventID int) ([]attendanceCount, error) {
+	var sql strings.Builder
+	sql.WriteString("SELECT COUNT(userID) as attendanceCount FROM attendance")
+	sql.WriteString(GenSelectQuery(params, "eventID", eventID))
+
+	result, err := connect(sql.String())
+	if err != nil {
+		return nil, err
+	}
+	defer result.Close()
+
+	var values []attendanceCount
+	
+	for result.Next() {
+		var t attendanceCount
+		if err := result.Scan(
+			&t.Count,
+		); err != nil {
+			return values, nil
+		}
+		values = append(values, t)
+	}
+
+	if err = result.Err(); err != nil {
+		return values, err
+	}
+
+	return values, nil
+}
+
+
+
 //JOINED TABLES
+
+/*
+*TESTED WORKING
+Gets all the events that a user is attending in the database
+*/
+func Users_Attendance_GET(params map[string]interface{}, userID int) ([]userAttendBusiness, error) {
+	var sql strings.Builder
+	sql.WriteString("SELECT  u.userID, u.username, u.email, u.accountType, u.imgID, ")
+	sql.WriteString("		b.businessID, b.businessName, b.businessType, b.location,")
+	sql.WriteString("		b.ownerUserID, b.contact, b.description, b.rating, b.imgID,")
+	sql.WriteString("		b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation,")
+	sql.WriteString("		(SELECT COUNT(id) FROM attendance a2 WHERE e.eventID = a2.eventID) as attendanceCount,")
+	sql.WriteString("		e.eventID, e.businessID, e.eventName , e.eventDescription, e.eventDate,")
+	sql.WriteString("		e.location, e.contactInfo, e.dataLocation, e.imgID, e.petSizePref, e.leashPolicy,")
+	sql.WriteString("		e.disabledFriendly ")
+	sql.WriteString("FROM user u ")
+	sql.WriteString("JOIN attendance a ON u.userID = a.userID ")
+	sql.WriteString("JOIN events e ON e.eventID = a.eventID ")
+	sql.WriteString("JOIN businesses b ON e.businessID = b.businessID ")
+	sql.WriteString(GenSelectQuery(params, "u.userID", userID))
+	
+
+	result, err := connect(sql.String())
+	if err != nil {
+		return nil, err
+	}
+	defer result.Close()
+
+	var values []userAttendBusiness
+	
+	for result.Next() {
+		var t userAttendBusiness
+		var u user
+		var b business
+		var e event
+		if err := result.Scan(
+			&u.UserID,
+			&u.Username,
+			&u.Email,
+			&u.AccountType,
+			&u.ImgID,
+			&b.BusinessID,
+			&b.BusinessName,
+			&b.BusinessType,
+			&b.Location,
+			&b.OwnerUserID,
+			&b.Contact,
+			&b.Description,
+			&b.Rating,
+			&b.ImgID,
+			&b.PetSizePref,
+			&b.LeashPolicy,
+			&b.DisabledFriendly,
+			&b.DataLocation,
+			&e.AttendanceCount,
+			&e.EventID,
+			&e.BusinessID,
+			&e.EventName,
+			&e.EventDescription,
+			&e.EventDate,
+			&e.Location,
+			&e.ContactInfo,
+			&e.DataLocation,
+			&e.ImgID,
+			&e.PetSizePref,
+			&e.LeashPolicy,
+			&e.DisabledFriendly,
+		); err != nil {
+			return values, nil
+		}
+		t.U = u
+		t.B = b
+		t.E = e
+		values = append(values, t)
+	}
+
+	if err = result.Err(); err != nil {
+		return values, err
+	}
+
+	return values, nil
+}
+
+
+
+
 
 /*
 *TESTED WORKING
@@ -263,9 +444,14 @@ gets all of a users saved businesses in full context
 */
 func Users_SavedBusiness_GET(params map[string]interface{}, userID int) ([]usersSavedBusiness, error) {
 	var sql strings.Builder
-	sql.WriteString("SELECT u.userID, u.username, u.email, u.accountType, sb.businessID, b.businessName, b.businessType, b.location, b.ownerUserID, b.contact, b.description, b.rating FROM user u\n")
-	sql.WriteString("JOIN savedBusinesses sb ON u.userID = sb.userID\n")
-	sql.WriteString("JOIN businesses b ON sb.businessID = b.businessID\n")
+	sql.WriteString("SELECT  u.userID, u.username, u.email, u.accountType, u.imgID, ")
+    sql.WriteString("    sb.businessID, b.businessName, b.businessType, b.location,")
+    sql.WriteString("    b.ownerUserID, b.contact, b.description, b.rating, b.imgID,")
+    sql.WriteString("    b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation ")
+	sql.WriteString("FROM user u ")
+	sql.WriteString("JOIN savedBusinesses sb ON u.userID = sb.userID ")
+	sql.WriteString("JOIN businesses b ON sb.businessID = b.businessID ")
+	
 	sql.WriteString(GenSelectQuery(params, "u.userID", userID))
 
 	result, err := connect(sql.String())
@@ -285,6 +471,7 @@ func Users_SavedBusiness_GET(params map[string]interface{}, userID int) ([]users
 			&u.Username,
 			&u.Email,
 			&u.AccountType,
+			&u.ImgID,
 			&b.BusinessID,
 			&b.BusinessName,
 			&b.BusinessType,
@@ -293,6 +480,11 @@ func Users_SavedBusiness_GET(params map[string]interface{}, userID int) ([]users
 			&b.Contact,
 			&b.Description,
 			&b.Rating,
+			&b.ImgID,
+			&b.PetSizePref,
+			&b.LeashPolicy,
+			&b.DisabledFriendly,
+			&b.DataLocation,
 		); err != nil {
 			return values, nil
 		}
@@ -317,10 +509,15 @@ gets all events for businesses in full context
 */
 func Businesses_Events_GET(params map[string]interface{}, businessID int) ([]businessEvents, error) {
 	var sql strings.Builder
-	sql.WriteString("SELECT e.eventID, e.eventName, e.eventDescription, e.eventDate, e.location, e.contactInfo, b.businessID, b.businessName, b.businessType, b.location, b.contact, b.description, b.rating, b.OwnerUserID FROM events e ")
-	sql.WriteString("JOIN businesses b ON e.businessID = b.businessID")
+	sql.WriteString("SELECT  e.eventID, e.eventName, e.eventDescription, e.eventDate,")
+	sql.WriteString("	e.location, e.contactInfo, e.imgID, e.petSizePref, e.leashPolicy, e.disabledFriendly,")
+	sql.WriteString("	(SELECT COUNT(userID) FROM attendance WHERE eventID = e.eventID) as attendance_count,")
+	sql.WriteString("	b.businessID, b.businessName, b.businessType, ")
+	sql.WriteString("	b.location, b.contact, b.description, b.rating, b.OwnerUserID,")
+	sql.WriteString("	b.imgID, b.petSizePref, b.leashPolicy, b.disabledFriendly ")
+	sql.WriteString("FROM events e ")
+	sql.WriteString("JOIN businesses b ON e.businessID = b.businessID ")
 	sql.WriteString(GenSelectQuery(params, "b.businessID", businessID))
-
 	result, err := connect(sql.String())
 	if err != nil {
 		return nil, err
@@ -340,6 +537,11 @@ func Businesses_Events_GET(params map[string]interface{}, businessID int) ([]bus
 			&e.EventDate,
 			&e.Location,
 			&e.ContactInfo,
+			&e.ImgID,
+			&e.PetSizePref,
+			&e.LeashPolicy,
+			&e.DisabledFriendly,
+			&e.AttendanceCount,
 			&b.BusinessID,
 			&b.BusinessName,
 			&b.BusinessType,
@@ -348,6 +550,10 @@ func Businesses_Events_GET(params map[string]interface{}, businessID int) ([]bus
 			&b.Description,
 			&b.Rating,
 			&b.OwnerUserID,
+			&b.ImgID,
+			&b.PetSizePref,
+			&b.LeashPolicy,
+			&b.DisabledFriendly,
 		); err != nil {
 			return values, nil
 		}
@@ -370,8 +576,18 @@ gets all reviews for businesses and users who made review
 */
 func Businesses_Reviews_Users_GET(params map[string]interface{}, businessID int) ([]businessReview, error) {
 	var sql strings.Builder
-	sql.WriteString("SELECT r.reviewID, r.rating, r.comment, r.dateCreated, u.userID, u.username, u.email, u.accountType, b.businessID, b.businessName, b.businessType, b.location, b.contact, b.rating AS businessRating, b.description, b.OwnerUserID")
-	sql.WriteString(" FROM reviews r JOIN businesses b ON r.businessID = b.businessID JOIN user u ON r.userID = u.userID")
+	// sql.WriteString("SELECT r.reviewID, r.rating, r.comment, r.dateCreated, u.userID, u.username, u.email, u.accountType, b.businessID, b.businessName, b.businessType, b.location, b.contact, b.rating AS businessRating, b.description, b.OwnerUserID")
+	// sql.WriteString(" FROM reviews r JOIN businesses b ON r.businessID = b.businessID JOIN user u ON r.userID = u.userID")
+	
+	sql.WriteString("SELECT  r.reviewID, r.rating, r.comment, r.dateCreated, r.imgID,")
+	sql.WriteString("	u.userID, u.username, u.email, u.accountType, u.imgID,")
+	sql.WriteString("	b.businessID, b.businessName, b.businessType, ")
+	sql.WriteString("	b.location, b.contact, b.rating AS businessRating, b.description, b.OwnerUserID,")
+	sql.WriteString("	b.imgID, b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation, r.dataLocation ")
+	sql.WriteString("FROM reviews r ")
+	sql.WriteString("JOIN businesses b ON r.businessID = b.businessID ")
+	sql.WriteString("JOIN user u ON r.userID = u.userID")
+	
 	sql.WriteString(GenSelectQuery(params, "b.businessID", businessID))
 
 	result, err := connect(sql.String())
@@ -392,10 +608,12 @@ func Businesses_Reviews_Users_GET(params map[string]interface{}, businessID int)
 			&r.Rating,
 			&r.Comment,
 			&r.DateCreated,
+			&r.ImgID,
 			&u.UserID,
 			&u.Username,
 			&u.Email,
 			&u.AccountType,
+			&u.ImgID,
 			&b.BusinessID,
 			&b.BusinessName,
 			&b.BusinessType,
@@ -404,6 +622,12 @@ func Businesses_Reviews_Users_GET(params map[string]interface{}, businessID int)
 			&b.Rating,
 			&b.Description,
 			&b.OwnerUserID,
+			&b.ImgID,
+			&b.PetSizePref,
+			&b.LeashPolicy,
+			&b.DisabledFriendly,
+			&b.DataLocation,
+			&r.DataLocation,
 		); err != nil {
 			return values, nil
 		}
@@ -448,7 +672,7 @@ func CreateNewAccount(data login) error {
 		columnName := strings.ToLower(field.Name)
 		columnValue := value.Field(i).Interface()
 
-		if columnName == "id" || columnName == "pwd" {
+		if columnName == "id" || columnName == "pwd" || columnName == "imgID" {
 			continue
 		}
 
@@ -546,12 +770,36 @@ RETURN: Error when applicable nil if no error (check if saved business exists)
 func CreateNewEvent(data event) error {
 	tableName := "events"
 
-	ignoreColumns := []string{"eventID", "eventid"}
+	ignoreColumns := []string{"eventID", "eventid", "attendancecount"}
 
 	sql, err := GenInsertQuery(tableName, data, ignoreColumns)
 	if err != nil {
 		return err
 	}
+	return execute(sql)
+}
+
+/*
+*TESTED WORKING
+creates new attendance in database if it does not exists already, updates attendance count
+*/
+func CreateNewAttendance(data attendance) error {
+	if AttendanceExist(data.UserID, data.EventID) {
+		return &s.AttendanceExistError{Message: "user is already attending event"}
+	}
+	tableName := "attendance"
+
+	ignoreColumns := []string{"id"}
+
+	sql, err := GenInsertQuery(tableName, data, ignoreColumns)
+	if err != nil {
+		return err
+	}
+	err = execute(sql)
+	if err != nil{
+		return err
+	}
+	sql = fmt.Sprintf("UPDATE events SET attendance_count = (SELECT COUNT(id) FROM attendance WHERE eventID = %d)", data.EventID)
 	return execute(sql)
 }
 
@@ -680,23 +928,30 @@ func DeleteData(data deleteQuery) error{
 	user_deleteReview := fmt.Sprintf("DELETE FROM reviews WHERE userID = %d", data.ID)
 	user_deleteBusiness := fmt.Sprintf("DELETE FROM businesses WHERE OwnerUserID = %d", data.ID)
 	user_deleteEvents := fmt.Sprintf("DELETE FROM events WHERE businessID = (SELECT businessID FROM businesses b WHERE OwnerUserID = %d)", data.ID)
+	user_deleteAttendance := fmt.Sprintf("DELETE FROM attendance WHERE eventID = (SELECT e.eventID FROM events e JOIN businesses b on b.OwnerUserID = %d AND e.businessID = b.businessID)", data.ID)
 
 
 	business_deleteBusiness := fmt.Sprintf("DELETE FROM businesses WHERE businessID = %d", data.ID)
 	business_deleteSavedBusinesses := fmt.Sprintf("DELETE FROM savedBusinesses WHERE businessID = %d", data.ID)
 	business_deleteReviews := fmt.Sprintf("DELETE FROM reviews WHERE businessID = %d",data.ID)
 	business_deleteEvents := fmt.Sprintf("DELETE FROM events WHERE businessID = %d", data.ID)
+	business_deleteAttendance := fmt.Sprintf("DELETE FROM attendance WHERE eventID = (SELECT eventID from events WHERE businessID = %d)", data.ID)
+	
+	event_deleteAttendance := fmt.Sprintf("DELETE FROM attendance WHERE eventID = %d", data.ID)
 
 	genericSQL := fmt.Sprintf("DELETE FROM %s WHERE %s = %d", data.TableName, data.Column, data.ID)
 	
 	switch data.TableName{
 	case "user":
+		execute(user_deleteAttendance)
 		execute(user_deleteEvents)
 		execute(user_deleteReview)
 		execute(user_deleteSavedBusiness)
 		execute(user_deleteBusiness)
 		execute(user_deleteUser)
+
 	case "businesses":
+		execute(business_deleteAttendance)
 		execute(business_deleteEvents)
 		execute(business_deleteReviews)
 		execute(business_deleteSavedBusinesses)
@@ -706,9 +961,23 @@ func DeleteData(data deleteQuery) error{
 	case "savedBusiness":
 		execute(genericSQL)
 	case "events":
+		execute(event_deleteAttendance)
 		execute(genericSQL)
 	}
 
+	return nil
+}
+
+/*
+*TESTED WORKING
+deletes attendance from database AND updates attendance count in events table
+!THERE IS NO TRUE ERROR CHECKING THIS WILL HAUNT ME LATER
+*/
+func DeleteAttendanceData(data attendance) error{
+	delete_attendance := fmt.Sprintf("DELETE FROM attendance WHERE userID=%d AND eventID=%d", data.UserID, data.EventID)
+	update_attendance := fmt.Sprintf("UPDATE events SET attendance_count = (SELECT COUNT(id) FROM attendance WHERE eventID = %d)", data.EventID)
+	execute(delete_attendance)
+	execute(update_attendance)
 	return nil
 }
 

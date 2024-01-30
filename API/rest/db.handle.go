@@ -18,7 +18,7 @@ type event = s.Event
 type updatequery = s.UpdateQuery
 type deletequery = s.DeleteQuery
 type pwdreset = s.PWDReset
-
+type attendance = s.Attendance
 
 /*
 *=================GET METHOD HANDLERS==================
@@ -70,6 +70,69 @@ func GetUsers(c *gin.Context) {
 
 /*
 *TESTED WORKING
+Gets all the events a user is attending using userID
+*/
+func GetUserAttendance(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	var query = make(map[string]interface{})
+	userID := c.Param("userid")
+	id, err := strconv.Atoi(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	queryParams := map[string]string{
+		"b.businessID": 		c.Query("businessID"),
+		"b.businessName":  		c.Query("businessName"),
+		"b.businessType":		c.Query("businessType"),
+		"b.location":			c.Query("location"),
+		"b.contact":			c.Query("contact"),
+		"b.ownerID": 			c.Query("ownerID"),
+		"b.petSizePref":		c.Query("B_petSizePref"),
+		"b.leashPolicy":		c.Query("B_leashPolicy"),
+		"b.disabledFriendly":	c.Query("B_disabledFriendly"),
+		"b.rating": 			c.Query("rating"),
+		"e.eventID": 			c.Query("eventID"),
+		"e.eventName": 			c.Query("eventName"),
+		"e.eventDate": 			c.Query("eventDate"),
+		"e.petSizePref":		c.Query("E_petSizePref"),
+		"e.leashPolicy":		c.Query("E_leashPolicy"),
+		"e.disabledFriendly":	c.Query("E_disabledFriendly"),
+		"e.attendance_count":	c.Query("attendance_count"),
+		"order":     			c.Query("order"),
+	}
+
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+	cacheKey := generateCacheKey(queryParams, userID + "getuserattendance")
+
+	if data, err := getCacheData(cacheKey); err == nil{
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+
+	results, err := db.Users_Attendance_GET(query, id)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	serializedData, err := json.Marshal(results)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
+		return
+	}
+	DataCache.Set(cacheKey, serializedData)
+	c.IndentedJSON(http.StatusOK, results)
+}
+
+
+/*
+*TESTED WORKING
 gets all businesses 
 and query for businessID, businessName, ownerID, rating, order (ASC, DESC)
 */
@@ -85,6 +148,9 @@ func GetBusinesses(c *gin.Context) {
 		"contact":			c.Query("contact"),
 		"ownerID": 			c.Query("ownerID"),
 		"rating": 			c.Query("rating"),
+		"petSizePref":		c.Query("petSizePref"),
+		"leashPolicy":		c.Query("leashPolicy"),
+		"disabledFriendly":	c.Query("disabledFriendly"),
 		"order":     		c.Query("order"),
 	}
 
@@ -134,6 +200,15 @@ func GetSavedBusiness(c *gin.Context) {
 
 	queryParams := map[string]string{
 		"b.businessID": 		c.Query("businessID"),
+		"b.businessName":  		c.Query("businessName"),
+		"b.businessType":		c.Query("businessType"),
+		"b.location":			c.Query("location"),
+		"b.contact":			c.Query("contact"),
+		"b.ownerID": 			c.Query("ownerID"),
+		"b.petSizePref":		c.Query("B_petSizePref"),
+		"b.leashPolicy":		c.Query("B_leashPolicy"),
+		"b.disabledFriendly":	c.Query("B_disabledFriendly"),
+		"b.rating": 			c.Query("rating"),
 		"order":     		c.Query("order"),
 	}
 
@@ -142,7 +217,7 @@ func GetSavedBusiness(c *gin.Context) {
 			query[key] = value
 		}
 	}
-	cacheKey := generateCacheKey(queryParams, "getsavedbusiness")
+	cacheKey := generateCacheKey(queryParams, userID + "getsavedbusinesses")
 
 	if data, err := getCacheData(cacheKey); err == nil{
 		c.IndentedJSON(http.StatusOK, data)
@@ -200,7 +275,7 @@ func GetBusinessReviews(c *gin.Context) {
 			query[key] = value
 		}
 	}
-	cacheKey := generateCacheKey(queryParams, "getbusinessreviews")
+	cacheKey := generateCacheKey(queryParams, businessID + "getbusinessreviews")
 
 	if data, err := getCacheData(cacheKey); err == nil{
 		c.IndentedJSON(http.StatusOK, data)
@@ -238,6 +313,10 @@ func GetEvents(c *gin.Context) {
 		"businessID": 		c.Query("businessID"),
 		"eventName":	  	c.Query("eventName"),
 		"eventDate": 		c.Query("eventDate"),
+		"petSizePref":		c.Query("petSizePref"),
+		"leashPolicy":		c.Query("leashPolicy"),
+		"disabledFriendly":	c.Query("disabledFriendly"),
+		"attendance_count": c.Query("attendance_count"),
 		"order":     		c.Query("order"),
 	}
 
@@ -285,9 +364,23 @@ func GetBusinessEvents(c *gin.Context) {
 	}
 
 	queryParams := map[string]string{
+		"b.businessID": 		c.Query("businessID"),
+		"b.businessName":  		c.Query("businessName"),
+		"b.businessType":		c.Query("businessType"),
+		"b.location":			c.Query("location"),
+		"b.contact":			c.Query("contact"),
+		"b.ownerID": 			c.Query("ownerID"),
+		"b.petSizePref":		c.Query("B_petSizePref"),
+		"b.leashPolicy":		c.Query("B_leashPolicy"),
+		"b.disabledFriendly":	c.Query("B_disabledFriendly"),
+		"b.rating": 			c.Query("rating"),
 		"e.eventID": 			c.Query("eventID"),
 		"e.eventName": 			c.Query("eventName"),
 		"e.eventDate": 			c.Query("eventDate"),
+		"e.petSizePref":		c.Query("E_petSizePref"),
+		"e.leashPolicy":		c.Query("E_leashPolicy"),
+		"e.disabledFriendly":	c.Query("E_disabledFriendly"),
+		"e.attendance_count":	c.Query("attendance_count"),
 		"order":     			c.Query("order"),
 	}
 
@@ -297,7 +390,7 @@ func GetBusinessEvents(c *gin.Context) {
 		}
 	}
 
-	cacheKey := generateCacheKey(queryParams, "getBusinessEvents")
+	cacheKey := generateCacheKey(queryParams, businessID + "getbusinessevents")
 
 	if data, err := getCacheData(cacheKey); err == nil{
 		c.IndentedJSON(http.StatusOK, data)
@@ -305,6 +398,94 @@ func GetBusinessEvents(c *gin.Context) {
 	}
 
 	results, err := db.Businesses_Events_GET(query, id)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	serializedData, err := json.Marshal(results)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
+		return
+	}
+	DataCache.Set(cacheKey, serializedData)
+	c.IndentedJSON(http.StatusOK, results)
+}
+
+/*
+*TESTED WORKING
+gets all img info from database
+can query by: id, size, imgName, imgType, order(ASC/DESC)
+*/
+func GetImgInfo(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	var query = make(map[string]interface{})
+	
+
+	queryParams := map[string]string{
+		"id": 					c.Query("id"),
+		"size": 				c.Query("size"),
+		"imgName": 				c.Query("imgName"),
+		"imgType": 				c.Query("imgType"),
+		"order":     			c.Query("order"),
+	}
+
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+
+	cacheKey := generateCacheKey(queryParams, "getImgInfo")
+
+	if data, err := getCacheData(cacheKey); err == nil{
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+
+	results, err := db.ImgInfo_GET(query)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	serializedData, err := json.Marshal(results)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
+		return
+	}
+	DataCache.Set(cacheKey, serializedData)
+	c.IndentedJSON(http.StatusOK, results)
+}
+
+
+
+/*
+*TESTED WORKING
+gets all attendance for an event using eventID
+*/
+func GetAttendanceCount(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	var query = make(map[string]interface{})
+	eventID := c.Param("eventid")
+	id, err := strconv.Atoi(eventID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		return
+	}
+
+	queryParams := map[string]string{
+		"eventID": 			eventID,
+	}
+
+	cacheKey := generateCacheKey(queryParams, eventID + "getattendancecount")
+
+	if data, err := getCacheData(cacheKey); err == nil{
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+
+	results, err := db.AttendanceCount_GET(query, id)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -365,7 +546,7 @@ func NewUser(c *gin.Context) {
 
 	results, err := db.Users_GET(query)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	c.IndentedJSON(http.StatusCreated, results)
@@ -412,6 +593,53 @@ func NewBusiness(c *gin.Context) {
 	}
 
 	results, err := db.Business_GET(query)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.IndentedJSON(http.StatusCreated, results)
+}
+
+
+/*
+*TESTED WORKING
+Creates new attendance entry in database
+*/
+func NewAttendance(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Content-Type")
+
+	var newAttendance attendance
+
+	if err := c.BindJSON(&newAttendance); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, nil)
+		return
+	}
+
+	err := db.CreateNewAttendance(newAttendance)
+	if err != nil {
+		if _, ok := err.(*s.AttendanceExistError); ok {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "user is already attending"})
+		} else {
+			c.IndentedJSON(http.StatusInternalServerError, nil)
+		}
+		return
+	}
+
+	var query = make(map[string]interface{})
+
+	queryParams := map[string]string{	
+		"e.eventID": 		strconv.Itoa(newAttendance.EventID),
+	}
+
+	for key, value := range queryParams {
+		if len(value) > 0 {
+			query[key] = value
+		}
+	}
+
+	results, err := db.Users_Attendance_GET(query, newAttendance.UserID)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -708,6 +936,27 @@ func Delete(c *gin.Context){
 	}
 
 	err := db.DeleteData(delete)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+}
+
+/*
+*TESTED WORKING
+deletes attendance from database and updates the attendance count in events table
+*/
+func DeleteAttendance(c *gin.Context){
+	c.Header("Access-Control-Allow-Origin", "*")
+
+	var delete attendance
+	
+	if err := c.BindJSON(&delete); err != nil{
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	err := db.DeleteAttendanceData(delete)
 	if err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return

@@ -1,9 +1,13 @@
 [
     {
         "userID": 1,
-        "username": "john_doe",
+        "username": "ggswag",
         "pwd": "",
-        "email": "john@example.com",
-        "accountType": "regular"
+        "email": "user1@example.com",
+        "accountType": "regular",
+        "imgID": {
+            "Int64": 1,
+            "Valid": true
+        }
     }
 ]

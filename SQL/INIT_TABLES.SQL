@@ -4,19 +4,17 @@
 --use database 
   use woof;
 
-create table images(
-  id            int auto_increment,
-  size          int null,
-  imgData       varchar(1000) null,
-  imgName       varchar(200) not null,
-  imgType ENUM('user', 'business', 'review', 'event') NOT NULL
-  dateCreated   DATETIME DEFAULT(CURRENT_DATE()) NOT NULL,
-  contraint images_pk primary key(id)
-  );
-
-
---create table user
-  create table user(
+CREATE TABLE images (
+  id            INT AUTO_INCREMENT,
+  size          INT NULL,
+  imgData       VARCHAR(1000) NULL,
+  imgName       VARCHAR(200) NOT NULL,
+  imgType       ENUM('user', 'business', 'review', 'event') NOT NULL,
+  dateCreated   DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  CONSTRAINT images_pk PRIMARY KEY (id)
+);
+ 
+ create table user(
     userID int auto_increment,
     username varchar(50) not null unique,
     password varchar(255) not null,
@@ -24,10 +22,9 @@ create table images(
     accountType varchar(30) not null,
     imgID int null,     
     constraint user_pk primary key(userID),
-    constraint img_fk foreign key(imgID) references images(id)
+    constraint user_fk_img foreign key(imgID) references images(id)
   );
 
---create table businesses
   create table businesses(
     businessID int auto_increment,
     businessName varchar(200) not null,
@@ -45,10 +42,9 @@ create table images(
     disabledFriendly BOOLEAN NOT NULL,
     constraint business_pk primary key(businessID),
     constraint business_fk foreign key(OwnerUserID) references user(userID),
-    constraint img_fk foreign key(imgID) references images(id)
+    constraint business_fk_img foreign key(imgID) references images(id)
 );
 
---create table reviews
 CREATE TABLE reviews (
     reviewID INT AUTO_INCREMENT,
     userID INT NOT NULL,
@@ -61,47 +57,46 @@ CREATE TABLE reviews (
     CONSTRAINT reviews_pk PRIMARY KEY (reviewID),
     CONSTRAINT reviews_fk_user FOREIGN KEY (userID) REFERENCES user(userID),
     CONSTRAINT reviews_fk_business FOREIGN KEY (businessID) REFERENCES businesses(businessID),
-    constraint img_fk foreign key(imgID) references images(id)
+    constraint review_fk_img foreign key(imgID) references images(id)
 );
 
---create table for saved businesses
-  create table savedBusinesses(
+create table savedBusinesses(
     saveID int auto_increment,
     userID int not null,
     businessID int not null,
     constraint savedBusinesses_pk primary key(saveID),
-    constraint savedBusinesses_fk foreign key(userID) references user(userID),
-    constraint savedBusinesses_fk foreign key(businessID) references businesses(businessID)
+    constraint savedBusinesses_fk_user foreign key(userID) references user(userID),
+    constraint savedBusinesses_fk_business foreign key(businessID) references businesses(businessID)
   );
 
---create table for events
-  create table events(
-    eventID int auto_increment,
-    businessID int not null,
-    eventName varchar(100) not null,
-    eventDescription varchar(400) null,
-    eventDate date not null,
-    location varchar(300) not null,
-    contactInfo varchar(300) not null,
-    dataLocation ENUM('foreign','internal') NOT NULL,
-    imgID int null,
-    petSizePref ENUM('small','medium','large') NOT NULL,
+CREATE TABLE events (
+    eventID int AUTO_INCREMENT,
+    businessID int NOT NULL,
+    eventName varchar(100) NOT NULL,
+    eventDescription varchar(400) NULL,
+    eventDate date NOT NULL,
+    location varchar(300) NOT NULL,
+    contactInfo varchar(300) NOT NULL,
+    dataLocation ENUM('foreign', 'internal') NOT NULL,
+    imgID int NULL,
+    petSizePref ENUM('small', 'medium', 'large') NOT NULL,
     leashPolicy BOOLEAN NOT NULL,
     disabledFriendly BOOLEAN NOT NULL,
-    attendance_count int DEFUALT (0) NOT NULL,
-    constraint events_pk primary key(eventID),
-    constraint events_fk foreign key(businessID) references businesses(businessID),
-    constraint img_fk foreign key(imgID) references images(id)
+    attendance_count int DEFAULT 0 NOT NULL,
+    CONSTRAINT events_pk PRIMARY KEY (eventID),
+    CONSTRAINT events_fk FOREIGN KEY (businessID) REFERENCES businesses (businessID),
+    CONSTRAINT events_fk_img FOREIGN KEY (imgID) REFERENCES images (id)
 );
 
-CREATE TABLE attendence(
+
+CREATE TABLE attendance(
   id int auto_increment,
   userID int not null,
   eventID int not null,
   constraint attendance_pk primary key (id),
-  constraint userID_fk foreign key (userID) references user(userID),
-  constraint eventID_fk foreign key (eventID) references events(eventID)
-)
+  constraint attendence_fk_user foreign key (userID) references user(userID),
+  constraint attendence_fk_event foreign key (eventID) references events(eventID)
+);
 
 
 CREATE TABLE `ADMIN` (

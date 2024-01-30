@@ -1,0 +1,26 @@
+[
+    {
+        "imgID": 1,
+        "size": 1024,
+        "imgData": "base64encodedimage1",
+        "imgName": "Image 1",
+        "imgType": "user",
+        "dateCreated": "2024-01-28 12:00:00"
+    },
+    {
+        "imgID": 2,
+        "size": 2048,
+        "imgData": "base64encodedimage2",
+        "imgName": "Image 2",
+        "imgType": "business",
+        "dateCreated": "2024-01-29 14:30:00"
+    },
+    {
+        "imgID": 3,
+        "size": 512,
+        "imgData": "base64encodedimage3",
+        "imgName": "Image 3",
+        "imgType": "review",
+        "dateCreated": "2024-01-30 10:45:00"
+    }
+]

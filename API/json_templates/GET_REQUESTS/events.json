@@ -2,10 +2,19 @@
     {
         "eventID": 1,
         "businessID": 1,
-        "eventName": "Live Music Night",
-        "eventDescription": "Enjoy live acoustic music.",
+        "eventName": "Event A",
+        "eventDescription": "Description A",
         "eventDate": "2024-02-01",
-        "location": "123 Main St, Cityville",
-        "contactInfo": "123-456-7890"
+        "location": "Location A",
+        "contactInfo": "Contact A",
+        "dataLocation": "internal",
+        "imgID": {
+            "Int64": 3,
+            "Valid": true
+        },
+        "petSizePref": "small",
+        "leashPolicy": true,
+        "disabledFriendly": false,
+        "attendance_count": 1
     }
 ]

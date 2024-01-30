@@ -1,29 +1,46 @@
 [
     {
         "businessinfo": {
-            "businessID": 3,
-            "businessName": "Fashion Boutique",
-            "ownerUserID": 2,
-            "businessType": "Retail",
-            "Location": "789 Fashion Blvd, Trendy Town",
-            "contact": "555-123-4567",
-            "description": "Latest fashion trends",
-            "rating": "3"
+            "businessID": 1,
+            "businessName": "Business 1",
+            "ownerUserID": 1,
+            "businessType": "Type A",
+            "Location": "Location A",
+            "contact": "Contact A",
+            "description": "Description A",
+            "rating": "4",
+            "dataLocation": "internal",
+            "imgID": {
+                "Int64": 3,
+                "Valid": true
+            },
+            "petSizePref": "medium",
+            "leashPolicy": true,
+            "disabledFriendly": false
         },
         "userinfo": {
-            "userID": 2,
-            "username": "jane_smith",
+            "userID": 1,
+            "username": "ggswag",
             "pwd": "",
-            "email": "jane@example.com",
-            "accountType": "premium"
+            "email": "user1@example.com",
+            "accountType": "regular",
+            "imgID": {
+                "Int64": 1,
+                "Valid": true
+            }
         },
         "reviewinfo": {
-            "reviewID": 2,
-            "userID": 2,
-            "businessID": 3,
-            "rating": 3,
-            "comment": "Nice clothing selection.",
-            "dateCreated": "2024-01-02"
+            "reviewID": 1,
+            "userID": 1,
+            "businessID": 1,
+            "rating": 5,
+            "comment": "Great experience!",
+            "dateCreated": "2024-01-29",
+            "dataLocation": "internal",
+            "imgID": {
+                "Int64": 1,
+                "Valid": true
+            }
         }
     }
 ]
