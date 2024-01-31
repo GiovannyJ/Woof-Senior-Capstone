@@ -54,6 +54,26 @@ These are endpoints to retrieve data from the database. They can be queried with
   - Query parameters available: `eventID`, `eventName`, `eventDate`, `order`
   - ex: http://localhost:8080/events?eventName=doggy%20disco
 
++ [http://localhost:8080/users/#USERID/attendance](#)
+  - Retrieve a list of all events the user is attending.
+  - Query parameters available: `eventID`, `eventName`, `eventDate`, `order`
+  - ex: http://localhost:8080/users/1/attendance
+
++ [http://localhost:8080/events/#EVENTID/attendance](#)
+  - Retrieve a count of all attending an event.
+  - Query parameters available: `eventID`, `eventName`, `eventDate`, `order`
+  - ex: http://localhost:8080/events/2/attendance
+
++ [http://localhost:8080/imgInfo](#)
+  - Retrieve a list of metadata for image data stored in database.
+  - Query parameters available: `eventID`, `eventName`, `eventDate`, `order`
+  - ex: http://localhost:8080/imgInfo?id=1
+
++ [http://localhost:8080/uploads/TYPE/FILENAME](#)
+  - Retrieve an image from the database, type denotes wether it is for a profile, business, event, or review.
+  - Query parameters available: `eventID`, `eventName`, `eventDate`, `order`
+  - ex: http://localhost:8080/uploads/profile/martin.png
+
 [Sample JSON Responses](json_templates/GET_REQUESTS)
 
 ### POST REQUESTS
@@ -80,6 +100,14 @@ These are endpoints to send data to the database. In the request body you must s
   
 + [http://localhost:8080/login](#)
   - Login using username and password
+
++ [http://localhost:8080/events/attendance](#)
+  - Create a new record for an events attendance (RSVP)
+  - this also updates the attendance_count column in the database
+  - checks for if user already is RSVP for the event as to not overpopulate it artificially
+
+  + [http://localhost:8080/uploads](#)
+  - upload a new image to the database, images are stored locally (maybe store on server later)
   
 
 [Sample JSON Body for Requests](json_templates/POST_REQUESTS)
@@ -121,12 +149,10 @@ These are endpoints to delete data from the database.
   
 + [http://localhost:8080/events](#)
   - Delete event from database
+  - Deletes attendance as well
+
++ [http://localhost:8080/attendance](#)
+  - Delete attendance from database
+  - Updates attendance count on the events tables
 
 [Sample JSON Body for Requests](json_templates/DEL_REQUESTS)
-
-
-### Notes
-In the future this API may be deployed to my production server as a stand alone service rather than a exe that runs on disc. There may also be attempts to transition this API to a cloud service. This must be done in order to have the API constantly serve data when needed.
-
-
-[Deploy Link](https://dev.to/koddr/how-to-deploy-golang-application-on-any-gnu-linux-system-but-without-docker-59m1)

@@ -6,11 +6,10 @@ import (
 	// "fmt"
 )
 
-//router driver make all requests here
 func API(mode string){
 	router := gin.Default()
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"*"}  // You might want to limit this to specific origins in production
+	config.AllowOrigins = []string{"*"}
 	router.Use(cors.New(config))
 	
 	// gin.SetMode(gin.ReleaseMode)
@@ -35,7 +34,6 @@ func API(mode string){
 	router.GET("events/:eventid/attendance", GetAttendanceCount) //*NEW
 	router.GET("imageInfo", GetImgInfo) //* NEW
 	
-
 
 	/*
 	*=========================POST ROUTES================================
@@ -74,28 +72,13 @@ func API(mode string){
 	/*
 	*=========================FILE HANDLER ROUTES================================
 	*/
-
-	// /*
-	// *WORKING
-	// !NEEDS MORE TESTS
-	// upload files in JSON FORMAT
-	// */
-	// router.POST("/uploads", PlaceHolder)
-
-	// /*
-	// *WORKING
-	// retrieve file in JSON
-	// */
-	// router.GET("/uploads/:file", PlaceHolder)
+	router.POST("/uploads", UploadFile) //* NEW
+	router.GET("/uploads/:type/:file", RetrieveFile) //* NEW
+	//!NEED A ROUTE TO MAKE SURE THAT THE NEWEST PICTURE IS THE ONE THE USER IS USING IN ANY CASE
 
 
 	/*
 	*=========================EMAIL ROUTES================================
-	*/
-	
-
-	/*
-	*=========================PHONE AUTH ROUTES================================
 	*/
 	
 

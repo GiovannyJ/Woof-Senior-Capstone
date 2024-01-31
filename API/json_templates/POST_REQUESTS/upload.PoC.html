@@ -1,0 +1,43 @@
+<!--
+    I HAD TO MAKE THIS ONE AN HTML FILE BECAUSE ITS NOT LIKE A SIMPLE
+    SENDING A JSON BODY SINCE ITS A FILE THAT YOU ARE UPLOADING IT NEEDS TO
+    BE A FORM VALUE
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
+<body>
+
+    <form id="uploadForm">
+        <input type="file" name="file" id="fileInput" />
+        <input type="text" name="type" value="FILETYPE" />
+        <button type="button" onclick="uploadFile()">Upload</button>
+    </form>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const typeInput = document.querySelector('input[name="type"]');
+            
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('type', typeInput.value);
+
+            fetch('http://localhost:8080/uploads', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</body>
+</html>

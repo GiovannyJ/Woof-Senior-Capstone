@@ -781,6 +781,27 @@ func CreateNewEvent(data event) error {
 
 /*
 *TESTED WORKING
+POST TO: images table
+DATA: must be form-data shaped like POST.uploads.json
+RETURN: error when applicable nil if no error
+*/
+func CreateNewImgInfo(data imgInfo) error {
+	tableName := "images"
+
+	ignoreColumns := []string{"id", "imgID", "imgid"}
+
+	sql, err := GenInsertQuery(tableName, data, ignoreColumns)
+	fmt.Println(sql)
+	if err != nil {
+		return err
+	}
+	return execute(sql)
+}
+
+
+
+/*
+*TESTED WORKING
 creates new attendance in database if it does not exists already, updates attendance count
 */
 func CreateNewAttendance(data attendance) error {
