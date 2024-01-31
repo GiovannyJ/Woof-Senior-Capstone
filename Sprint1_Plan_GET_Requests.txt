@@ -1,0 +1,9 @@
+In this sprint we will connect all the GET endpoints to the API
+- test what the data looks like in API/json_templates/GET
+- test what the endpoint data looks like in postman
+- create decodable struct in swift (maybe make a separate file for it)
+- create method to call endpoint and print it to terminal
+- design what skeleton frame will look like and populate data in there using struct
+- if all works try making call to API using query strings
+- make sure page can refresh to call latest data
+- if any errors cannot be solved on swift end its probably an API issue record it

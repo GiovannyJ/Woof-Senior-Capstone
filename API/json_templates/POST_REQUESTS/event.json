@@ -1,11 +1,20 @@
-{
-    "eventName": "doggy disco",
-    "eventDescription": "bring your dog and let them dance, free food and drink and swag for dogs",
-    "eventDate": "2024-01-09",
-    "location": "Rath Park",
-    "contactInfo": "516-312-9715",
-    "datalocation": "internal",
-    "petsizepref": "small",
-    "leashpolicy": true,
-    "disabledfriendly": true
-}
+[
+    {
+        "attendance_count": 3,
+        "businessID": 2,
+        "contactInfo": "Contact B",
+        "dataLocation": "foreign",
+        "disabledFriendly": true,
+        "eventDate": "2024-02-05",
+        "eventDescription": "Description B",
+        "eventID": 2,
+        "eventName": "Event B",
+        "imgID": {
+            "Int64": 2,
+            "Valid": true
+        },
+        "leashPolicy": false,
+        "location": "Location B",
+        "petSizePref": "large"
+    }
+]

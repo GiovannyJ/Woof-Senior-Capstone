@@ -1,6 +1,13 @@
-{
-    "username":	    "rk",
-    "password":		"PASSWORD",
-    "email":		"rk@gmail.com",
-    "accountType":  "regular"
-}
+[
+    {
+        "userID": 2,
+        "username": "user2",
+        "pwd": "",
+        "email": "user2@example.com",
+        "accountType": "regular",
+        "imgID": {
+            "Int64": 2,
+            "Valid": true
+        }
+    }
+]

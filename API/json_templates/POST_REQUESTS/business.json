@@ -1,12 +1,21 @@
-{
-	"BusinessName": "ipad mini",	
-	"OwneruserID": 10,      		
-	"BusinessType": "juice bar",	
-	"Location": "123 up ya booty",
-	"Contact": "911-119-0090",	 			
-	"Description": "juice bar for fit people who like to drink juice",
-    "DataLocation": "internal",
-    "PetSizePref": "small",
-    "LeashPolicy": true,
-    "DisabledFriendly": true
-}
+[
+    {
+        "businessID": 2,
+        "businessName": "Business 2",
+        "ownerUserID": 2,
+        "businessType": "Type B",
+        "Location": "Location B",
+        "contact": "Contact B",
+        "description": "Description B",
+        "event": "Event B",
+        "rating": "3",
+        "dataLocation": "foreign",
+        "imgID": {
+            "Int64": 2,
+            "Valid": true
+        },
+        "petSizePref": "large",
+        "leashPolicy": false,
+        "disabledFriendly": true
+    }
+]
