@@ -14,7 +14,7 @@ returns .env variable
 */
 func EnvVar(key string) string {
 
-  err := godotenv.Load(".env")
+  err := godotenv.Load()
 
   if err != nil {
     log.Fatalf("Error loading .env file")

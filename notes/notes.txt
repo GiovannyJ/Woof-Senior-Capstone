@@ -10,18 +10,18 @@ user:
     imageID
 
 businesses: 
-    data location (foriegn/remote):: update get and insert methods
+    data location (foreign/remote):: update get and insert methods
     imageID:: update get, insert, and update methods
     pet size preference
     leash policy
     disabled (bool)
 
 reviews: 
-    data location (foriegn/remote):: update get and insert methods
+    data location (foreign/remote):: update get and insert methods
     imageID:: update get and insert methods
 
 events:
-    data location (foriegn/remote):: update get and insert methods
+    data location (foreign/remote):: update get and insert methods
     imageID: update get and insert methods
     user count: int see how many ppl are going to the event
     pet size preference

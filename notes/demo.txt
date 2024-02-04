@@ -1,0 +1,19 @@
+show database
+    attendance
+    img info
+
+show upload img
+show download img
+
+
+Show Demo of how App work
+    login (need to learn how to store data that persists)
+    businesses
+
+Get Bo's env running for API/Testing
+
+Discuss what we need to show Kim on Tuesday
+-make abstract
+-make powerpoint
+    -record demo of using app
+    -sprint 2: POST ROUTES

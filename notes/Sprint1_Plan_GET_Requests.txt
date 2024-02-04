@@ -7,3 +7,17 @@ In this sprint we will connect all the GET endpoints to the API
 - if all works try making call to API using query strings
 - make sure page can refresh to call latest data
 - if any errors cannot be solved on swift end its probably an API issue record it
+
+Fixing bugs in API GET endpoints:
+- if any errors in API logic for get endpoints are found fix them
+- if any endpoints need to be created
+
+
+Research for 3rd Party API:
+- look into documentation for 3rd party API
+- look into how to call API and how to best structure data
+- look into pipeline: external API -> Script -> Internal API/App itself
+
+
+Research email Generation:
+- how can we send email to user when their account is being breached
