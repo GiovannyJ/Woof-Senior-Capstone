@@ -6,11 +6,13 @@ show upload img
 show download img
 
 
+On Mac:
+show makefile
 Show Demo of how App work
     login (need to learn how to store data that persists)
     businesses
 
-Get Bo's env running for API/Testing
+Get Bo's env running for API/Testing (Go and postman)
 
 Discuss what we need to show Kim on Tuesday
 -make abstract

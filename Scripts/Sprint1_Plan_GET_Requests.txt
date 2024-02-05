@@ -21,3 +21,7 @@ Research for 3rd Party API:
 
 Research email Generation:
 - how can we send email to user when their account is being breached
+
+Fix pages:
+- make sure pages can be traversed
+- hold session variables (user account)
