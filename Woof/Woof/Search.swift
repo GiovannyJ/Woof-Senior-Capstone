@@ -11,6 +11,7 @@ struct Search: View {
     @State private var filterByHotel: Bool = false
     @State private var filterByRestaurant: Bool = false
     @State private var selectedBusinessType: String = "All"
+    @ObservedObject private var sessionManager = SessionManager.shared
     
     // Array for business types
     let businessTypes = ["All", "Hotel", "Restaurant", "Daycare", "Park", "Other"]

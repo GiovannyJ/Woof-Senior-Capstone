@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct Profile: View {
+    @ObservedObject private var sessionManager = SessionManager.shared
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("User Profile")

@@ -8,6 +8,7 @@ import SwiftUI
 
 struct LocalEvents: View {
     @State private var events: [Event] = []
+    @ObservedObject private var sessionManager = SessionManager.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {

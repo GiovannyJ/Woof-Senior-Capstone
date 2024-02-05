@@ -12,6 +12,7 @@ struct RegisterView: View {
     @State private var password: String = ""
     @State private var email: String = ""
     @State private var accountType: String = ""
+    @ObservedObject private var sessionManager = SessionManager.shared
 
     var body: some View {
         NavigationView {

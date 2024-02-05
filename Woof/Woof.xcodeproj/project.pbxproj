@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F514F982B70A25B00C1DEE7 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F514F972B70A25B00C1DEE7 /* SessionManager.swift */; };
 		3FD1074A2B67F20A007968DF /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD107442B67F209007968DF /* Search.swift */; };
 		3FD1074B2B67F20A007968DF /* CreateEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD107452B67F209007968DF /* CreateEvent.swift */; };
 		3FD1074C2B67F20A007968DF /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD107462B67F209007968DF /* Register.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F514F972B70A25B00C1DEE7 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		3FD107442B67F209007968DF /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		3FD107452B67F209007968DF /* CreateEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEvent.swift; sourceTree = "<group>"; };
 		3FD107462B67F209007968DF /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				C0F297872B4851C70096E053 /* Assets.xcassets */,
 				C0F297892B4851C70096E053 /* Preview Content */,
 				C0F297AD2B4857180096E053 /* login.swift */,
+				3F514F972B70A25B00C1DEE7 /* SessionManager.swift */,
 			);
 			path = Woof;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				C0F297AE2B4857180096E053 /* login.swift in Sources */,
 				3FD1074E2B67F20A007968DF /* Home.swift in Sources */,
 				3FD1074F2B67F20A007968DF /* Profile.swift in Sources */,
+				3F514F982B70A25B00C1DEE7 /* SessionManager.swift in Sources */,
 				C0F297842B4851C40096E053 /* WoofApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

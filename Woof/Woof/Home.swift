@@ -7,10 +7,17 @@
 import SwiftUI
 
 struct HomeView: View {
+    @ObservedObject private var sessionManager = SessionManager.shared
+    
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+                    Text("Welcome Back \(sessionManager.currentUser?.username ?? "Guest")!")
+                        .font(.subheadline)
+                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        .padding(.leading)
+                    
                     Text("Discover Pet-Friendly Businesses and Events.")
                         .font(.largeTitle)
                         .foregroundColor(.orange)
@@ -21,7 +28,7 @@ struct HomeView: View {
                         .fontWeight(.bold)
                         .padding(.leading)
 
-                    NavigationLink(destination: ProfileView()) {
+                    NavigationLink(destination: Profile()) {
                         Text("Profile")
                             .font(.subheadline)
                             .fontWeight(.heavy)
@@ -32,7 +39,7 @@ struct HomeView: View {
                             .cornerRadius(10)
                     }
 
-                    NavigationLink(destination: SearchView()) {
+                    NavigationLink(destination: Search()) {
                         Text("Search")
                             .fontWeight(.heavy)
                             .padding()
@@ -42,7 +49,7 @@ struct HomeView: View {
                             .cornerRadius(10)
                     }
 
-                    NavigationLink(destination: LocalEventsView()) {
+                    NavigationLink(destination: LocalEvents()) {
                         Text("Local Events")
                             .fontWeight(.heavy)
                             .padding()

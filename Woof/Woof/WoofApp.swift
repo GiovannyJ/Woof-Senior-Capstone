@@ -11,7 +11,8 @@ import SwiftUI
 struct WoofApp: App {
     var body: some Scene {
         WindowGroup {
-            LocalEvents()
+//            LocalEvents()
+            Login()
         }
     }
 }
