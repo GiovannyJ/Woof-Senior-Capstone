@@ -12,3 +12,9 @@ delete edit: deletes all attendance when an event is deleted
 Files:
 moved files to correct location under Woof Project
 created file space for uploads (will be used for pictures in the future)
+
+Woof App:
+added pages
+- functionality to login
+- functionality to local events
+- added session manager

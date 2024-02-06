@@ -15,7 +15,7 @@ struct Login: View {
     @ObservedObject private var sessionManager = SessionManager.shared
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 20) {
                 TextField("Username", text: $username)
                     .disableAutocorrection(true)
@@ -29,10 +29,7 @@ struct Login: View {
                     .background(Color.teal.opacity(0.2))
                     .cornerRadius(8)
                 
-                Button(action: {
-                    // Make API request
-                    authenticateUser()
-                }) {
+                Button(action: {authenticateUser()}) {
                     Text("Login")
                         .foregroundColor(.white)
                         .padding()
@@ -44,15 +41,19 @@ struct Login: View {
                 .padding(.horizontal)
                 .padding()
                 .navigationTitle("Login")
-                .background(
-                NavigationLink(
-                    destination: HomeView(),  // Destination view when isLoggedIn is true
-                    isActive: $isLoggedIn,
-                    label: {
-                        EmptyView()  // This view is invisible, used only for navigation
+                .navigationDestination(
+                    isPresented: $isLoggedIn) {
+                        HomeView()
                     }
-                )
-            )
+//                .background(
+//                NavigationLink(
+//                    destination: HomeView(),  // Destination view when isLoggedIn is true
+//                    isActive: $isLoggedIn,
+//                    label: {
+//                        EmptyView()  // This view is invisible, used only for navigation
+//                    }
+//                )
+//            )
                 
                 if let errorMessage = errorMessage {
                     Text(errorMessage)
