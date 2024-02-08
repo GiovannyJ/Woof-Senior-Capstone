@@ -40,7 +40,7 @@ struct HomeView: View {
                     }
 
                     NavigationLink(destination: Search()) {
-                        Text("Search")
+                        Text("Search Businesses")
                             .fontWeight(.heavy)
                             .padding()
                             .frame(maxWidth: .infinity)

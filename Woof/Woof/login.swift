@@ -16,7 +16,7 @@ struct Login: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
+            VStack(spacing: 13.0) {
                 TextField("Username", text: $username)
                     .disableAutocorrection(true)
                     .textContentType(.none)
@@ -45,15 +45,17 @@ struct Login: View {
                     isPresented: $isLoggedIn) {
                         HomeView()
                     }
-//                .background(
-//                NavigationLink(
-//                    destination: HomeView(),  // Destination view when isLoggedIn is true
-//                    isActive: $isLoggedIn,
-//                    label: {
-//                        EmptyView()  // This view is invisible, used only for navigation
-//                    }
-//                )
-//            )
+                
+                NavigationLink(
+                    destination: RegisterView(),
+                    label: {
+                        Text("Don't have an account? Sign Up")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color.red)
+                            .padding(.leading)
+                    })
+                    .padding(.bottom)
                 
                 if let errorMessage = errorMessage {
                     Text(errorMessage)
@@ -116,10 +118,6 @@ struct Login: View {
             }
         }.resume()
     }
-}
-
-struct ErrorResponse: Decodable {
-    let error: String
 }
 
 

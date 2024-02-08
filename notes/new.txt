@@ -18,3 +18,13 @@ added pages
 - functionality to login
 - functionality to local events
 - added session manager
+- added GET routes to profile, pfp, local events
+- added pages to view event in full context
+- added page to view business in full context
+
+
+NEED TO WORK ON: 
+- loading images(business/events)
+- search business page 
+- default pfp (if user/business/event has none)
+- review page (under business in full context)

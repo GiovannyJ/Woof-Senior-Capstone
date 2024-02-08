@@ -1,3 +1,5 @@
+FIX CACHE:: if person makes POST request when GET endpoint is cached then it messes up
+
 NEED TO WORK ON:
 get more business logic
 

@@ -1,6 +1,5 @@
 [
     {
-        "businessID": 2,
         "businessName": "Business 2",
         "ownerUserID": 2,
         "businessType": "Type B",

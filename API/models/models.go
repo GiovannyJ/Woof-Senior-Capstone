@@ -36,7 +36,7 @@ type Business struct{
 	BusinessName		string				`json:"businessName"`
 	OwnerUserID      	int    				`json:"ownerUserID"`
 	BusinessType		string				`json:"businessType"`
-	Location			string				`json:"Location"`
+	Location			string				`json:"location"`
 	Contact	 			string 				`json:"contact"`
 	Description 		string				`json:"description"`
 	Events 				*string				`json:"event,omitempty"`
