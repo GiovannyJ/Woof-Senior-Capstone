@@ -4,7 +4,7 @@
         "businessName": "Business 1",
         "ownerUserID": 1,
         "businessType": "Type A",
-        "Location": "Location A",
+        "location": "Location A",
         "contact": "Contact A",
         "description": "Description A",
         "event": "Event A",

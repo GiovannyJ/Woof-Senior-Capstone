@@ -29,6 +29,6 @@ if response.status_code == 200:
     for i in businesses:
         # bind to structure that looks like BODY_JSON
         # call to POST ENDPOINT 
-    print(businesses)
+        print(businesses)
 else:
     print(f"Error: {response.status_code}")
