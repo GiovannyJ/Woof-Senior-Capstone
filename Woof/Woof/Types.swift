@@ -31,7 +31,7 @@ struct Event: Decodable {
     let eventDate: String
     let eventDescription: String
     let eventName: String
-    let imgID: ImageID
+    let imgID: ImageID?
     let leashPolicy: Bool
     let location: String
     let petSizePref: String

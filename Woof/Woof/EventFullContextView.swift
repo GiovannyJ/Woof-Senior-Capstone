@@ -6,62 +6,59 @@
 //
 
 import SwiftUI
-import Combine
 
-// ViewModel to handle data fetching and networking
+// ViewModel to handle data fetching and networking for EventFullContextView
 class EventFullContextViewModel: ObservableObject {
     @Published var event: Event
     @Published var imageData: Data?
-    private var cancellables = Set<AnyCancellable>()
 
     init(event: Event) {
         self.event = event
-        fetchImageInfo()
+        fetchEventImage()
     }
 
-    func fetchImageInfo() {
-        guard let url = URL(string: "http://localhost:8080/imageInfo?id=\(event.imgID.Int64)") else {
-            print("Invalid imageInfo URL")
+    func fetchEventImage() {
+        guard let imgID = self.event.imgID?.Int64 else {
+            print("Image ID not found")
             return
         }
-        print("Fetching imageInfo from: \(url)")
-
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map { $0.data }
-            .decode(type: ImageInfo.self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
-                    print("Error fetching imageInfo:", error)
-                }
-            }, receiveValue: { [weak self] imageInfo in
-                print("Received imageInfo:", imageInfo)
-                self?.fetchImageData(with: imageInfo)
-            })
-            .store(in: &cancellables)
-    }
-
-    func fetchImageData(with imageInfo: ImageInfo) {
-        guard let url = URL(string: "http://localhost:8080/uploads/\(imageInfo.imgType)/\(imageInfo.imgName)") else {
-            print("Invalid imageData URL")
+        guard let url = URL(string: "http://localhost:8080/imageInfo?id=\(imgID)") else {
+            print("Invalid URL")
             return
         }
-        print("Fetching imageData from: \(url)")
-
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map { $0.data }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
-                    print("Error fetching imageData:", error)
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                if let error = error {
+                    print("Error fetching image data:", error.localizedDescription)
+                } else {
+                    print("No data received for event image")
                 }
-            }, receiveValue: { [weak self] imageData in
-                print("Received imageData:", imageData)
-                self?.imageData = imageData
-            })
-            .store(in: &cancellables)
+                return
+            }
+            
+            do {
+                let imageInfo = try JSONDecoder().decode([ImageInfo].self, from: data)
+                if let info = imageInfo.first {
+                    let fileURL = URL(fileURLWithPath: #file)
+                    let directoryURL = fileURL.deletingLastPathComponent()
+
+                    // Constructing the file URL
+                    let uploadsUrl = directoryURL.appendingPathComponent("uploads")
+                    let imageUrl = uploadsUrl.appendingPathComponent(info.imgType).appendingPathComponent(info.imgName)
+
+                    let imageData = try Data(contentsOf: imageUrl)
+                    DispatchQueue.main.async {
+                        self.imageData = imageData
+                    }
+                }
+            } catch {
+                print("Error decoding image info JSON:", error)
+            }
+        }.resume()
     }
 }
+
 // View displaying event details and image
 struct EventFullContextView: View {
     @ObservedObject var viewModel: EventFullContextViewModel
@@ -112,4 +109,3 @@ struct EventFullContextView: View {
         .cornerRadius(8)
     }
 }
-
