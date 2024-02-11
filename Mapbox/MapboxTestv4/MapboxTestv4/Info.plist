@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>MBXAccessToken</key>
+	<string>pk.eyJ1IjoibWFydGluZ2VuYW8iLCJhIjoiY2xzYjFuZ2dyMGFhYTJpcWtkbmgybGRhNSJ9.Z1iRRckNBGkuEx1ttQg5Zg</string>
+	<key>MGLMapboxAccessToken</key>
+	<string>sk.eyJ1IjoibWFydGluZ2VuYW8iLCJhIjoiY2xzYjI2ZDVxMDl6aDJycGh2eDV5bzRkZiJ9.-hv3x6Sd63bDVIObvYRbWw</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>Main</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+</dict>
+</plist>
