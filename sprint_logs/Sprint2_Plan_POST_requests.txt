@@ -1,12 +1,15 @@
-Backend
+Backend (Gio)
 - bug fixing for API post routes
-- Integration of 3rd Party API for business data
+- fix bugs for GET
+    - FIX CACHE ISSUE
+- (maybe) Integration of 3rd Party API for business data
 
-Frontend
+Frontend (Gio/Bo)
 - POST for all necessary pages
 - GET for any stragglers
 - MAP view for events/businesses
 - Cleaning inconsistencies
+- make things look purdy
 
-Research
-- 
+Research (Martin)
+- map view 

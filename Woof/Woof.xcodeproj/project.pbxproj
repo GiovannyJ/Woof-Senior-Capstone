@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3F514F982B70A25B00C1DEE7 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F514F972B70A25B00C1DEE7 /* SessionManager.swift */; };
+		3F8C161A2B795A80000C3DEE /* BusinessReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8C16192B795A80000C3DEE /* BusinessReviews.swift */; };
 		3FBF9E102B749A03000D584B /* uploads in Resources */ = {isa = PBXBuildFile; fileRef = 3FBF9E0F2B749A03000D584B /* uploads */; };
 		3FBF9E122B74A775000D584B /* BusinessFullContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF9E112B74A775000D584B /* BusinessFullContext.swift */; };
 		3FCE1E3E2B73381F00C9E182 /* EventFullContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCE1E3D2B73381F00C9E182 /* EventFullContextView.swift */; };
@@ -47,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		3F514F972B70A25B00C1DEE7 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		3F8C16192B795A80000C3DEE /* BusinessReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusinessReviews.swift; sourceTree = "<group>"; };
 		3FBF9E0F2B749A03000D584B /* uploads */ = {isa = PBXFileReference; lastKnownFileType = folder; name = uploads; path = Woof/uploads; sourceTree = "<group>"; };
 		3FBF9E112B74A775000D584B /* BusinessFullContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessFullContext.swift; sourceTree = "<group>"; };
 		3FCE1E3D2B73381F00C9E182 /* EventFullContextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFullContextView.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 		C0F297822B4851C40096E053 /* Woof */ = {
 			isa = PBXGroup;
 			children = (
+				3F8C16192B795A80000C3DEE /* BusinessReviews.swift */,
 				3FD107452B67F209007968DF /* CreateEvent.swift */,
 				3FBF9E112B74A775000D584B /* BusinessFullContext.swift */,
 				3FD107482B67F20A007968DF /* Home.swift */,
@@ -299,6 +302,7 @@
 				3FBF9E122B74A775000D584B /* BusinessFullContext.swift in Sources */,
 				3FD1074A2B67F20A007968DF /* Search.swift in Sources */,
 				3FCE1E402B7339B200C9E182 /* Types.swift in Sources */,
+				3F8C161A2B795A80000C3DEE /* BusinessReviews.swift in Sources */,
 				3FD1074B2B67F20A007968DF /* CreateEvent.swift in Sources */,
 				3FD1074D2B67F20A007968DF /* LocalEvents.swift in Sources */,
 				C0F297AE2B4857180096E053 /* login.swift in Sources */,

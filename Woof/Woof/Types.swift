@@ -66,6 +66,7 @@ struct Business: Decodable, Identifiable {
     let petSizePref: String
     let leashPolicy: Bool
     let disabledFriendly: Bool
+    let reviews: [Review]?
 
     var id: Int {
         return businessID
@@ -73,7 +74,22 @@ struct Business: Decodable, Identifiable {
 }
 
 
-
 struct ErrorResponse: Decodable {
     let error: String
+}
+
+
+struct Review: Decodable, Identifiable{
+    let reviewID: Int
+    let userID: Int
+    let businessID: Int
+    let rating: Int
+    let comment: String
+    let dateCreated: String
+    let dataLocation: String
+    let imgID: ImageID?
+    
+    var id: Int {
+        return reviewID
+    }
 }
