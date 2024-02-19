@@ -45,7 +45,7 @@ struct Profile: View {
                             Text("No saved businesses.")
                         } else {
                             ForEach(businesses, id: \.businessinfo.businessID) { savedBusiness in
-                                NavigationLink(destination: BusinessFullContextView(business: savedBusiness.businessinfo)) {
+                                NavigationLink(destination: BusinessReviews(business: savedBusiness.businessinfo)) {
                                     Text(savedBusiness.businessinfo.businessName)
                                         .padding()
                                         .background(Color.blue)

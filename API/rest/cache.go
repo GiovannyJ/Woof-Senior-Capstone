@@ -1,16 +1,18 @@
 package rest
 
 import (
-	"github.com/allegro/bigcache"
-	"time"
 	"encoding/json"
+	"time"
+	"github.com/allegro/bigcache"
 	// "github.com/gin-gonic/gin"
-	"strings"
 	"fmt"
+	"strings"
 )
 
 // Define a global BigCache instance
 var DataCache *bigcache.BigCache
+var cacheKeys []string
+
 
 /*
 Initialization of the cache
@@ -55,7 +57,10 @@ func getCacheData(cacheKey string) ([]interface{}, error) {
     return data, nil
 }
 
-
+/*
+*HELPER METHOD
+used to create a unique id for cache
+*/
 func generateCacheKey(queryParams map[string]string, uid string) string {
 	var cacheKeyParts []string
 	for key, value := range queryParams {
@@ -66,4 +71,31 @@ func generateCacheKey(queryParams map[string]string, uid string) string {
 
 	key := fmt.Sprintf("%s-%s", uid, strings.Join(cacheKeyParts, "-"))
 	return key
+}
+
+
+/*
+*HELPER METHOD
+used to set cache data as well as update the cache keys list
+*/
+func setCache(cacheKey string, serializedData []byte){
+	DataCache.Set(cacheKey, serializedData)
+	cacheKeys = append(cacheKeys, cacheKey)
+}
+
+
+func invalidateCache(pattern string) {
+    var updatedKeys []string
+
+    for _, key := range cacheKeys {
+        if strings.Contains(key, pattern) {
+            // Delete the cache entry associated with the key
+            DataCache.Delete(key)
+        } else {
+            updatedKeys = append(updatedKeys, key)
+        }
+    }
+
+    // Update the cacheKeys list
+    cacheKeys = updatedKeys
 }
