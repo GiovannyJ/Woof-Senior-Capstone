@@ -93,3 +93,9 @@ struct Review: Decodable, Identifiable{
         return reviewID
     }
 }
+
+struct BusinessReviewInfo: Decodable{
+    let businessinfo: Business
+    let userinfo: User
+    let reviewinfo: Review
+}

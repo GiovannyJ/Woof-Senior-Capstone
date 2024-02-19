@@ -62,6 +62,7 @@ class EventFullContextViewModel: ObservableObject {
 // View displaying event details and image
 struct EventFullContextView: View {
     @ObservedObject var viewModel: EventFullContextViewModel
+    
 
     init(event: Event) {
         self.viewModel = EventFullContextViewModel(event: event)

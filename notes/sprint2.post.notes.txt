@@ -1,0 +1,12 @@
+added functionality to:
+-register
+-search (GET)
+-review
+
+changed view for business info to be in full context with that Bo made
+
+ISSUES:
+-cache
+    when new info is added to the database: need to invalidate cache bc GET will not get the latest info
+- view:
+    when business info is loaded it lags behind on the img data and the review data need to fix
