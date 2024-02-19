@@ -59,6 +59,42 @@ struct CreateEventView: View {
     }
 }
 
+private func submitEvent(eventName: String, eventDescription: String, eventDate: String, location: String, contactInfo: String){
+    let url = URL(string: "http://localhost:8080/create_event")!
+    
+    let body:[String: String] = [
+        "eventName": eventName,
+        "eventDescription": eventDescription,
+        "eventDate": eventDate,
+        "location": location,
+        "contactInfo": contactInfo
+    ]
+    
+    let jsonData = try? JSONSerialization.data(withJSONObject: body)
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.httpBody = jsonData
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let httpResponse = response as? HTTPURLResponse {
+            switch httpResponse.statusCode {
+            case 201:
+                // Successful response
+                print("Event Created!")
+                // Update SessionManager on the main thread
+            case 500:
+                // Handle 500 error
+                print("Error.")
+            default:
+                // Handle other status codes
+                print("Unexpected error occurred")
+            }
+        }
+    }.resume()
+}
+
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {
         CreateEventView()
