@@ -64,7 +64,7 @@ func GetUsers(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -126,7 +126,7 @@ func GetUserAttendance(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -177,7 +177,7 @@ func GetBusinesses(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -239,7 +239,7 @@ func GetSavedBusiness(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -293,7 +293,7 @@ func GetBusinessReviews(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -343,7 +343,7 @@ func GetEvents(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -408,7 +408,7 @@ func GetBusinessEvents(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -454,7 +454,7 @@ func GetImgInfo(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -496,7 +496,7 @@ func GetAttendanceCount(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -549,6 +549,8 @@ func NewUser(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	invalidateCache("getusers")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -597,6 +599,7 @@ func NewBusiness(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getbusinesses")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -644,6 +647,7 @@ func NewAttendance(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getuserattendance")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -698,6 +702,7 @@ func NewSavedBusiness(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getsavedbusinesses")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -756,6 +761,7 @@ func NewReview(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getbusinessreviews")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -810,6 +816,7 @@ func NewEvent(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getevents")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
