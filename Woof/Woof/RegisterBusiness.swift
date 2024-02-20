@@ -76,7 +76,7 @@ struct RegisterBusiness: View {
     }
 }
 private func registerBusiness(businessName: String, businessType: String, location: String, contact: String, description: String, events: String) {
-    let url = URL(string: "http://localhost:8080/register_business")!
+    let url = URL(string: "http://localhost:8080/CreateNewBusiness")!
     
     let body: [String: String] = [
         "businessName": businessName,

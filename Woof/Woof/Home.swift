@@ -60,7 +60,7 @@ struct HomeView: View {
                     }
                     
                     NavigationLink(destination: CreateEventView()) {
-                        Text("Create Event")
+                        Text("Create an Event")
                             .fontWeight(.heavy)
                             .padding()
                             .frame(maxWidth: .infinity)
@@ -68,7 +68,16 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
-                    // Add more features as needed
+                    
+                    NavigationLink(destination: RegisterBusiness()) {
+                        Text("Register Your Business")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.teal)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }                    // Add more features as needed
 
                     Spacer()
                 }
