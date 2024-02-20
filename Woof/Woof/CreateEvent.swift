@@ -13,14 +13,14 @@ struct CreateEventView: View {
     @State private var eventDate: String = ""
     @State private var location: String = ""
     @State private var contactInfo: String = ""
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Promote Your Pet-Friendly Event")
                 .font(.largeTitle)
                 .foregroundColor(.orange)
                 .padding()
-
+            
             // Form to input event details
             Form {
                 Section(header: Text("Event Information")) {
@@ -30,7 +30,7 @@ struct CreateEventView: View {
                     TextField("Location", text: $location)
                     TextField("Contact Information", text: $contactInfo)
                 }
-
+                
                 // Button to submit the event
                 Section {
                     Button(action: {
@@ -51,7 +51,7 @@ struct CreateEventView: View {
         .padding()
         .navigationTitle("Create Event")
     }
-
+    
     // Function for event submission
     private func submitEvent() {
         //  logic to submit the event to the database
@@ -60,7 +60,7 @@ struct CreateEventView: View {
 }
 
 private func submitEvent(eventName: String, eventDescription: String, eventDate: String, location: String, contactInfo: String){
-    let url = URL(string: "http://localhost:8080/create_event")!
+    let url = URL(string: "http://localhost:8080/CreateNewEvent")!
     
     let body:[String: String] = [
         "eventName": eventName,
@@ -100,3 +100,4 @@ struct CreateEventView_Previews: PreviewProvider {
         CreateEventView()
     }
 }
+

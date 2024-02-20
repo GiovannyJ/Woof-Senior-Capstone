@@ -58,7 +58,16 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
-
+                    
+                    NavigationLink(destination: CreateEventView()) {
+                        Text("Create Event")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.teal)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
                     // Add more features as needed
 
                     Spacer()
