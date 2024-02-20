@@ -13,8 +13,12 @@ class SessionManager: ObservableObject {
     @Published var currentUser: User?
     @Published var isLoggedIn: Bool = false
     @Published var userID: Int?
-
+    
     static let shared = SessionManager()
-
+    
     private init() {}
+    
+    func getUserID() -> Int? {
+        return userID
+    }
 }

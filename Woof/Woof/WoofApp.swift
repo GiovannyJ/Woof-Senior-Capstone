@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct WoofApp: App {
+    @StateObject var sessionManager = SessionManager.shared
     var body: some Scene {
         WindowGroup {
-            Login()
+            Login().environmentObject(sessionManager) // Start directly with the Login view
         }
     }
 }

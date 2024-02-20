@@ -10,6 +10,7 @@ struct RegisterBusiness: View {
     @State private var petSizePreference: String = "small" // Default value
     
     @State private var registrationStatus: String = ""
+    @EnvironmentObject var sessionManager: SessionManager
     
     var body: some View {
         VStack {
@@ -89,6 +90,11 @@ struct RegisterBusiness: View {
             return
         }
         
+        guard let userID = sessionManager.getUserID() else {
+            self.registrationStatus = "User ID not available"
+            return
+        }
+        
         let body: [String: Any] = [
             "businessName": businessName,
             "businessType": businessType,
@@ -97,7 +103,8 @@ struct RegisterBusiness: View {
             "description": description,
             "events": events,
             "petSizePref": petSizePreference,
-            "dataLocation": "internal"
+            "dataLocation": "internal",
+            "userID": userID // Add userID to the request body
         ]
         
         do {

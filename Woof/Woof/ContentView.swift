@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var counter: Int = 0 // State variable to track the counter value
-        
+    @StateObject var sessionManager = SessionManager.shared
+    
+    
         var body: some View {
             VStack(spacing: 20) { // Vertical stack to arrange views vertically with spacing
                 Text("Welcome to Woof!") // Text view greeting message
