@@ -34,8 +34,8 @@ struct CreateEventView: View {
                 // Button to submit the event
                 Section {
                     Button(action: {
-                        // No real action rn
-                        submitEvent()
+                        // Call the submitEvent function with the event details
+                        submitEvent(eventName: eventName, eventDescription: eventDescription, eventDate: eventDate, location: location, contactInfo: contactInfo)
                     }) {
                         Text("Submit Event")
                             .foregroundColor(.white)
@@ -51,18 +51,11 @@ struct CreateEventView: View {
         .padding()
         .navigationTitle("Create Event")
     }
-    
-    // Function for event submission
-    private func submitEvent() {
-        //  logic to submit the event to the database
-        print("Event created successfully!")
-    }
 }
 
 private func submitEvent(eventName: String, eventDescription: String, eventDate: String, location: String, contactInfo: String){
     let url = URL(string: "http://localhost:8080/CreateNewEvent")!
-    
-    let body:[String: String] = [
+    let body: [String: String] = [
         "eventName": eventName,
         "eventDescription": eventDescription,
         "eventDate": eventDate,
@@ -70,7 +63,10 @@ private func submitEvent(eventName: String, eventDescription: String, eventDate:
         "contactInfo": contactInfo
     ]
     
-    let jsonData = try? JSONSerialization.data(withJSONObject: body)
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
+        print("Error encoding data")
+        return
+    }
     
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
@@ -84,9 +80,12 @@ private func submitEvent(eventName: String, eventDescription: String, eventDate:
                 // Successful response
                 print("Event Created!")
                 // Update SessionManager on the main thread
+                DispatchQueue.main.async {
+                    SessionManager.shared.isLoggedIn = true
+                }
             case 500:
                 // Handle 500 error
-                print("Error.")
+                print("Error: \(httpResponse.statusCode)")
             default:
                 // Handle other status codes
                 print("Unexpected error occurred")
@@ -100,4 +99,3 @@ struct CreateEventView_Previews: PreviewProvider {
         CreateEventView()
     }
 }
-
