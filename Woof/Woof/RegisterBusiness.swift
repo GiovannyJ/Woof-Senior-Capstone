@@ -10,57 +10,56 @@ struct RegisterBusiness: View {
     @State private var petSizePreference: String = "small" // Default value
     
     @State private var registrationStatus: String = ""
-    @EnvironmentObject var sessionManager: SessionManager
     
     var body: some View {
         VStack {
             Form {
                 Section(header: Text("Business Details")
-                            .foregroundColor(.teal)
-                            .font(.title)
-                            .padding(.vertical)
-                            .fontWeight(.bold)) {
-                    TextField("Business Name", text: $businessName)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    TextField("Business Type", text: $businessType)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    TextField("Location", text: $location)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    TextField("Contact", text: $contact)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                }
-                .cornerRadius(4)
-                .padding(.vertical, 5)
+                    .foregroundColor(.teal)
+                    .font(.title)
+                    .padding(.vertical)
+                    .fontWeight(.bold)) {
+                        TextField("Business Name", text: $businessName)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        TextField("Business Type", text: $businessType)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        TextField("Location", text: $location)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        TextField("Contact", text: $contact)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                    }
+                    .cornerRadius(4)
+                    .padding(.vertical, 5)
                 
                 Section(header: Text("Additional Information").foregroundColor(.teal)
-                            .font(.headline)
-                            .padding(.vertical)
-                            .fontWeight(.medium)) {
-                    TextField("Description", text: $description)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    TextField("Events", text: $events)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    Picker("Pet Size Preference", selection: $petSizePreference) {
-                        Text("Small").tag("small")
-                        Text("Medium").tag("medium")
-                        Text("Large").tag("large")
+                    .font(.headline)
+                    .padding(.vertical)
+                    .fontWeight(.medium)) {
+                        TextField("Description", text: $description)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        TextField("Events", text: $events)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        Picker("Pet Size Preference", selection: $petSizePreference) {
+                            Text("Small").tag("small")
+                            Text("Medium").tag("medium")
+                            Text("Large").tag("large")
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
                     }
-                    .pickerStyle(SegmentedPickerStyle())
-                }
-                .cornerRadius(10)
-                .padding(.vertical, 5)
+                    .cornerRadius(10)
+                    .padding(.vertical, 5)
             }
             
             Button(action: {
@@ -83,63 +82,59 @@ struct RegisterBusiness: View {
         }
         .padding()
     }
-    
     private func registerBusiness() {
-        guard let url = URL(string: "http://localhost:8080/businesses") else {
-            self.registrationStatus = "Invalid URL"
-            return
-        }
-        
-        guard let userID = sessionManager.getUserID() else {
-            self.registrationStatus = "User ID not available"
-            return
-        }
-        
-        let body: [String: Any] = [
+        // Create a dictionary with the  data to register the business
+        let businessData: [String: Any] = [
             "businessName": businessName,
             "businessType": businessType,
             "location": location,
             "contact": contact,
             "description": description,
             "events": events,
-            "petSizePref": petSizePreference,
-            "dataLocation": "internal",
-            "userID": userID // Add userID to the request body
+            "petSizePreference": petSizePreference,
+            "dataLocation": "internal"
         ]
         
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: body)
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.httpBody = jsonData
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                DispatchQueue.main.async {
-                    if let httpResponse = response as? HTTPURLResponse {
-                        switch httpResponse.statusCode {
-                        case 201:
-                            self.registrationStatus = "Business Registered Successfully!"
-                        case 500:
-                            self.registrationStatus = "Internal Server Error"
-                        default:
-                            self.registrationStatus = "Unexpected error occurred"
-                        }
-                    } else if let error = error {
-                        self.registrationStatus = "Error: \(error.localizedDescription)"
-                    } else {
-                        self.registrationStatus = "Unexpected error occurred"
-                    }
-                }
-            }.resume()
-        } catch {
-            self.registrationStatus = "Error converting data to JSON"
+        // JSON data
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: businessData) else {
+            print("Error converting data to JSON")
+            return
         }
-    }
-}
-
-struct RegisterBusiness_Preview: PreviewProvider {
-    static var previews: some View {
-        RegisterBusiness()
+        
+        guard let url = URL(string: "http://localhost:8080/businesses") else {
+            print("Invalid URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let httpResponse = response as? HTTPURLResponse {
+                switch httpResponse.statusCode {
+                case 201:
+                    // Successful response
+                    print("Business Registered!")
+                    // Update SessionManager on the main thread
+                    DispatchQueue.main.async {
+                        SessionManager.shared.isLoggedIn = true
+                    }
+                case 500:
+                    // Handle 500 error
+                    print("Error: \(httpResponse.statusCode)")
+                default:
+                    // Handle other status codes
+                    print("Unexpected error occurred")
+                }
+            }
+        }.resume()
+        struct RegisterBusiness_Preview: PreviewProvider {
+            static var previews: some View {
+                RegisterBusiness()
+            }
+        }
     }
 }

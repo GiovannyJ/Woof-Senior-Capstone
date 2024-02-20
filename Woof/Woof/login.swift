@@ -92,6 +92,7 @@ struct Login: View {
                         // Update SessionManager on the main thread
                         DispatchQueue.main.async {
                             SessionManager.shared.currentUser = user
+                            SessionManager.shared.userID = user?.userID
                         }
                         
                         // Set isLoggedIn to true upon successful login
