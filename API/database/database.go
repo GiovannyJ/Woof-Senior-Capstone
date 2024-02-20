@@ -5,10 +5,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"reflect"
 	"strings"
-	_ "github.com/go-sql-driver/mysql"
 )
 
 type user = s.User
@@ -28,7 +28,6 @@ type imgInfo = s.ImgInfo
 type attendanceCount = s.AttendanceCount
 type userAttendBusiness = s.UsersAttendEvent
 type attendance = s.Attendance
-
 
 /*
 *TEST PASSING
@@ -191,7 +190,7 @@ gets all events in database
 func Event_GET(params map[string]interface{}) ([]event, error) {
 	var sql strings.Builder
 	sql.WriteString("SELECT eventID , businessID, eventName, eventDescription, eventDate, location, contactInfo, dataLocation, imgID, petSizePref, leashPolicy, disabledFriendly, (SELECT COUNT(userID) FROM attendance WHERE eventID = e.eventID) as num_attend  FROM events e ")
-	
+
 	sql.WriteString(GenSelectQuery(params, "", 0))
 
 	result, err := connect(sql.String())
@@ -290,7 +289,7 @@ func ImgInfo_GET(params map[string]interface{}) ([]imgInfo, error) {
 	defer result.Close()
 
 	var values []imgInfo
-	
+
 	for result.Next() {
 		var t imgInfo
 		if err := result.Scan(
@@ -313,7 +312,6 @@ func ImgInfo_GET(params map[string]interface{}) ([]imgInfo, error) {
 	return values, nil
 }
 
-
 /*
 *TESTED WORKING
 gets count of all the userIDs attending an event
@@ -330,7 +328,7 @@ func AttendanceCount_GET(params map[string]interface{}, eventID int) ([]attendan
 	defer result.Close()
 
 	var values []attendanceCount
-	
+
 	for result.Next() {
 		var t attendanceCount
 		if err := result.Scan(
@@ -347,8 +345,6 @@ func AttendanceCount_GET(params map[string]interface{}, eventID int) ([]attendan
 
 	return values, nil
 }
-
-
 
 //JOINED TABLES
 
@@ -371,7 +367,6 @@ func Users_Attendance_GET(params map[string]interface{}, userID int) ([]userAtte
 	sql.WriteString("JOIN events e ON e.eventID = a.eventID ")
 	sql.WriteString("JOIN businesses b ON e.businessID = b.businessID ")
 	sql.WriteString(GenSelectQuery(params, "u.userID", userID))
-	
 
 	result, err := connect(sql.String())
 	if err != nil {
@@ -380,7 +375,7 @@ func Users_Attendance_GET(params map[string]interface{}, userID int) ([]userAtte
 	defer result.Close()
 
 	var values []userAttendBusiness
-	
+
 	for result.Next() {
 		var t userAttendBusiness
 		var u user
@@ -434,10 +429,6 @@ func Users_Attendance_GET(params map[string]interface{}, userID int) ([]userAtte
 	return values, nil
 }
 
-
-
-
-
 /*
 *TESTED WORKING
 gets all of a users saved businesses in full context
@@ -445,13 +436,13 @@ gets all of a users saved businesses in full context
 func Users_SavedBusiness_GET(params map[string]interface{}, userID int) ([]usersSavedBusiness, error) {
 	var sql strings.Builder
 	sql.WriteString("SELECT  u.userID, u.username, u.email, u.accountType, u.imgID, ")
-    sql.WriteString("    sb.businessID, b.businessName, b.businessType, b.location,")
-    sql.WriteString("    b.ownerUserID, b.contact, b.description, b.rating, b.imgID,")
-    sql.WriteString("    b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation ")
+	sql.WriteString("    sb.businessID, b.businessName, b.businessType, b.location,")
+	sql.WriteString("    b.ownerUserID, b.contact, b.description, b.rating, b.imgID,")
+	sql.WriteString("    b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation ")
 	sql.WriteString("FROM user u ")
 	sql.WriteString("JOIN savedBusinesses sb ON u.userID = sb.userID ")
 	sql.WriteString("JOIN businesses b ON sb.businessID = b.businessID ")
-	
+
 	sql.WriteString(GenSelectQuery(params, "u.userID", userID))
 
 	result, err := connect(sql.String())
@@ -578,7 +569,7 @@ func Businesses_Reviews_Users_GET(params map[string]interface{}, businessID int)
 	var sql strings.Builder
 	// sql.WriteString("SELECT r.reviewID, r.rating, r.comment, r.dateCreated, u.userID, u.username, u.email, u.accountType, b.businessID, b.businessName, b.businessType, b.location, b.contact, b.rating AS businessRating, b.description, b.OwnerUserID")
 	// sql.WriteString(" FROM reviews r JOIN businesses b ON r.businessID = b.businessID JOIN user u ON r.userID = u.userID")
-	
+
 	sql.WriteString("SELECT  r.reviewID, r.rating, r.comment, r.dateCreated, r.imgID,")
 	sql.WriteString("	u.userID, u.username, u.email, u.accountType, u.imgID,")
 	sql.WriteString("	b.businessID, b.businessName, b.businessType, ")
@@ -587,7 +578,7 @@ func Businesses_Reviews_Users_GET(params map[string]interface{}, businessID int)
 	sql.WriteString("FROM reviews r ")
 	sql.WriteString("JOIN businesses b ON r.businessID = b.businessID ")
 	sql.WriteString("JOIN user u ON r.userID = u.userID")
-	
+
 	sql.WriteString(GenSelectQuery(params, "b.businessID", businessID))
 
 	result, err := connect(sql.String())
@@ -755,7 +746,7 @@ func CreateNewReview(data review) error {
 	ignoreColumns := []string{"reviewid", "reviewID", "datecreated", "dateCreated"}
 	sql, err := GenInsertQuery(tableName, data, ignoreColumns)
 
-	if err !=nil{
+	if err != nil {
 		return err
 	}
 	return execute(sql)
@@ -769,7 +760,6 @@ RETURN: Error when applicable nil if no error (check if saved business exists)
 */
 func CreateNewEvent(data event) error {
 	tableName := "events"
-
 	ignoreColumns := []string{"eventID", "eventid", "attendancecount"}
 
 	sql, err := GenInsertQuery(tableName, data, ignoreColumns)
@@ -798,8 +788,6 @@ func CreateNewImgInfo(data imgInfo) error {
 	return execute(sql)
 }
 
-
-
 /*
 *TESTED WORKING
 creates new attendance in database if it does not exists already, updates attendance count
@@ -817,7 +805,7 @@ func CreateNewAttendance(data attendance) error {
 		return err
 	}
 	err = execute(sql)
-	if err != nil{
+	if err != nil {
 		return err
 	}
 	sql = fmt.Sprintf("UPDATE events SET attendance_count = (SELECT COUNT(id) FROM attendance WHERE eventID = %d)", data.EventID)
@@ -830,38 +818,34 @@ Using username, compares password to value in database
 RETURNS account if password valid nil if not
 */
 func GetLoginInfo(username *string, password *string) (*login, error) {
-    var sql strings.Builder
+	var sql strings.Builder
 	q := fmt.Sprintf("SELECT userID, username, password FROM user WHERE username='%s'", *username)
 	sql.WriteString(q)
 
-    result, err := connect(sql.String())
-    if err != nil {
-        return nil, errors.New("error connecting to database")
-    }
-    defer result.Close()
+	result, err := connect(sql.String())
+	if err != nil {
+		return nil, errors.New("error connecting to database")
+	}
+	defer result.Close()
 
-    if result.Next() {
-        var t login
-        if err := result.Scan(
-            &t.UserID,
-            &t.Username,
+	if result.Next() {
+		var t login
+		if err := result.Scan(
+			&t.UserID,
+			&t.Username,
 			&t.Pwd,
-        ); err != nil {
-            return nil, err
-        }
+		); err != nil {
+			return nil, err
+		}
 
 		if err := VerifyPassword([]byte(*password), *t.Pwd); err != nil {
-            return nil, errors.New("incorrect Password")
-        }
+			return nil, errors.New("incorrect Password")
+		}
 
-
-        return &t, nil
-    }
-    return nil, errors.New("user Not found")
+		return &t, nil
+	}
+	return nil, errors.New("user Not found")
 }
-
-
-
 
 // //**+++++++++++++++++++++UPDATE QUERIES++++++++++++++++++++++++++++
 
@@ -894,47 +878,43 @@ func UpdateData(data updatequery) error {
 	return execute(sql)
 }
 
-
 /*
 *TESTED PASSING
 UPDATE METHOD TO CHANGE PWD MUST BE SHAPED LIKE PWDRESET STRUCT
 RETURN: error if applicable
 */
-func UpdatePassword(data pwdreset) error{
-	if data.NewPwd == data.OldPwd{
+func UpdatePassword(data pwdreset) error {
+	if data.NewPwd == data.OldPwd {
 		return &s.PWDResetError{Message: "password cannot be the same as old"}
 	}
-	
+
 	checkoldPWd := fmt.Sprintf("SELECT password FROM user WHERE userID=%d", data.UserID)
 	result, err := connect(checkoldPWd)
-	if err != nil{
+	if err != nil {
 		return errors.New("error connecting to database")
 	}
 	defer result.Close()
 
-	if result.Next(){
+	if result.Next() {
 		var t pwdreset
 		if err := result.Scan(
 			&t.OldPwd,
-		);err != nil{
+		); err != nil {
 			return err
 		}
-		if err := VerifyPassword([]byte(data.OldPwd), []byte(t.OldPwd)); err != nil{
+		if err := VerifyPassword([]byte(data.OldPwd), []byte(t.OldPwd)); err != nil {
 			return &s.PWDResetError{Message: "password does not match"}
 		}
 	}
 
 	hashedPwd, err := HashPassword(data.NewPwd)
-	if err != nil{
+	if err != nil {
 		return err
 	}
-
 
 	sql := fmt.Sprintf("UPDATE user SET password = '%s' WHERE userID = %d", hashedPwd, data.UserID)
 	return execute(sql)
 }
-
-
 
 // //**+++++++++++++++++++++DELETE QUERIES++++++++++++++++++++++++++++
 
@@ -943,7 +923,7 @@ func UpdatePassword(data pwdreset) error{
 deletes data from tables, cascades across all tables when necessary
 !THERE IS NO ERROR CHECKING THIS MIGHT BITE ME IN THE ASS LATER
 */
-func DeleteData(data deleteQuery) error{
+func DeleteData(data deleteQuery) error {
 	user_deleteUser := fmt.Sprintf("DELETE FROM user WHERE userID = %d", data.ID)
 	user_deleteSavedBusiness := fmt.Sprintf("DELETE FROM savedBusinesses WHERE userID = %d", data.ID)
 	user_deleteReview := fmt.Sprintf("DELETE FROM reviews WHERE userID = %d", data.ID)
@@ -951,18 +931,17 @@ func DeleteData(data deleteQuery) error{
 	user_deleteEvents := fmt.Sprintf("DELETE FROM events WHERE businessID = (SELECT businessID FROM businesses b WHERE OwnerUserID = %d)", data.ID)
 	user_deleteAttendance := fmt.Sprintf("DELETE FROM attendance WHERE eventID = (SELECT e.eventID FROM events e JOIN businesses b on b.OwnerUserID = %d AND e.businessID = b.businessID)", data.ID)
 
-
 	business_deleteBusiness := fmt.Sprintf("DELETE FROM businesses WHERE businessID = %d", data.ID)
 	business_deleteSavedBusinesses := fmt.Sprintf("DELETE FROM savedBusinesses WHERE businessID = %d", data.ID)
-	business_deleteReviews := fmt.Sprintf("DELETE FROM reviews WHERE businessID = %d",data.ID)
+	business_deleteReviews := fmt.Sprintf("DELETE FROM reviews WHERE businessID = %d", data.ID)
 	business_deleteEvents := fmt.Sprintf("DELETE FROM events WHERE businessID = %d", data.ID)
 	business_deleteAttendance := fmt.Sprintf("DELETE FROM attendance WHERE eventID = (SELECT eventID from events WHERE businessID = %d)", data.ID)
-	
+
 	event_deleteAttendance := fmt.Sprintf("DELETE FROM attendance WHERE eventID = %d", data.ID)
 
 	genericSQL := fmt.Sprintf("DELETE FROM %s WHERE %s = %d", data.TableName, data.Column, data.ID)
-	
-	switch data.TableName{
+
+	switch data.TableName {
 	case "user":
 		execute(user_deleteAttendance)
 		execute(user_deleteEvents)
@@ -994,7 +973,7 @@ func DeleteData(data deleteQuery) error{
 deletes attendance from database AND updates attendance count in events table
 !THERE IS NO TRUE ERROR CHECKING THIS WILL HAUNT ME LATER
 */
-func DeleteAttendanceData(data attendance) error{
+func DeleteAttendanceData(data attendance) error {
 	delete_attendance := fmt.Sprintf("DELETE FROM attendance WHERE userID=%d AND eventID=%d", data.UserID, data.EventID)
 	update_attendance := fmt.Sprintf("UPDATE events SET attendance_count = (SELECT COUNT(id) FROM attendance WHERE eventID = %d)", data.EventID)
 	execute(delete_attendance)
@@ -1002,58 +981,56 @@ func DeleteAttendanceData(data attendance) error{
 	return nil
 }
 
-
-
 //*-------------------------------------------------------AUTH METHODS-------------------------------------------------------
 
 /*
- * TESTED WORKING
- Gets the token from the user and compares it with the token string
- if the thing exists then return true
+* TESTED WORKING
+Gets the token from the user and compares it with the token string
+if the thing exists then return true
 */
 func CheckToken(userID string, tokenString string) bool {
-    var sql strings.Builder
-    sql.WriteString("SELECT * FROM ADMIN WHERE ")
-    condition := fmt.Sprintf("id='%v'", userID)
-    sql.WriteString(condition)
+	var sql strings.Builder
+	sql.WriteString("SELECT * FROM ADMIN WHERE ")
+	condition := fmt.Sprintf("id='%v'", userID)
+	sql.WriteString(condition)
 
-    result, err := connect(sql.String())
-    if err != nil {
-        fmt.Println(err)
-        return false
-    }
+	result, err := connect(sql.String())
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
 
-    defer result.Close()
+	defer result.Close()
 
-    var values []admin
+	var values []admin
 
-    for result.Next() {
-        var t admin
-        t.Id = new(string)
-        t.Name = new(string)
-        t.Token = new(string)
+	for result.Next() {
+		var t admin
+		t.Id = new(string)
+		t.Name = new(string)
+		t.Token = new(string)
 
-        if err := result.Scan(
-            t.Id,
-            t.Name,
-            t.Token,
-        ); err != nil {
-            fmt.Println(err)
-            return false
-        }
-        values = append(values, t)
-    }
+		if err := result.Scan(
+			t.Id,
+			t.Name,
+			t.Token,
+		); err != nil {
+			fmt.Println(err)
+			return false
+		}
+		values = append(values, t)
+	}
 
-    if err = result.Err(); err != nil {
-        fmt.Println(err)
-        return false
-    }
+	if err = result.Err(); err != nil {
+		fmt.Println(err)
+		return false
+	}
 
-    for _, val := range values {
-        if *val.Token == tokenString {
-            return true
-        }
-    }
+	for _, val := range values {
+		if *val.Token == tokenString {
+			return true
+		}
+	}
 
-    return false
+	return false
 }

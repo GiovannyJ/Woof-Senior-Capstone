@@ -54,7 +54,7 @@ struct CreateEventView: View {
 }
 
 private func submitEvent(eventName: String, eventDescription: String, eventDate: String, location: String, contactInfo: String){
-    let url = URL(string: "http://localhost:8080/CreateNewEvent")!
+    let url = URL(string: "https://localhost:8080/events/businesses/#BUSINESSID")!
     let body: [String: String] = [
         "eventName": eventName,
         "eventDescription": eventDescription,
