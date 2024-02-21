@@ -10,6 +10,7 @@ struct RegisterBusiness: View {
     @State private var petSizePreference: String = "small" // Default value
     
     @State private var registrationStatus: String = ""
+    @ObservedObject private var sessionManager = SessionManager.shared
     
     var body: some View {
         VStack {
@@ -87,11 +88,15 @@ struct RegisterBusiness: View {
         let businessData: [String: Any] = [
             "businessName": businessName,
             "businessType": businessType,
+            "ownerUserID": sessionManager.currentUser?.userID ?? 0,
             "location": location,
             "contact": contact,
             "description": description,
-            "events": events,
-            "petSizePreference": petSizePreference,
+//            "events": events,
+            "petSizePref": petSizePreference,
+            //ADD QUESTIONS FOR THESE TWO
+            "leashPolicy": false,
+            "disabledFriendly": true,
             "dataLocation": "internal"
         ]
         
@@ -119,9 +124,9 @@ struct RegisterBusiness: View {
                     // Successful response
                     print("Business Registered!")
                     // Update SessionManager on the main thread
-                    DispatchQueue.main.async {
-                        SessionManager.shared.isLoggedIn = true
-                    }
+//                    DispatchQueue.main.async {
+//                        SessionManager.shared.isLoggedIn = true
+//                    }
                 case 500:
                     // Handle 500 error
                     print("Error: \(httpResponse.statusCode)")
