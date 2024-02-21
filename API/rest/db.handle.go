@@ -145,7 +145,7 @@ func GetBusinesses(c *gin.Context) {
 		"businessType":     c.Query("businessType"),
 		"location":         c.Query("location"),
 		"contact":          c.Query("contact"),
-		"ownerID":          c.Query("ownerID"),
+		"ownerUserID":      c.Query("ownerUserID"),
 		"rating":           c.Query("rating"),
 		"petSizePref":      c.Query("petSizePref"),
 		"leashPolicy":      c.Query("leashPolicy"),
