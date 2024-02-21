@@ -10,6 +10,17 @@ Frontend (Gio/Bo)
 - MAP view for events/businesses
 - Cleaning inconsistencies
 - make things look purdy
+- add ability to
+    - say attending event (button)
+    - save business as user (button)
+
+- update session manager
+    - isBusinessOwner property (make call to API /businesses?OwnerUserID=$currentUser.id to find out)
 
 Research (Martin)
 - map view 
+
+House Keeping:
+- refactor code base to be more clean
+    - change file names to be more consistent
+    - move shared assets and methods
