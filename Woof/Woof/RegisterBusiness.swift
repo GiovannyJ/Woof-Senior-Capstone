@@ -28,13 +28,16 @@ struct RegisterBusiness: View {
                             .cornerRadius(8)
                         Picker("Business Type", selection: $businessType) {
                             Text("Arts & Entertainment").tag("T1")
+                                .foregroundColor(.gray)
                             Text("Active Life").tag("T2")
+                                .foregroundColor(.gray)
                             Text("Hotels & Travel").tag("T3")
                             Text("Local Flavor").tag("T5")
                             Text("Restaurants").tag("T6")
                             Text("Shopping").tag("T7")
-                            Text("Other").tag("T8")                        }
-                        .pickerStyle(MenuPickerStyle())
+                            Text("Other").tag("T8")
+                        }
+                            .pickerStyle(MenuPickerStyle())
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)

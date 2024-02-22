@@ -13,6 +13,10 @@ struct CreateEventView: View {
     @State private var eventDate: String = ""
     @State private var location: String = ""
     @State private var contactInfo: String = ""
+    @State private var petSizePref: String = ""
+    @State private var leashPolicy: String = ""
+    @State private var disabledFriendly: String = ""
+    
     @ObservedObject private var sessionManager = SessionManager.shared
     
     var body: some View {
@@ -30,13 +34,31 @@ struct CreateEventView: View {
                     TextField("Event Date", text: $eventDate)
                     TextField("Location", text: $location)
                     TextField("Contact Information", text: $contactInfo)
-                }
-                
+                    TextField("Leash Policy", text: $leashPolicy)
+                    Picker("Disabled Pet Friendly", selection: $disabledFriendly){
+                        Text("Yes").tag("yes")
+                        Text("No").tag("no")
+                    }
+                    
+                    .padding()
+                    .background(Color.teal.opacity(0.2))
+                    .cornerRadius(8)
+                    Picker("Pet Size Preference", selection: $petSizePref) {
+                        Text("Small Pets").tag("small")
+                        Text("Medium Pets").tag("medium")
+                        Text("Large Pets").tag("large")
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding()
+                    .background(Color.teal.opacity(0.2))
+                    .cornerRadius(8)                }
+            
                 // Button to submit the event
                 Section {
                     Button(action: {
                         // Call the submitEvent function with the event details
-                        submitEvent(eventName: eventName, eventDescription: eventDescription, eventDate: eventDate, location: location, contactInfo: contactInfo)
+                        submitEvent(eventName: eventName, eventDescription: eventDescription, eventDate: eventDate, location: location, contactInfo: contactInfo,
+                                    petSizePref: petSizePref, leashPolicy: leashPolicy, disabledFriendly: disabledFriendly )
                     }) {
                         Text("Submit Event")
                             .foregroundColor(.white)
@@ -53,8 +75,7 @@ struct CreateEventView: View {
         .navigationTitle("Create Event")
     }
 }
-
-private func submitEvent(eventName: String, eventDescription: String, eventDate: String, location: String, contactInfo: String){
+private func submitEvent(eventName: String, eventDescription: String, eventDate: String, location: String, contactInfo: String, petSizePref: String, leashPolicy: String, disabledFriendly: String){
     let businessID = SessionManager.shared.userBusinessID
     let url = URL(string: "http://localhost:8080/events/businesses/\(businessID ?? 0)")!
     let body: [String: Any] = [
@@ -63,10 +84,9 @@ private func submitEvent(eventName: String, eventDescription: String, eventDate:
         "eventDate": eventDate,
         "location": location,
         "contactInfo": contactInfo,
-        //ADD QUESTIONS FOR THESE THINGS
-        "petsizepref": "small",
-        "leashpolicy": true,
-        "disabledfriendly": true,
+        "petSizePref": petSizePref,
+        "leashPolicy": leashPolicy,
+        "disabledFriendly": disabledFriendly,
         
         
         "datalocation": "internal"
