@@ -95,10 +95,24 @@ struct EventCard: View {
                 // Example: Display if disabled-friendly
                 Text("Disabled Friendly: \(event.disabledFriendly ? "Yes" : "No")")
                     .font(.subheadline)
-            }
+                
+                // Attend Event Button
+                Button(action: {
+                //  attending  event
+                print("Attend Event: \(event.eventName)")
+                              }) {
+                Text("Attend Event")
+                    .foregroundColor(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
+                    .background(Color.teal.opacity(0.3))
+                    .cornerRadius(8)
+                    .font(.headline)
+                              }
+                          }
+                }
             .padding()
             .background(Color.teal.opacity(0.2))
             .cornerRadius(8)
         }
     }
-}
