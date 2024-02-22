@@ -31,7 +31,22 @@ struct CreateEventView: View {
                 Section(header: Text("Event Information")) {
                     TextField("Event Name", text: $eventName)
                     TextField("Event Description", text: $eventDescription)
-                    TextField("Event Date", text: $eventDate)
+                    DatePicker( "D/T", selection: Binding<Date>(
+                        get: {
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "yyyy-MM-dd" // Adjust the date format as needed
+                            return dateFormatter.date(from: eventDate) ?? Date()
+                        },
+                        set: { newDate in
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "yyyy-MM-dd" // Adjust the date format as needed
+                            eventDate = dateFormatter.string(from: newDate)
+                        }
+                    ))
+                    .foregroundColor(.gray)
+                    .datePickerStyle(.compact)
+                    .padding()
+                    .cornerRadius(8)
                     TextField("Location", text: $location)
                     TextField("Contact Information", text: $contactInfo)
                     TextField("Leash Policy", text: $leashPolicy)
@@ -41,7 +56,6 @@ struct CreateEventView: View {
                     }
                     
                     .padding()
-                    .background(Color.teal.opacity(0.2))
                     .cornerRadius(8)
                     Picker("Pet Size Preference", selection: $petSizePref) {
                         Text("Small Pets").tag("small")
@@ -50,7 +64,6 @@ struct CreateEventView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding()
-                    .background(Color.teal.opacity(0.2))
                     .cornerRadius(8)                }
             
                 // Button to submit the event
