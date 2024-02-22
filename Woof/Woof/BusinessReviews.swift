@@ -133,31 +133,37 @@ struct BusinessReviews: View {
             VStack(alignment: .leading, spacing: 16) {
                 // Business information section
                 Section(header: Text("Business Information")
-                            .font(.title2)
-                            .foregroundColor(.teal)
-                            .padding(.bottom, 5)
+                    .font(.title)
+                    .foregroundColor(.teal)
+                    .fontWeight(.heavy)
+                    .padding(.bottom, 5)
                 ) {
                     // Display business information
-                    Text("Name: \(viewModel.business.businessName)")
+                    Text("\(viewModel.business.businessName)")
+                        .font(.title)
+                        .foregroundColor(.orange)
                     Text("Type: \(viewModel.business.businessType)")
+                        .font(.title2)
                     Text("Location: \(viewModel.business.location)")
+                        .font(.title2)
                     Text("Contact: \(viewModel.business.contact)")
+                        .font(.title2)
                     if let rating = viewModel.business.rating {
                         Text("Rating: \(rating)")
-                            .font(.subheadline)
+                        .font(.title2)
                     }
                     
                     // Example: Display pet-related preferences
                     Text("Pet Size Preference: \(viewModel.business.petSizePref)")
-                        .font(.subheadline)
+                        .font(.title2)
                     
                     // Example: Display if leash policy is enforced
                     Text("Leash Policy: \(viewModel.business.leashPolicy ? "Enforced" : "Not Enforced")")
-                        .font(.subheadline)
+                        .font(.title2)
                     
                     // Example: Display if disabled-friendly
                     Text("Disabled Friendly: \(viewModel.business.disabledFriendly ? "Yes" : "No")")
-                        .font(.subheadline)
+                        .font(.title2)
                     
                     // Display business image
                     if let businessImgData = viewModel.businessImgData,
@@ -168,7 +174,18 @@ struct BusinessReviews: View {
                             .frame(width: 200, height: 200)
                     }
                 }
-
+                // Button to Save Business NONFUNCTIONAL ATM
+                Button(action: {
+                    // Save business
+                }) {
+                    Text("Save Business")
+                        .foregroundColor(.teal)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.teal.opacity(0.1))
+                        .cornerRadius(8)
+                        .fontWeight(.heavy)
+                }
                 // User's review section
                 Section(header: Text("Your Review")
                             .font(.title2)
