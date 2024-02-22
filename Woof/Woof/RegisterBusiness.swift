@@ -8,6 +8,8 @@ struct RegisterBusiness: View {
     @State private var description: String = ""
     @State private var events: String = ""
     @State private var petSizePreference: String = "small" // Default value
+    @State private var leashPolicy: String = ""
+    @State private var disabledFriendly: String = ""
     
     @State private var registrationStatus: String = ""
     @ObservedObject private var sessionManager = SessionManager.shared
@@ -24,7 +26,15 @@ struct RegisterBusiness: View {
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
-                        TextField("Business Type", text: $businessType)
+                        Picker("Business Type", selection: $businessType) {
+                            Text("Arts & Entertainment").tag("T1")
+                            Text("Active Life").tag("T2")
+                            Text("Hotels & Travel").tag("T3")
+                            Text("Local Flavor").tag("T5")
+                            Text("Restaurants").tag("T6")
+                            Text("Shopping").tag("T7")
+                            Text("Other").tag("T8")                        }
+                        .pickerStyle(MenuPickerStyle())
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
@@ -48,14 +58,18 @@ struct RegisterBusiness: View {
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
-                        TextField("Events", text: $events)
+                        TextField("Leash Policy", text: $leashPolicy)
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
+                        TextField("Disabled Pet Friendly", text: $disabledFriendly)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)                        
                         Picker("Pet Size Preference", selection: $petSizePreference) {
-                            Text("Small").tag("small")
-                            Text("Medium").tag("medium")
-                            Text("Large").tag("large")
+                            Text("Small Pets").tag("small")
+                            Text("Medium Pets").tag("medium")
+                            Text("Large Pets").tag("large")
                         }
                         .pickerStyle(SegmentedPickerStyle())
                     }
@@ -94,9 +108,8 @@ struct RegisterBusiness: View {
             "description": description,
 //            "events": events,
             "petSizePref": petSizePreference,
-            //ADD QUESTIONS FOR THESE TWO
-            "leashPolicy": false,
-            "disabledFriendly": true,
+            "leashPolicy": leashPolicy,
+            "disabledFriendly": disabledFriendly,
             "dataLocation": "internal"
         ]
         
