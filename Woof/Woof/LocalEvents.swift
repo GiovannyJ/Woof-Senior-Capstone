@@ -56,8 +56,6 @@ struct LocalEvents: View {
 }
 
 
-
-
 struct LocalEvents_Previews: PreviewProvider {
     static var previews: some View {
         LocalEvents()
@@ -98,14 +96,14 @@ struct EventCard: View {
                 
                 // Attend Event Button
                 Button(action: {
-                //  attending  event
+                    attendEvent(eventID: event.eventID)
                 print("Attend Event: \(event.eventName)")
                               }) {
                 Text("Attend Event")
                     .foregroundColor(.white)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 16)
-                    .background(Color.teal.opacity(0.3))
+                    .background(Color.teal)
                     .cornerRadius(8)
                     .font(.headline)
                               }
@@ -115,4 +113,44 @@ struct EventCard: View {
             .background(Color.teal.opacity(0.2))
             .cornerRadius(8)
         }
+    
+    
+    private func attendEvent(eventID: Int){
+        let url = URL(string: "http://localhost:8080/events/attendance")!
+        let userID = SessionManager.shared.currentUser?.userID
+        let body: [String: Any] = [
+            "userID": userID ?? 0,
+            "eventID": eventID,
+        ]
+        print(body)
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
+            print("Error encoding data")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let httpResponse = response as? HTTPURLResponse {
+                switch httpResponse.statusCode {
+                case 201:
+                    // Successful response
+                    print("Event Attending!")
+                case 400:
+                    //MAKE POPUP HERE LATER
+                    print("User is already attending event")
+                case 500:
+                    // Handle 500 error
+                    print("Error: \(httpResponse.statusCode)")
+                default:
+                    // Handle other status codes
+                    print("Unexpected error occurred")
+                }
+            }
+        }.resume()
+    }
     }

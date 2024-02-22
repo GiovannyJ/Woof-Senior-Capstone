@@ -117,6 +117,51 @@ class BusinessReviewsViewModel: ObservableObject {
             }
         }.resume()
     }
+    
+    func saveBusiness(){
+        guard let currentUserID = SessionManager.shared.currentUser?.userID else {
+            print("Current user ID not found")
+            return
+        }
+        
+        guard let url = URL(string: "http://localhost:8080/savedbusinesses/user/\(currentUserID)") else {
+            print("Invalid URL")
+            return
+        }
+        
+        let reviewData: [String: Any] = [
+            "userid": currentUserID,
+            "businessid": business.businessID
+        ]
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: reviewData) else {
+            print("Error creating HTTP body")
+            return
+        }
+        request.httpBody = httpBody
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard data != nil else {
+                print("No data received:", error?.localizedDescription ?? "Unknown error")
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 201 {
+                    print("Business saved successfully")
+                    // Show a success popup
+                }else if httpResponse.statusCode == 400{
+                    print("Business already saved")
+                } else {
+                    print("Error saving business. Status code: \(httpResponse.statusCode)")
+                    // Show an error popup
+                }
+            }
+        }.resume()
+    }
 }
 
 struct BusinessReviews: View {
@@ -176,7 +221,7 @@ struct BusinessReviews: View {
                 }
                 // Button to Save Business NONFUNCTIONAL ATM
                 Button(action: {
-                    // Save business
+                    viewModel.saveBusiness()
                 }) {
                     Text("Save Business")
                         .foregroundColor(.teal)
@@ -240,7 +285,6 @@ struct BusinessReviews: View {
                 
             }
             .padding()
-            .navigationTitle("Business Reviews")
             .onAppear(){
                 viewModel.fetchReviews()
                 viewModel.fetchBusinessImage()

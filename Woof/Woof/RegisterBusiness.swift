@@ -2,14 +2,14 @@ import SwiftUI
 
 struct RegisterBusiness: View {
     @State private var businessName: String = ""
-    @State private var businessType: String = ""
+    @State private var businessType: String = "Other"
     @State private var location: String = ""
     @State private var contact: String = ""
     @State private var description: String = ""
     @State private var events: String = ""
-    @State private var petSizePreference: String = "small" // Default value
-    @State private var leashPolicy: String = ""
-    @State private var disabledFriendly: String = ""
+    @State private var petSizePref: String = "small" // Default value
+    @State private var leashPolicy: Bool = true
+    @State private var disabledFriendly: Bool = false
     
     @State private var registrationStatus: String = ""
     @ObservedObject private var sessionManager = SessionManager.shared
@@ -27,15 +27,15 @@ struct RegisterBusiness: View {
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
                         Picker("Business Type", selection: $businessType) {
-                            Text("Arts & Entertainment").tag("T1")
+                            Text("Arts & Entertainment").tag("Arts & Entertainment")
                                 .foregroundColor(.gray)
-                            Text("Active Life").tag("T2")
+                            Text("Active Life").tag("Active Life")
                                 .foregroundColor(.gray)
-                            Text("Hotels & Travel").tag("T3")
-                            Text("Local Flavor").tag("T5")
-                            Text("Restaurants").tag("T6")
-                            Text("Shopping").tag("T7")
-                            Text("Other").tag("T8")
+                            Text("Hotels & Travel").tag("Hotels & Travel")
+                            Text("Local Flavor").tag("Local Flavor")
+                            Text("Restaurants").tag("Restaurants")
+                            Text("Shopping").tag("Shopping")
+                            Text("Other").tag("Other")
                         }
                             .pickerStyle(MenuPickerStyle())
                             .padding()
@@ -61,20 +61,27 @@ struct RegisterBusiness: View {
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
-                        TextField("Leash Policy", text: $leashPolicy)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        TextField("Disabled Pet Friendly", text: $disabledFriendly)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)                        
-                        Picker("Pet Size Preference", selection: $petSizePreference) {
+                        Picker("Leash Policy", selection: $leashPolicy){
+                            Text("Yes").tag(true)
+                            Text("No").tag(false)
+                        }
+                        .padding()
+                        .cornerRadius(8)
+                        
+                        Picker("Disabled Pet Friendly", selection: $disabledFriendly){
+                            Text("Yes").tag(true)
+                            Text("No").tag(false)
+                        }
+                        .padding()
+                        .cornerRadius(8)
+                        
+                        Picker("Pet Size Preference", selection: $petSizePref) {
                             Text("Small Pets").tag("small")
                             Text("Medium Pets").tag("medium")
                             Text("Large Pets").tag("large")
                         }
-                        .pickerStyle(SegmentedPickerStyle())
+                        .padding()
+                        .cornerRadius(8)
                     }
                     .cornerRadius(10)
                     .padding(.vertical, 5)
@@ -110,11 +117,12 @@ struct RegisterBusiness: View {
             "contact": contact,
             "description": description,
 //            "events": events,
-            "petSizePref": petSizePreference,
+            "petSizePref": petSizePref,
             "leashPolicy": leashPolicy,
             "disabledFriendly": disabledFriendly,
             "dataLocation": "internal"
         ]
+        print(businessData)
         
         // JSON data
         guard let jsonData = try? JSONSerialization.data(withJSONObject: businessData) else {
@@ -140,9 +148,6 @@ struct RegisterBusiness: View {
                     // Successful response
                     print("Business Registered!")
                     // Update SessionManager on the main thread
-//                    DispatchQueue.main.async {
-//                        SessionManager.shared.isLoggedIn = true
-//                    }
                 case 500:
                     // Handle 500 error
                     print("Error: \(httpResponse.statusCode)")
