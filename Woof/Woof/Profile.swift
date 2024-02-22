@@ -37,6 +37,18 @@ struct Profile: View {
                 Section(header: Text("User Information")) {
                     Text("Username: \(sessionManager.currentUser?.username ?? "Guest")")
                     Text("Email: \(sessionManager.currentUser?.email ?? "Guest")")
+                    Text("Owned Business: ")
+                    if let ownedBusiness = sessionManager.ownedBusiness{
+                        NavigationLink(destination: BusinessReviews(business: ownedBusiness)){
+                            Text(ownedBusiness.businessName)
+                                .padding()
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
+                    }else{
+                        Text("None").foregroundColor(.gray)
+                    }
                 }
                 
                 Section(header: Text("Saved Businesses")) {
@@ -55,8 +67,7 @@ struct Profile: View {
                             }
                         }
                     } else {
-                        ProgressView() // Show loading indicator while fetching data
-                            .padding()
+                        Text("No saved businesses.").foregroundColor(.gray)
                     }
                 }
             }

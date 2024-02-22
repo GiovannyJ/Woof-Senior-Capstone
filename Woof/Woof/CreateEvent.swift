@@ -13,6 +13,7 @@ struct CreateEventView: View {
     @State private var eventDate: String = ""
     @State private var location: String = ""
     @State private var contactInfo: String = ""
+    @ObservedObject private var sessionManager = SessionManager.shared
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -54,13 +55,21 @@ struct CreateEventView: View {
 }
 
 private func submitEvent(eventName: String, eventDescription: String, eventDate: String, location: String, contactInfo: String){
-    let url = URL(string: "https://localhost:8080/events/businesses/#BUSINESSID")!
-    let body: [String: String] = [
+    let businessID = SessionManager.shared.userBusinessID
+    let url = URL(string: "http://localhost:8080/events/businesses/\(businessID ?? 0)")!
+    let body: [String: Any] = [
         "eventName": eventName,
         "eventDescription": eventDescription,
         "eventDate": eventDate,
         "location": location,
-        "contactInfo": contactInfo
+        "contactInfo": contactInfo,
+        //ADD QUESTIONS FOR THESE THINGS
+        "petsizepref": "small",
+        "leashpolicy": true,
+        "disabledfriendly": true,
+        
+        
+        "datalocation": "internal"
     ]
     
     guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
@@ -80,9 +89,9 @@ private func submitEvent(eventName: String, eventDescription: String, eventDate:
                 // Successful response
                 print("Event Created!")
                 // Update SessionManager on the main thread
-                DispatchQueue.main.async {
-                    SessionManager.shared.isLoggedIn = true
-                }
+//                DispatchQueue.main.async {
+//                    SessionManager.shared.isLoggedIn = true
+//                }
             case 500:
                 // Handle 500 error
                 print("Error: \(httpResponse.statusCode)")

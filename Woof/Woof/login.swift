@@ -98,6 +98,7 @@ struct Login: View {
                         // Set isLoggedIn to true upon successful login
                         DispatchQueue.main.async {
                             SessionManager.shared.isLoggedIn = true
+                            SessionManager.shared.checkUserBusinessOwner()
                         }
                         isLoggedIn = true
                     } catch {
