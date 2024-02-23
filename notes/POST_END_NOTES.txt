@@ -3,10 +3,6 @@ create event:
     -fix API to reflect
     -fix documentation to reflect
 
-
-create business:
--this one was perfect
-
 Local Events
 -need to add ability to block button if user is already attending event (API routes to see what events user is attending probably make dict for this)
 -need to update attendance_count live (idk if this is cache issue lol)
