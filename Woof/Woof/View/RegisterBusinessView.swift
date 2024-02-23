@@ -1,18 +1,16 @@
+//
+//  RegisterBusinessView.swift
+//  Woof
+//
+//  Created by Giovanny Joseph on 2/22/24.
+//
+
 import SwiftUI
 
-struct RegisterBusiness: View {
-    @State private var businessName: String = ""
-    @State private var businessType: String = "Other"
-    @State private var location: String = ""
-    @State private var contact: String = ""
-    @State private var description: String = ""
-    @State private var events: String = ""
-    @State private var petSizePref: String = "small" // Default value
-    @State private var leashPolicy: Bool = true
-    @State private var disabledFriendly: Bool = false
-    
-    @State private var registrationStatus: String = ""
+struct RegisterBusinessView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
+    @ObservedObject var viewModel: RegisterBusinessViewModel
+    
     
     var body: some View {
         VStack {
@@ -22,11 +20,11 @@ struct RegisterBusiness: View {
                     .font(.title)
                     .padding(.vertical)
                     .fontWeight(.bold)) {
-                        TextField("Business Name", text: $businessName)
+                        TextField("Business Name", text: $viewModel.businessName)
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
-                        Picker("Business Type", selection: $businessType) {
+                        Picker("Business Type", selection: $viewModel.businessType) {
                             Text("Arts & Entertainment").tag("Arts & Entertainment")
                                 .foregroundColor(.gray)
                             Text("Active Life").tag("Active Life")
@@ -41,11 +39,11 @@ struct RegisterBusiness: View {
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
-                        TextField("Location", text: $location)
+                        TextField("Location", text: $viewModel.location)
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
-                        TextField("Contact", text: $contact)
+                        TextField("Contact", text: $viewModel.contact)
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
@@ -57,25 +55,25 @@ struct RegisterBusiness: View {
                     .font(.headline)
                     .padding(.vertical)
                     .fontWeight(.medium)) {
-                        TextField("Description", text: $description)
+                        TextField("Description", text: $viewModel.description)
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
-                        Picker("Leash Policy", selection: $leashPolicy){
+                        Picker("Leash Policy", selection: $viewModel.leashPolicy){
                             Text("Yes").tag(true)
                             Text("No").tag(false)
                         }
                         .padding()
                         .cornerRadius(8)
                         
-                        Picker("Disabled Pet Friendly", selection: $disabledFriendly){
+                        Picker("Disabled Pet Friendly", selection: $viewModel.disabledFriendly){
                             Text("Yes").tag(true)
                             Text("No").tag(false)
                         }
                         .padding()
                         .cornerRadius(8)
                         
-                        Picker("Pet Size Preference", selection: $petSizePref) {
+                        Picker("Pet Size Preference", selection: $viewModel.petSizePref) {
                             Text("Small Pets").tag("small")
                             Text("Medium Pets").tag("medium")
                             Text("Large Pets").tag("large")
@@ -88,7 +86,7 @@ struct RegisterBusiness: View {
             }
             
             Button(action: {
-                registerBusiness()
+                viewModel.registerBusiness()
             }) {
                 Text("Register Business")
                     .foregroundColor(.white)
@@ -101,66 +99,16 @@ struct RegisterBusiness: View {
             .padding(.vertical)
             .buttonStyle(PlainButtonStyle())
             
-            Text(registrationStatus)
+            Text(viewModel.registrationStatus)
                 .padding()
                 .foregroundColor(.red)
         }
         .padding()
     }
-    private func registerBusiness() {
-        // Create a dictionary with the  data to register the business
-        let businessData: [String: Any] = [
-            "businessName": businessName,
-            "businessType": businessType,
-            "ownerUserID": sessionManager.currentUser?.userID ?? 0,
-            "location": location,
-            "contact": contact,
-            "description": description,
-//            "events": events,
-            "petSizePref": petSizePref,
-            "leashPolicy": leashPolicy,
-            "disabledFriendly": disabledFriendly,
-            "dataLocation": "internal"
-        ]
-        print(businessData)
-        
-        // JSON data
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: businessData) else {
-            print("Error converting data to JSON")
-            return
-        }
-        
-        guard let url = URL(string: "http://localhost:8080/businesses") else {
-            print("Invalid URL")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        
-        request.httpBody = jsonData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let httpResponse = response as? HTTPURLResponse {
-                switch httpResponse.statusCode {
-                case 201:
-                    // Successful response
-                    print("Business Registered!")
-                    // Update SessionManager on the main thread
-                case 500:
-                    // Handle 500 error
-                    print("Error: \(httpResponse.statusCode)")
-                default:
-                    // Handle other status codes
-                    print("Unexpected error occurred")
-                }
-            }
-        }.resume()
-        struct RegisterBusiness_Preview: PreviewProvider {
-            static var previews: some View {
-                RegisterBusiness()
-            }
-        }
+}
+
+struct RegisterBusinessView_Preview: PreviewProvider {
+    static var previews: some View {
+        RegisterBusinessView(viewModel: RegisterBusinessViewModel())
     }
 }

@@ -637,6 +637,8 @@ func NewAttendance(c *gin.Context) {
 		return
 	}
 	invalidateCache("getuserattendance")
+	invalidateCache("getevents")
+	invalidateCache("getbusinessevents")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 

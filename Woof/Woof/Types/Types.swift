@@ -23,7 +23,7 @@ struct ImageID: Decodable {
 
 struct Event: Decodable {
     let eventID: Int
-    let attendance_count: Int
+    var attendance_count: Int
     let businessID: Int
     let contactInfo: String
     let dataLocation: String

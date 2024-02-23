@@ -1,70 +1,15 @@
-//  LocalEventsView.swift
+//
+//  EventCard.swift
 //  Woof
 //
-//  Created by Bo Nappie on 1/23/24.
+//  Created by Giovanny Joseph on 2/22/24.
 //
 
 import SwiftUI
 
-struct LocalEvents: View {
-    @State private var events: [Event] = []
-    @ObservedObject private var sessionManager = SessionManager.shared
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Pet-Friendly Events Near You")
-                .font(.largeTitle)
-                .foregroundColor(.orange)
-                .padding()
-
-            // Display a list of events created and promoted by businesses
-            ScrollView {
-                ForEach(events, id: \.eventID) { event in
-                    EventCard(event: event)
-                        .padding(.vertical, 8)
-                }
-            }
-        }
-        .padding()
-        .onAppear {
-            fetchEvents()
-        }
-        .navigationTitle("Local Events")
-    }
-
-    private func fetchEvents() {
-        guard let url = URL(string: "http://localhost:8080/events") else {
-            print("Invalid URL")
-            return
-        }
-
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data {
-                do {
-                    let decodedData = try JSONDecoder().decode([Event].self, from: data)
-                    DispatchQueue.main.async {
-                        events = decodedData
-                    }
-                } catch {
-                    print("Error decoding JSON: \(error)")
-                }
-            } else if let error = error {
-                print("Error making API request: \(error)")
-            }
-        }.resume()
-    }
-}
-
-
-struct LocalEvents_Previews: PreviewProvider {
-    static var previews: some View {
-        LocalEvents()
-    }
-}
-
-// EventCard
 struct EventCard: View {
     let event: Event
+    
 
     var body: some View {
         NavigationLink(destination: EventFullContextView(event: event)) {
@@ -96,7 +41,7 @@ struct EventCard: View {
                 
                 // Attend Event Button
                 Button(action: {
-                    attendEvent(eventID: event.eventID)
+                    attendEvent(event: event)
                 print("Attend Event: \(event.eventName)")
                               }) {
                 Text("Attend Event")
@@ -115,14 +60,13 @@ struct EventCard: View {
         }
     
     
-    private func attendEvent(eventID: Int){
+    private func attendEvent(event: Event){
         let url = URL(string: "http://localhost:8080/events/attendance")!
         let userID = SessionManager.shared.currentUser?.userID
         let body: [String: Any] = [
             "userID": userID ?? 0,
-            "eventID": eventID,
+            "eventID": event.eventID,
         ]
-        print(body)
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
             print("Error encoding data")
@@ -153,4 +97,13 @@ struct EventCard: View {
             }
         }.resume()
     }
+}
+
+
+struct EventCard_Preview: PreviewProvider {
+    static let testEvent = Event(eventID: 1, attendance_count: 10, businessID: 1, contactInfo: "100-200-2020", dataLocation: "internal", disabledFriendly: true, eventDate: "1/1/2024", eventDescription: "This is a test event with test data and whatnot", eventName: "test event", imgID: nil, leashPolicy: true, location: "1800 Test Street", petSizePref: "small")
+    
+    static var previews: some View {
+        EventCard(event: testEvent)
     }
+}

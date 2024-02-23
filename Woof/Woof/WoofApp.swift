@@ -11,7 +11,7 @@ import SwiftUI
 struct WoofApp: App {
     var body: some Scene {
         WindowGroup {
-            Login().environmentObject(SessionManager.shared) // Start directly with the Login view
+            LoginView().environmentObject(SessionManager.shared) // Start directly with the Login view
         }
     }
 }
