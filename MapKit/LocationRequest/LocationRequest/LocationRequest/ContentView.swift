@@ -93,3 +93,8 @@ class CustomAnnotation: NSObject, MKAnnotation {
 }
 
 
+struct ContentView_Preview: PreviewProvider {
+    static var previews: some View {
+        ContentView() // Shows the LocationRequestView in the preview.
+    }
+}

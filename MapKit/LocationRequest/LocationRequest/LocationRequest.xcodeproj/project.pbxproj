@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5B009E482B8AE06700CCF3A1 /* AddressFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B009E472B8AE06700CCF3A1 /* AddressFinderView.swift */; };
-		5B2940392B84F390006FC615 /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 5B2940382B84F390006FC615 /* MapboxMaps */; };
 		5B2940402B8A9493006FC615 /* Geocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B29403F2B8A9493006FC615 /* Geocoding.swift */; };
 		5B4437222B830F650076C1E3 /* LocationRequestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4437212B830F650076C1E3 /* LocationRequestApp.swift */; };
 		5B4437262B830F690076C1E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B4437252B830F690076C1E3 /* Assets.xcassets */; };
@@ -63,7 +62,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B2940392B84F390006FC615 /* MapboxMaps in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,7 +161,6 @@
 			);
 			name = LocationRequest;
 			packageProductDependencies = (
-				5B2940382B84F390006FC615 /* MapboxMaps */,
 			);
 			productName = LocationRequest;
 			productReference = 5B44371E2B830F650076C1E3 /* LocationRequest.app */;
@@ -238,7 +235,6 @@
 			);
 			mainGroup = 5B4437152B830F650076C1E3;
 			packageReferences = (
-				5B2940372B84F390006FC615 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
 			);
 			productRefGroup = 5B44371F2B830F650076C1E3 /* Products */;
 			projectDirPath = "";
@@ -616,25 +612,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		5B2940372B84F390006FC615 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		5B2940382B84F390006FC615 /* MapboxMaps */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5B2940372B84F390006FC615 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
-			productName = MapboxMaps;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5B4437162B830F650076C1E3 /* Project object */;
 }
