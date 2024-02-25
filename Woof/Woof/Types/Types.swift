@@ -23,7 +23,7 @@ struct ImageID: Decodable {
 
 struct Event: Decodable {
     let eventID: Int
-    let attendance_count: Int
+    var attendance_count: Int
     let businessID: Int
     let contactInfo: String
     let dataLocation: String
@@ -31,10 +31,11 @@ struct Event: Decodable {
     let eventDate: String
     let eventDescription: String
     let eventName: String
-    let imgID: ImageID
+    let imgID: ImageID?
     let leashPolicy: Bool
     let location: String
     let petSizePref: String
+    var geolocation: String
 }
 
 struct ImageInfo: Decodable{
@@ -66,6 +67,8 @@ struct Business: Decodable, Identifiable {
     let petSizePref: String
     let leashPolicy: Bool
     let disabledFriendly: Bool
+    let reviews: [Review]?
+    var geolocation: String	
 
     var id: Int {
         return businessID
@@ -73,7 +76,28 @@ struct Business: Decodable, Identifiable {
 }
 
 
-
 struct ErrorResponse: Decodable {
     let error: String
+}
+
+
+struct Review: Decodable, Identifiable{
+    let reviewID: Int
+    let userID: Int
+    let businessID: Int
+    let rating: Int
+    let comment: String
+    let dateCreated: String
+    let dataLocation: String
+    let imgID: ImageID?
+    
+    var id: Int {
+        return reviewID
+    }
+}
+
+struct BusinessReviewInfo: Decodable{
+    let businessinfo: Business
+    let userinfo: User
+    let reviewinfo: Review
 }

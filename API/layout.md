@@ -19,8 +19,6 @@ cd API
 go run main.go
 ```
 
-### AUTHENTICATION
-Authentication is done through JWT (JSON Web Token). A header is required by each request {Key: "Authorization", Value: "Bearer TOKEN_IN_DB"}. Tokens are generated and inserted into the database. This is done in order to not allow people who are not in our development team to use the API since it will be hosted on the server and possibly exposed to threats.
 
 ### GET REQUESTS
 These are endpoints to retrieve data from the database. They can be queried with parameters and in order of ascending or descending. The endpoints are:

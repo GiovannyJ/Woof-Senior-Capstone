@@ -1,6 +1,5 @@
 [
     {
-        "attendance_count": 3,
         "businessID": 2,
         "contactInfo": "Contact B",
         "dataLocation": "foreign",
@@ -9,12 +8,9 @@
         "eventDescription": "Description B",
         "eventID": 2,
         "eventName": "Event B",
-        "imgID": {
-            "Int64": 2,
-            "Valid": true
-        },
         "leashPolicy": false,
         "location": "Location B",
-        "petSizePref": "large"
+        "petSizePref": "large",
+        "geolocation": "someplace"
     }
 ]

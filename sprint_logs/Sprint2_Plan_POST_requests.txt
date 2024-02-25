@@ -1,0 +1,26 @@
+Backend (Gio)
+- bug fixing for API post routes
+- fix bugs for GET
+    - FIX CACHE ISSUE
+- (maybe) Integration of 3rd Party API for business data
+
+Frontend (Gio/Bo)
+- POST for all necessary pages
+- GET for any stragglers
+- MAP view for events/businesses
+- Cleaning inconsistencies
+- make things look purdy
+- add ability to
+    - say attending event (button)
+    - save business as user (button)
+
+- update session manager
+    - isBusinessOwner property (make call to API /businesses?OwnerUserID=$currentUser.id to find out)
+
+Research (Martin)
+- map view 
+
+House Keeping:
+- refactor code base to be more clean
+    - change file names to be more consistent
+    - move shared assets and methods

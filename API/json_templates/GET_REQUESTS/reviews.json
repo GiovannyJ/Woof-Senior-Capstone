@@ -16,7 +16,8 @@
             },
             "petSizePref": "medium",
             "leashPolicy": true,
-            "disabledFriendly": false
+            "disabledFriendly": false,
+            "geolocation": ""
         },
         "userinfo": {
             "userID": 1,

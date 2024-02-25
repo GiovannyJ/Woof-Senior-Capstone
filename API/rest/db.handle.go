@@ -4,9 +4,9 @@ import (
 	db "API/database"
 	s "API/models"
 	"encoding/json"
-	"strconv"
-	"net/http"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"strconv"
 )
 
 type user = s.User
@@ -34,11 +34,11 @@ func GetUsers(c *gin.Context) {
 	var query = make(map[string]interface{})
 
 	queryParams := map[string]string{
-		"userID": 		c.Query("userID"),
-		"username":  	c.Query("username"),
-		"email": 		c.Query("email"),
-		"accountType": 	c.Query("accountType"),
-		"order":     	c.Query("order"),
+		"userID":      c.Query("userID"),
+		"username":    c.Query("username"),
+		"email":       c.Query("email"),
+		"accountType": c.Query("accountType"),
+		"order":       c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -48,7 +48,7 @@ func GetUsers(c *gin.Context) {
 	}
 	cacheKey := generateCacheKey(queryParams, "getusers")
 
-	if data, err := getCacheData(cacheKey); err == nil{
+	if data, err := getCacheData(cacheKey); err == nil {
 		c.IndentedJSON(http.StatusOK, data)
 		return
 	}
@@ -60,11 +60,11 @@ func GetUsers(c *gin.Context) {
 	}
 
 	serializedData, err := json.Marshal(results)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -83,24 +83,26 @@ func GetUserAttendance(c *gin.Context) {
 	}
 
 	queryParams := map[string]string{
-		"b.businessID": 		c.Query("businessID"),
-		"b.businessName":  		c.Query("businessName"),
-		"b.businessType":		c.Query("businessType"),
-		"b.location":			c.Query("location"),
-		"b.contact":			c.Query("contact"),
-		"b.ownerID": 			c.Query("ownerID"),
-		"b.petSizePref":		c.Query("B_petSizePref"),
-		"b.leashPolicy":		c.Query("B_leashPolicy"),
-		"b.disabledFriendly":	c.Query("B_disabledFriendly"),
-		"b.rating": 			c.Query("rating"),
-		"e.eventID": 			c.Query("eventID"),
-		"e.eventName": 			c.Query("eventName"),
-		"e.eventDate": 			c.Query("eventDate"),
-		"e.petSizePref":		c.Query("E_petSizePref"),
-		"e.leashPolicy":		c.Query("E_leashPolicy"),
-		"e.disabledFriendly":	c.Query("E_disabledFriendly"),
-		"e.attendance_count":	c.Query("attendance_count"),
-		"order":     			c.Query("order"),
+		"b.businessID":       c.Query("businessID"),
+		"b.businessName":     c.Query("businessName"),
+		"b.businessType":     c.Query("businessType"),
+		"b.location":         c.Query("location"),
+		"b.contact":          c.Query("contact"),
+		"b.ownerID":          c.Query("ownerID"),
+		"b.petSizePref":      c.Query("B_petSizePref"),
+		"b.leashPolicy":      c.Query("B_leashPolicy"),
+		"b.disabledFriendly": c.Query("B_disabledFriendly"),
+		"b.rating":           c.Query("rating"),
+		"b.geolocation":	  c.Query("B_geolocation"),
+		"e.eventID":          c.Query("eventID"),
+		"e.eventName":        c.Query("eventName"),
+		"e.eventDate":        c.Query("eventDate"),
+		"e.petSizePref":      c.Query("E_petSizePref"),
+		"e.leashPolicy":      c.Query("E_leashPolicy"),
+		"e.disabledFriendly": c.Query("E_disabledFriendly"),
+		"e.attendance_count": c.Query("attendance_count"),
+		"e.geolocation":	  c.Query("E_geolocation"),
+		"order":              c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -108,9 +110,9 @@ func GetUserAttendance(c *gin.Context) {
 			query[key] = value
 		}
 	}
-	cacheKey := generateCacheKey(queryParams, userID + "getuserattendance")
+	cacheKey := generateCacheKey(queryParams, userID+"getuserattendance")
 
-	if data, err := getCacheData(cacheKey); err == nil{
+	if data, err := getCacheData(cacheKey); err == nil {
 		c.IndentedJSON(http.StatusOK, data)
 		return
 	}
@@ -122,18 +124,17 @@ func GetUserAttendance(c *gin.Context) {
 	}
 
 	serializedData, err := json.Marshal(results)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
-
 /*
 *TESTED WORKING
-gets all businesses 
+gets all businesses
 and query for businessID, businessName, ownerID, rating, order (ASC, DESC)
 */
 func GetBusinesses(c *gin.Context) {
@@ -141,17 +142,18 @@ func GetBusinesses(c *gin.Context) {
 	var query = make(map[string]interface{})
 
 	queryParams := map[string]string{
-		"businessID": 		c.Query("businessID"),
-		"businessName":  	c.Query("businessName"),
-		"businessType":		c.Query("businessType"),
-		"location":			c.Query("location"),
-		"contact":			c.Query("contact"),
-		"ownerID": 			c.Query("ownerID"),
-		"rating": 			c.Query("rating"),
-		"petSizePref":		c.Query("petSizePref"),
-		"leashPolicy":		c.Query("leashPolicy"),
-		"disabledFriendly":	c.Query("disabledFriendly"),
-		"order":     		c.Query("order"),
+		"businessID":       c.Query("businessID"),
+		"businessName":     c.Query("businessName"),
+		"businessType":     c.Query("businessType"),
+		"location":         c.Query("location"),
+		"contact":          c.Query("contact"),
+		"ownerUserID":      c.Query("ownerUserID"),
+		"rating":           c.Query("rating"),
+		"petSizePref":      c.Query("petSizePref"),
+		"leashPolicy":      c.Query("leashPolicy"),
+		"disabledFriendly": c.Query("disabledFriendly"),
+		"geolocation":		c.Query("geolocation"),
+		"order":            c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -161,7 +163,7 @@ func GetBusinesses(c *gin.Context) {
 	}
 	cacheKey := generateCacheKey(queryParams, "getbusinesses")
 
-	if data, err := getCacheData(cacheKey); err == nil{
+	if data, err := getCacheData(cacheKey); err == nil {
 		c.IndentedJSON(http.StatusOK, data)
 		return
 	}
@@ -173,14 +175,13 @@ func GetBusinesses(c *gin.Context) {
 	}
 
 	serializedData, err := json.Marshal(results)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
-
 
 /*
 *TESTED WORKING
@@ -199,17 +200,18 @@ func GetSavedBusiness(c *gin.Context) {
 	}
 
 	queryParams := map[string]string{
-		"b.businessID": 		c.Query("businessID"),
-		"b.businessName":  		c.Query("businessName"),
-		"b.businessType":		c.Query("businessType"),
-		"b.location":			c.Query("location"),
-		"b.contact":			c.Query("contact"),
-		"b.ownerID": 			c.Query("ownerID"),
-		"b.petSizePref":		c.Query("B_petSizePref"),
-		"b.leashPolicy":		c.Query("B_leashPolicy"),
-		"b.disabledFriendly":	c.Query("B_disabledFriendly"),
-		"b.rating": 			c.Query("rating"),
-		"order":     		c.Query("order"),
+		"b.businessID":       c.Query("businessID"),
+		"b.businessName":     c.Query("businessName"),
+		"b.businessType":     c.Query("businessType"),
+		"b.location":         c.Query("location"),
+		"b.contact":          c.Query("contact"),
+		"b.ownerID":          c.Query("ownerID"),
+		"b.petSizePref":      c.Query("B_petSizePref"),
+		"b.leashPolicy":      c.Query("B_leashPolicy"),
+		"b.disabledFriendly": c.Query("B_disabledFriendly"),
+		"b.rating":           c.Query("rating"),
+		"b.geolocation":	  c.Query("geolocation"),
+		"order":              c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -217,29 +219,29 @@ func GetSavedBusiness(c *gin.Context) {
 			query[key] = value
 		}
 	}
-	cacheKey := generateCacheKey(queryParams, userID + "getsavedbusinesses")
+	cacheKey := generateCacheKey(queryParams, userID+"getsavedbusinesses")
 
-	if data, err := getCacheData(cacheKey); err == nil{
+	if data, err := getCacheData(cacheKey); err == nil {
 		c.IndentedJSON(http.StatusOK, data)
 		return
 	}
 
 	results, err := db.Users_SavedBusiness_GET(query, id)
 	/*
-	! POSSIBLY MAKE ENDPOINT FOR THIS??
-	! results, err := db.SavedBusiness_GET(query, id)
-	*/ 
+		! POSSIBLY MAKE ENDPOINT FOR THIS??
+		! results, err := db.SavedBusiness_GET(query, id)
+	*/
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 
 	serializedData, err := json.Marshal(results)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -258,16 +260,15 @@ func GetBusinessReviews(c *gin.Context) {
 		return
 	}
 
-
 	queryParams := map[string]string{
-		"r.reviewID":		c.Query("reviewID"),
-		"r.rating":			c.Query("reviewRating"),
-		"r.dateCreated":	c.Query("dateCreated"),
-		"u.userID":			c.Query("userID"),
-		"u.username":		c.Query("username"),
-		"u.email":			c.Query("email"),
-		"u.accountType":	c.Query("accountType"),
-		"order":     		c.Query("order"),
+		"r.reviewID":    c.Query("reviewID"),
+		"r.rating":      c.Query("reviewRating"),
+		"r.dateCreated": c.Query("dateCreated"),
+		"u.userID":      c.Query("userID"),
+		"u.username":    c.Query("username"),
+		"u.email":       c.Query("email"),
+		"u.accountType": c.Query("accountType"),
+		"order":         c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -275,9 +276,9 @@ func GetBusinessReviews(c *gin.Context) {
 			query[key] = value
 		}
 	}
-	cacheKey := generateCacheKey(queryParams, businessID + "getbusinessreviews")
+	cacheKey := generateCacheKey(queryParams, businessID+"getbusinessreviews")
 
-	if data, err := getCacheData(cacheKey); err == nil{
+	if data, err := getCacheData(cacheKey); err == nil {
 		c.IndentedJSON(http.StatusOK, data)
 		return
 	}
@@ -289,15 +290,13 @@ func GetBusinessReviews(c *gin.Context) {
 	}
 
 	serializedData, err := json.Marshal(results)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
-
-
 
 /*
 *TESTED WORKING
@@ -309,15 +308,16 @@ func GetEvents(c *gin.Context) {
 	var query = make(map[string]interface{})
 
 	queryParams := map[string]string{
-		"eventID":			c.Query("eventID"),
-		"businessID": 		c.Query("businessID"),
-		"eventName":	  	c.Query("eventName"),
-		"eventDate": 		c.Query("eventDate"),
-		"petSizePref":		c.Query("petSizePref"),
-		"leashPolicy":		c.Query("leashPolicy"),
-		"disabledFriendly":	c.Query("disabledFriendly"),
+		"eventID":          c.Query("eventID"),
+		"businessID":       c.Query("businessID"),
+		"eventName":        c.Query("eventName"),
+		"eventDate":        c.Query("eventDate"),
+		"petSizePref":      c.Query("petSizePref"),
+		"leashPolicy":      c.Query("leashPolicy"),
+		"disabledFriendly": c.Query("disabledFriendly"),
 		"attendance_count": c.Query("attendance_count"),
-		"order":     		c.Query("order"),
+		"geolocation":		c.Query("geolocation"),
+		"order":            c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -327,7 +327,7 @@ func GetEvents(c *gin.Context) {
 	}
 	cacheKey := generateCacheKey(queryParams, "getevents")
 
-	if data, err := getCacheData(cacheKey); err == nil{
+	if data, err := getCacheData(cacheKey); err == nil {
 		c.IndentedJSON(http.StatusOK, data)
 		return
 	}
@@ -339,14 +339,13 @@ func GetEvents(c *gin.Context) {
 	}
 
 	serializedData, err := json.Marshal(results)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
-
 
 /*
 *TESTED WORKING
@@ -364,24 +363,26 @@ func GetBusinessEvents(c *gin.Context) {
 	}
 
 	queryParams := map[string]string{
-		"b.businessID": 		c.Query("businessID"),
-		"b.businessName":  		c.Query("businessName"),
-		"b.businessType":		c.Query("businessType"),
-		"b.location":			c.Query("location"),
-		"b.contact":			c.Query("contact"),
-		"b.ownerID": 			c.Query("ownerID"),
-		"b.petSizePref":		c.Query("B_petSizePref"),
-		"b.leashPolicy":		c.Query("B_leashPolicy"),
-		"b.disabledFriendly":	c.Query("B_disabledFriendly"),
-		"b.rating": 			c.Query("rating"),
-		"e.eventID": 			c.Query("eventID"),
-		"e.eventName": 			c.Query("eventName"),
-		"e.eventDate": 			c.Query("eventDate"),
-		"e.petSizePref":		c.Query("E_petSizePref"),
-		"e.leashPolicy":		c.Query("E_leashPolicy"),
-		"e.disabledFriendly":	c.Query("E_disabledFriendly"),
-		"e.attendance_count":	c.Query("attendance_count"),
-		"order":     			c.Query("order"),
+		"b.businessID":       c.Query("businessID"),
+		"b.businessName":     c.Query("businessName"),
+		"b.businessType":     c.Query("businessType"),
+		"b.location":         c.Query("location"),
+		"b.contact":          c.Query("contact"),
+		"b.ownerID":          c.Query("ownerID"),
+		"b.petSizePref":      c.Query("B_petSizePref"),
+		"b.leashPolicy":      c.Query("B_leashPolicy"),
+		"b.disabledFriendly": c.Query("B_disabledFriendly"),
+		"b.rating":           c.Query("rating"),
+		"b.geolocation":	  c.Query("B_geolocation"),
+		"e.eventID":          c.Query("eventID"),
+		"e.eventName":        c.Query("eventName"),
+		"e.eventDate":        c.Query("eventDate"),
+		"e.petSizePref":      c.Query("E_petSizePref"),
+		"e.leashPolicy":      c.Query("E_leashPolicy"),
+		"e.disabledFriendly": c.Query("E_disabledFriendly"),
+		"e.attendance_count": c.Query("attendance_count"),
+		"e.geolocation":	  c.Query("E_geolocation"),
+		"order":              c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -390,9 +391,9 @@ func GetBusinessEvents(c *gin.Context) {
 		}
 	}
 
-	cacheKey := generateCacheKey(queryParams, businessID + "getbusinessevents")
+	cacheKey := generateCacheKey(queryParams, businessID+"getbusinessevents")
 
-	if data, err := getCacheData(cacheKey); err == nil{
+	if data, err := getCacheData(cacheKey); err == nil {
 		c.IndentedJSON(http.StatusOK, data)
 		return
 	}
@@ -404,11 +405,11 @@ func GetBusinessEvents(c *gin.Context) {
 	}
 
 	serializedData, err := json.Marshal(results)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
@@ -420,14 +421,13 @@ can query by: id, size, imgName, imgType, order(ASC/DESC)
 func GetImgInfo(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	var query = make(map[string]interface{})
-	
 
 	queryParams := map[string]string{
-		"id": 					c.Query("id"),
-		"size": 				c.Query("size"),
-		"imgName": 				c.Query("imgName"),
-		"imgType": 				c.Query("imgType"),
-		"order":     			c.Query("order"),
+		"id":      c.Query("id"),
+		"size":    c.Query("size"),
+		"imgName": c.Query("imgName"),
+		"imgType": c.Query("imgType"),
+		"order":   c.Query("order"),
 	}
 
 	for key, value := range queryParams {
@@ -438,7 +438,7 @@ func GetImgInfo(c *gin.Context) {
 
 	cacheKey := generateCacheKey(queryParams, "getImgInfo")
 
-	if data, err := getCacheData(cacheKey); err == nil{
+	if data, err := getCacheData(cacheKey); err == nil {
 		c.IndentedJSON(http.StatusOK, data)
 		return
 	}
@@ -450,15 +450,13 @@ func GetImgInfo(c *gin.Context) {
 	}
 
 	serializedData, err := json.Marshal(results)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
-
-
 
 /*
 *TESTED WORKING
@@ -475,12 +473,12 @@ func GetAttendanceCount(c *gin.Context) {
 	}
 
 	queryParams := map[string]string{
-		"eventID": 			eventID,
+		"eventID": eventID,
 	}
 
-	cacheKey := generateCacheKey(queryParams, eventID + "getattendancecount")
+	cacheKey := generateCacheKey(queryParams, eventID+"getattendancecount")
 
-	if data, err := getCacheData(cacheKey); err == nil{
+	if data, err := getCacheData(cacheKey); err == nil {
 		c.IndentedJSON(http.StatusOK, data)
 		return
 	}
@@ -492,18 +490,17 @@ func GetAttendanceCount(c *gin.Context) {
 	}
 
 	serializedData, err := json.Marshal(results)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
 		return
 	}
-	DataCache.Set(cacheKey, serializedData)
+	setCache(cacheKey, serializedData)
 	c.IndentedJSON(http.StatusOK, results)
 }
 
-
 /*
 *=================POST METHOD HANDLERS==================
-*/
+ */
 
 /*
 *TESTED WORKING
@@ -534,8 +531,8 @@ func NewUser(c *gin.Context) {
 
 	var query = make(map[string]interface{})
 
-	queryParams := map[string]string{	
-		"username":  	*newAcc.Username,
+	queryParams := map[string]string{
+		"username": *newAcc.Username,
 	}
 
 	for key, value := range queryParams {
@@ -549,6 +546,8 @@ func NewUser(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	invalidateCache("getusers")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -581,9 +580,9 @@ func NewBusiness(c *gin.Context) {
 
 	var query = make(map[string]interface{})
 
-	queryParams := map[string]string{	
-		"businessName":  	newBusiness.BusinessName,
-		"location": 		newBusiness.Location,
+	queryParams := map[string]string{
+		"businessName": newBusiness.BusinessName,
+		"location":     newBusiness.Location,
 	}
 
 	for key, value := range queryParams {
@@ -597,9 +596,9 @@ func NewBusiness(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getbusinesses")
 	c.IndentedJSON(http.StatusCreated, results)
 }
-
 
 /*
 *TESTED WORKING
@@ -629,8 +628,8 @@ func NewAttendance(c *gin.Context) {
 
 	var query = make(map[string]interface{})
 
-	queryParams := map[string]string{	
-		"e.eventID": 		strconv.Itoa(newAttendance.EventID),
+	queryParams := map[string]string{
+		"e.eventID": strconv.Itoa(newAttendance.EventID),
 	}
 
 	for key, value := range queryParams {
@@ -644,6 +643,9 @@ func NewAttendance(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getuserattendance")
+	invalidateCache("getevents")
+	invalidateCache("getbusinessevents")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -652,11 +654,11 @@ func NewAttendance(c *gin.Context) {
 creates new saved business for account
 Request body shaped like saved business struct without savedID
 */
-func NewSavedBusiness(c *gin.Context){	
+func NewSavedBusiness(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
 	c.Header("Access-Control-Allow-Headers", "Content-Type")
-	
+
 	userID := c.Param("userid")
 	id, err := strconv.Atoi(userID)
 	if err != nil {
@@ -683,8 +685,8 @@ func NewSavedBusiness(c *gin.Context){
 
 	var query = make(map[string]interface{})
 
-	queryParams := map[string]string{	
-		"businessID": 		strconv.Itoa(newSavedBusiness.BusinessID),
+	queryParams := map[string]string{
+		"businessID": strconv.Itoa(newSavedBusiness.BusinessID),
 	}
 
 	for key, value := range queryParams {
@@ -698,6 +700,7 @@ func NewSavedBusiness(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getsavedbusinesses")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -706,11 +709,11 @@ func NewSavedBusiness(c *gin.Context){
 creates new review for business using account
 Request body shaped like review struct without reviewID, userID, businessID, dateCreated
 */
-func NewReview(c *gin.Context){	
+func NewReview(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
 	c.Header("Access-Control-Allow-Headers", "Content-Type")
-	
+
 	userID, err := strconv.Atoi(c.Param("userid"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
@@ -732,7 +735,7 @@ func NewReview(c *gin.Context){
 	}
 
 	err = db.CreateNewReview(newReview)
-	
+
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -740,9 +743,9 @@ func NewReview(c *gin.Context){
 
 	var query = make(map[string]interface{})
 
-	queryParams := map[string]string{	
-		"businessID": 		c.Param("businessid"),
-		"userID":			c.Param("userid"),
+	queryParams := map[string]string{
+		"businessID": c.Param("businessid"),
+		"userID":     c.Param("userid"),
 	}
 
 	for key, value := range queryParams {
@@ -756,6 +759,7 @@ func NewReview(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getbusinessreviews")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -764,12 +768,11 @@ func NewReview(c *gin.Context){
 creates new event for business using businessID
 Request body shaped like event struct
 */
-func NewEvent(c *gin.Context){	
+func NewEvent(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
 	c.Header("Access-Control-Allow-Headers", "Content-Type")
-	
-	
+
 	businessID, err := strconv.Atoi(c.Param("businessid"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid business ID"})
@@ -785,7 +788,7 @@ func NewEvent(c *gin.Context){
 	}
 
 	err = db.CreateNewEvent(newEvent)
-	
+
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -794,9 +797,10 @@ func NewEvent(c *gin.Context){
 	var query = make(map[string]interface{})
 
 	queryParams := map[string]string{
-		"eventName":		newEvent.EventName,
-		"businessID": 		c.Param("businessid"),
-		"userID":			c.Param("userid"),
+		"eventName":  newEvent.EventName,
+		"businessID": c.Param("businessid"),
+		"userID":     c.Param("userid"),
+		"eventDate": newEvent.EventDate,
 	}
 
 	for key, value := range queryParams {
@@ -810,6 +814,7 @@ func NewEvent(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getevents")
 	c.IndentedJSON(http.StatusCreated, results)
 }
 
@@ -818,11 +823,11 @@ func NewEvent(c *gin.Context){
 Checks username and password to database, if they are good then returns account info (without pwd)
 Request body shaped like Login struct without userID, pwd, email, and accountType
 */
-func Login(c *gin.Context){	
+func Login(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Header("Access-Control-Allow-Methods", "POST, OPTIONS")
 	c.Header("Access-Control-Allow-Headers", "Content-Type")
-	
+
 	var newLogin login
 
 	if err := c.BindJSON(&newLogin); err != nil {
@@ -831,7 +836,7 @@ func Login(c *gin.Context){
 	}
 
 	u, err := db.GetLoginInfo(newLogin.Username, newLogin.Password)
-	
+
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -840,7 +845,7 @@ func Login(c *gin.Context){
 	var query = make(map[string]interface{})
 
 	queryParams := map[string]string{
-		"username":			*u.Username,
+		"username": *u.Username,
 	}
 
 	for key, value := range queryParams {
@@ -856,7 +861,6 @@ func Login(c *gin.Context){
 	}
 	c.IndentedJSON(http.StatusCreated, results)
 }
-
 
 /*
 *=================PATCH METHOD HANDLERS==================
@@ -882,6 +886,21 @@ func Update(c *gin.Context) {
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
+	}
+
+	switch update.TableName {
+	case "user":
+		invalidateCache("getusers")
+	case "business":
+		invalidateCache("getbusinesses")
+		invalidateCache("getbusinessreviews")
+		invalidateCache("getbusinessevents")
+	case "reviews":
+		invalidateCache("getreviews")
+		invalidateCache("getbusinessreviews")
+	case "events":
+		invalidateCache("getevents")
+		invalidateCache("getbusinessevents")
 	}
 
 	c.IndentedJSON(http.StatusOK, update)
@@ -925,20 +944,35 @@ func UpdatePWD(c *gin.Context) {
 deletes value in database based on table name cascades if necessary
 request body shaped like DELETE_REQUESTS/*.json files
 */
-func Delete(c *gin.Context){
+func Delete(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 
 	var delete deletequery
-	
-	if err := c.BindJSON(&delete); err != nil{
+
+	if err := c.BindJSON(&delete); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
 	err := db.DeleteData(delete)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
+	}
+
+	switch delete.TableName {
+	case "user":
+		invalidateCache("getusers")
+	case "business":
+		invalidateCache("getbusinesses")
+		invalidateCache("getbusinessreviews")
+		invalidateCache("getbusinessevents")
+	case "reviews":
+		invalidateCache("getreviews")
+		invalidateCache("getbusinessreviews")
+	case "events":
+		invalidateCache("getevents")
+		invalidateCache("getbusinessevents")
 	}
 }
 
@@ -946,18 +980,18 @@ func Delete(c *gin.Context){
 *TESTED WORKING
 deletes attendance from database and updates the attendance count in events table
 */
-func DeleteAttendance(c *gin.Context){
+func DeleteAttendance(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 
 	var delete attendance
-	
-	if err := c.BindJSON(&delete); err != nil{
+
+	if err := c.BindJSON(&delete); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
 	err := db.DeleteAttendanceData(delete)
-	if err != nil{
+	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}

@@ -1,0 +1,14 @@
+Added:
+-new columns
+    - geolocation varchar(300) NOT NULL:: events and businesses tables
+    - used to store geolocation for map data
+    - should be populated in json data
+-changed column
+    - event date -> event datetime
+    - stores time for more accuracy
+    - default will still be date with time 00:00:00
+
+Endpoint update:
+-new query params
+    -geolocation, E_geolocation, B_geolcation (where appropriate)
+    -used to filer out data by geolocation

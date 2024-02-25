@@ -1,0 +1,25 @@
+New Structure planned
+
+-This will be where we store the scaffold pages
+ViewModels/
+    BusinessViewModel.swift
+    LocalEventsViewModel.swift
+    ....
+
+-This will be where we have the pages that will be used:: utilize viewmodels for functionality and to populate assets/features on pages
+Views/
+    BusinessView.swift
+    LocalEventsView.swift
+    ....
+
+-Where we hold common assets such as popups title cards etc for consistent styling
+Assets/
+    assets.swift
+
+-Where we store the data types that are the same as the API so that we maintain consistent
+Types/
+    types.swift
+
+-Helper methods that we tend to use alot
+Helper/
+    helper.swift

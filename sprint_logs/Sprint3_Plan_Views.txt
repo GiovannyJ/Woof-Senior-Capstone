@@ -1,0 +1,32 @@
+SPRINT 3
+Backend:
+-fix bugs
+
+Frontend:
+- create different views depending on access level
+    - regular users
+    - business users
+    - admin users?
+- create update pages
+    - account (updateAccount.swift)
+        - will allow update password and all other info
+    - business (updateBusiness.swift)
+    - events (updateEvent.swift)
+- add delete buttons where necessary
+    - delete user
+    - delete business
+    - delete review
+    - delete event 
+    - delete saved business
+    - delete attendance
+- add ability to upload img
+    - user
+    - business
+    - event
+    - review
+
+Research:
+-3rd party APIs to get more data from web
+
+Feature Integration:
+-add map feature to necessary pages

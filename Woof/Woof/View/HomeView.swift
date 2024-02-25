@@ -1,7 +1,8 @@
+//
 //  HomeView.swift
 //  Woof
 //
-//  Created by Bo Nappie on 1/23/24.
+//  Created by Giovanny Joseph on 2/22/24.
 //
 
 import SwiftUI
@@ -28,7 +29,7 @@ struct HomeView: View {
                         .fontWeight(.bold)
                         .padding(.leading)
 
-                    NavigationLink(destination: Profile()) {
+                    NavigationLink(destination: ProfileView()) {
                         Text("Profile")
                             .font(.subheadline)
                             .fontWeight(.heavy)
@@ -39,7 +40,7 @@ struct HomeView: View {
                             .cornerRadius(10)
                     }
 
-                    NavigationLink(destination: Search()) {
+                    NavigationLink(destination: SearchView()) {
                         Text("Search Businesses")
                             .fontWeight(.heavy)
                             .padding()
@@ -49,7 +50,7 @@ struct HomeView: View {
                             .cornerRadius(10)
                     }
 
-                    NavigationLink(destination: LocalEvents()) {
+                    NavigationLink(destination: LocalEventsView()) {
                         Text("Local Events")
                             .fontWeight(.heavy)
                             .padding()
@@ -58,8 +59,26 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
-
-                    // Add more features as needed
+                    
+                    NavigationLink(destination: CreateEventView()) {
+                        Text("Create an Event")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.teal)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    
+                    NavigationLink(destination: RegisterBusinessView(viewModel: RegisterBusinessViewModel())) {
+                        Text("Register Your Business")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.teal)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }                    // Add more features as needed
 
                     Spacer()
                 }
@@ -67,36 +86,6 @@ struct HomeView: View {
             }
             .navigationTitle("Home")
         }
-    }
-}
-
-
-struct ProfileView: View {
-    var body: some View {
-        Text("Profile Page\nHistory, Saved Businesses, Reviews, etc.")
-            .font(.title)
-            .multilineTextAlignment(.center)
-            .padding()
-    }
-}
-
-
-struct SearchView: View {
-    var body: some View {
-        Text("Search Page\nKeyword or Filter by Type.")
-            .font(.title)
-            .multilineTextAlignment(.center)
-            .padding()
-    }
-}
-
-
-struct LocalEventsView: View {
-    var body: some View {
-        Text("Local Events Page\nBusiness events near user.")
-            .font(.title)
-            .multilineTextAlignment(.center)
-            .padding()
     }
 }
 

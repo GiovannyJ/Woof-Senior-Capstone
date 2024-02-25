@@ -40,6 +40,7 @@ CREATE TABLE images (
     petSizePref ENUM('small','medium','large') NOT NULL,
     leashPolicy BOOLEAN NOT NULL,
     disabledFriendly BOOLEAN NOT NULL,
+    geolocation varchar(300) NOT NULL,
     constraint business_pk primary key(businessID),
     constraint business_fk foreign key(OwnerUserID) references user(userID),
     constraint business_fk_img foreign key(imgID) references images(id)
@@ -74,7 +75,7 @@ CREATE TABLE events (
     businessID int NOT NULL,
     eventName varchar(100) NOT NULL,
     eventDescription varchar(400) NULL,
-    eventDate date NOT NULL,
+    eventDate datetime NOT NULL,
     location varchar(300) NOT NULL,
     contactInfo varchar(300) NOT NULL,
     dataLocation ENUM('foreign', 'internal') NOT NULL,
@@ -83,6 +84,7 @@ CREATE TABLE events (
     leashPolicy BOOLEAN NOT NULL,
     disabledFriendly BOOLEAN NOT NULL,
     attendance_count int DEFAULT 0 NOT NULL,
+    geolocation varchar(300) NOT NULL,
     CONSTRAINT events_pk PRIMARY KEY (eventID),
     CONSTRAINT events_fk FOREIGN KEY (businessID) REFERENCES businesses (businessID),
     CONSTRAINT events_fk_img FOREIGN KEY (imgID) REFERENCES images (id)
