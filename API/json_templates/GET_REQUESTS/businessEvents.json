@@ -16,7 +16,8 @@
             },
             "petSizePref": "medium",
             "leashPolicy": true,
-            "disabledFriendly": false
+            "disabledFriendly": false,
+            "geolocation": ""
         },
         "eventinfo": {
             "eventID": 1,
@@ -34,7 +35,8 @@
             "petSizePref": "small",
             "leashPolicy": true,
             "disabledFriendly": false,
-            "attendance_count": 1
+            "attendance_count": 1,
+            "geolocation": ""
         }
     }
 ]

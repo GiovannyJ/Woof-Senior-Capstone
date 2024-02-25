@@ -1,20 +1,15 @@
 [
     {
-        "businessName": "Business 2",
+        "businessName": "Second Business",
         "ownerUserID": 2,
         "businessType": "Type B",
         "Location": "Location B",
         "contact": "Contact B",
         "description": "Description B",
-        "event": "Event B",
-        "rating": "3",
         "dataLocation": "foreign",
-        "imgID": {
-            "Int64": 2,
-            "Valid": true
-        },
         "petSizePref": "large",
         "leashPolicy": false,
-        "disabledFriendly": true
+        "disabledFriendly": true,
+        "geolocation": "some place in the world"
     }
 ]

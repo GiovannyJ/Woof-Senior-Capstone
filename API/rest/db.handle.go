@@ -93,6 +93,7 @@ func GetUserAttendance(c *gin.Context) {
 		"b.leashPolicy":      c.Query("B_leashPolicy"),
 		"b.disabledFriendly": c.Query("B_disabledFriendly"),
 		"b.rating":           c.Query("rating"),
+		"b.geolocation":	  c.Query("B_geolocation"),
 		"e.eventID":          c.Query("eventID"),
 		"e.eventName":        c.Query("eventName"),
 		"e.eventDate":        c.Query("eventDate"),
@@ -100,6 +101,7 @@ func GetUserAttendance(c *gin.Context) {
 		"e.leashPolicy":      c.Query("E_leashPolicy"),
 		"e.disabledFriendly": c.Query("E_disabledFriendly"),
 		"e.attendance_count": c.Query("attendance_count"),
+		"e.geolocation":	  c.Query("E_geolocation"),
 		"order":              c.Query("order"),
 	}
 
@@ -150,6 +152,7 @@ func GetBusinesses(c *gin.Context) {
 		"petSizePref":      c.Query("petSizePref"),
 		"leashPolicy":      c.Query("leashPolicy"),
 		"disabledFriendly": c.Query("disabledFriendly"),
+		"geolocation":		c.Query("geolocation"),
 		"order":            c.Query("order"),
 	}
 
@@ -207,6 +210,7 @@ func GetSavedBusiness(c *gin.Context) {
 		"b.leashPolicy":      c.Query("B_leashPolicy"),
 		"b.disabledFriendly": c.Query("B_disabledFriendly"),
 		"b.rating":           c.Query("rating"),
+		"b.geolocation":	  c.Query("geolocation"),
 		"order":              c.Query("order"),
 	}
 
@@ -312,6 +316,7 @@ func GetEvents(c *gin.Context) {
 		"leashPolicy":      c.Query("leashPolicy"),
 		"disabledFriendly": c.Query("disabledFriendly"),
 		"attendance_count": c.Query("attendance_count"),
+		"geolocation":		c.Query("geolocation"),
 		"order":            c.Query("order"),
 	}
 
@@ -368,6 +373,7 @@ func GetBusinessEvents(c *gin.Context) {
 		"b.leashPolicy":      c.Query("B_leashPolicy"),
 		"b.disabledFriendly": c.Query("B_disabledFriendly"),
 		"b.rating":           c.Query("rating"),
+		"b.geolocation":	  c.Query("B_geolocation"),
 		"e.eventID":          c.Query("eventID"),
 		"e.eventName":        c.Query("eventName"),
 		"e.eventDate":        c.Query("eventDate"),
@@ -375,6 +381,7 @@ func GetBusinessEvents(c *gin.Context) {
 		"e.leashPolicy":      c.Query("E_leashPolicy"),
 		"e.disabledFriendly": c.Query("E_disabledFriendly"),
 		"e.attendance_count": c.Query("attendance_count"),
+		"e.geolocation":	  c.Query("E_geolocation"),
 		"order":              c.Query("order"),
 	}
 
@@ -793,6 +800,7 @@ func NewEvent(c *gin.Context) {
 		"eventName":  newEvent.EventName,
 		"businessID": c.Param("businessid"),
 		"userID":     c.Param("userid"),
+		"eventDate": newEvent.EventDate,
 	}
 
 	for key, value := range queryParams {

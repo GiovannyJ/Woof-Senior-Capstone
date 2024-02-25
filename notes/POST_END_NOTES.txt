@@ -1,7 +1,8 @@
 create event:
 -need to fix in database: datetime instead of date so we can store the time of the event as well
     -fix API to reflect
-    -fix documentation to reflect
+    -fix documentation to reflect 
+    (THIS IS DONE)
 
 Local Events
 -need to add ability to block button if user is already attending event (API routes to see what events user is attending probably make dict for this)
@@ -24,4 +25,4 @@ Other Issues:
 -need to find a way to refresh all data and pages live (maybe every like 20-30 seconds)
 -need to find a way to allow user to refresh pages (makes ^ timer set to 0) probably use an asset or helper for this
 -need to make a way to check what events ur attending
--MAKE GEOLOCATION PROPERTY IN DATABASE FOR EVENTS AND BUSINESSES
+-MAKE GEOLOCATION PROPERTY IN DATABASE FOR EVENTS AND BUSINESSES (THIS IS DONE)

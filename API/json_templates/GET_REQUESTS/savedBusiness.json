@@ -27,7 +27,8 @@
             },
             "petSizePref": "medium",
             "leashPolicy": true,
-            "disabledFriendly": false
+            "disabledFriendly": false,
+            "geolocation": ""
         }
     }
 ]

@@ -15,6 +15,7 @@
         "petSizePref": "small",
         "leashPolicy": true,
         "disabledFriendly": false,
-        "attendance_count": 1
+        "attendance_count": 1,
+        "geolocation": ""
     }
 ]

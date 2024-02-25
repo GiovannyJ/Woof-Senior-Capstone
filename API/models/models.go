@@ -46,6 +46,7 @@ type Business struct{
 	PetSizePref			string				`json:"petSizePref"`
 	LeashPolicy			bool				`json:"leashPolicy"`
 	DisabledFriendly	bool				`json:"disabledFriendly"`
+	GeoLocation			string				`json:"geolocation"`
 }
 
 type BusinessExistsError struct {
@@ -92,6 +93,7 @@ type Event struct{
 	LeashPolicy				bool			`json:"leashPolicy"`
 	DisabledFriendly		bool			`json:"disabledFriendly"`
 	AttendanceCount			int				`json:"attendance_count"`
+	GeoLocation				string			`json:"geolocation"`
 }
 
 type AttendanceCount struct{

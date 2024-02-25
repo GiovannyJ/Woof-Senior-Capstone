@@ -134,6 +134,7 @@ func Business_GET(params map[string]interface{}) ([]business, error) {
 			&t.PetSizePref,
 			&t.LeashPolicy,
 			&t.DisabledFriendly,
+			&t.GeoLocation,
 		); err != nil {
 			return values, nil
 		}
@@ -189,7 +190,7 @@ gets all events in database
 */
 func Event_GET(params map[string]interface{}) ([]event, error) {
 	var sql strings.Builder
-	sql.WriteString("SELECT eventID , businessID, eventName, eventDescription, eventDate, location, contactInfo, dataLocation, imgID, petSizePref, leashPolicy, disabledFriendly, (SELECT COUNT(userID) FROM attendance WHERE eventID = e.eventID) as num_attend  FROM events e ")
+	sql.WriteString("SELECT eventID, businessID, eventName, eventDescription, eventDate, location, contactInfo, dataLocation, imgID, petSizePref, leashPolicy, disabledFriendly, (SELECT COUNT(userID) FROM attendance WHERE eventID = e.eventID) as num_attend, geolocation FROM events e ")
 
 	sql.WriteString(GenSelectQuery(params, "", 0))
 
@@ -217,6 +218,7 @@ func Event_GET(params map[string]interface{}) ([]event, error) {
 			&t.LeashPolicy,
 			&t.DisabledFriendly,
 			&t.AttendanceCount,
+			&t.GeoLocation,
 		); err != nil {
 			return values, nil
 		}
@@ -357,11 +359,11 @@ func Users_Attendance_GET(params map[string]interface{}, userID int) ([]userAtte
 	sql.WriteString("SELECT  u.userID, u.username, u.email, u.accountType, u.imgID, ")
 	sql.WriteString("		b.businessID, b.businessName, b.businessType, b.location,")
 	sql.WriteString("		b.ownerUserID, b.contact, b.description, b.rating, b.imgID,")
-	sql.WriteString("		b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation,")
+	sql.WriteString("		b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation, b.geolocation,")
 	sql.WriteString("		(SELECT COUNT(id) FROM attendance a2 WHERE e.eventID = a2.eventID) as attendanceCount,")
 	sql.WriteString("		e.eventID, e.businessID, e.eventName , e.eventDescription, e.eventDate,")
 	sql.WriteString("		e.location, e.contactInfo, e.dataLocation, e.imgID, e.petSizePref, e.leashPolicy,")
-	sql.WriteString("		e.disabledFriendly ")
+	sql.WriteString("		e.disabledFriendly, e.geolocation ")
 	sql.WriteString("FROM user u ")
 	sql.WriteString("JOIN attendance a ON u.userID = a.userID ")
 	sql.WriteString("JOIN events e ON e.eventID = a.eventID ")
@@ -400,6 +402,7 @@ func Users_Attendance_GET(params map[string]interface{}, userID int) ([]userAtte
 			&b.LeashPolicy,
 			&b.DisabledFriendly,
 			&b.DataLocation,
+			&b.GeoLocation,
 			&e.AttendanceCount,
 			&e.EventID,
 			&e.BusinessID,
@@ -413,6 +416,7 @@ func Users_Attendance_GET(params map[string]interface{}, userID int) ([]userAtte
 			&e.PetSizePref,
 			&e.LeashPolicy,
 			&e.DisabledFriendly,
+			&e.GeoLocation,
 		); err != nil {
 			return values, nil
 		}
@@ -438,7 +442,7 @@ func Users_SavedBusiness_GET(params map[string]interface{}, userID int) ([]users
 	sql.WriteString("SELECT  u.userID, u.username, u.email, u.accountType, u.imgID, ")
 	sql.WriteString("    sb.businessID, b.businessName, b.businessType, b.location,")
 	sql.WriteString("    b.ownerUserID, b.contact, b.description, b.rating, b.imgID,")
-	sql.WriteString("    b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation ")
+	sql.WriteString("    b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation, b.geolocation ")
 	sql.WriteString("FROM user u ")
 	sql.WriteString("JOIN savedBusinesses sb ON u.userID = sb.userID ")
 	sql.WriteString("JOIN businesses b ON sb.businessID = b.businessID ")
@@ -476,6 +480,7 @@ func Users_SavedBusiness_GET(params map[string]interface{}, userID int) ([]users
 			&b.LeashPolicy,
 			&b.DisabledFriendly,
 			&b.DataLocation,
+			&b.GeoLocation,
 		); err != nil {
 			return values, nil
 		}
@@ -502,10 +507,10 @@ func Businesses_Events_GET(params map[string]interface{}, businessID int) ([]bus
 	var sql strings.Builder
 	sql.WriteString("SELECT  e.eventID, e.eventName, e.eventDescription, e.eventDate,")
 	sql.WriteString("	e.location, e.contactInfo, e.imgID, e.petSizePref, e.leashPolicy, e.disabledFriendly,")
-	sql.WriteString("	(SELECT COUNT(userID) FROM attendance WHERE eventID = e.eventID) as attendance_count,")
+	sql.WriteString("	(SELECT COUNT(userID) FROM attendance WHERE eventID = e.eventID) as attendance_count, e.geolocation, ")
 	sql.WriteString("	b.businessID, b.businessName, b.businessType, ")
 	sql.WriteString("	b.location, b.contact, b.description, b.rating, b.OwnerUserID,")
-	sql.WriteString("	b.imgID, b.petSizePref, b.leashPolicy, b.disabledFriendly ")
+	sql.WriteString("	b.imgID, b.petSizePref, b.leashPolicy, b.disabledFriendly, b.geolocation ")
 	sql.WriteString("FROM events e ")
 	sql.WriteString("JOIN businesses b ON e.businessID = b.businessID ")
 	sql.WriteString(GenSelectQuery(params, "b.businessID", businessID))
@@ -533,6 +538,7 @@ func Businesses_Events_GET(params map[string]interface{}, businessID int) ([]bus
 			&e.LeashPolicy,
 			&e.DisabledFriendly,
 			&e.AttendanceCount,
+			&e.GeoLocation,
 			&b.BusinessID,
 			&b.BusinessName,
 			&b.BusinessType,
@@ -545,6 +551,7 @@ func Businesses_Events_GET(params map[string]interface{}, businessID int) ([]bus
 			&b.PetSizePref,
 			&b.LeashPolicy,
 			&b.DisabledFriendly,
+			&b.GeoLocation,
 		); err != nil {
 			return values, nil
 		}
@@ -574,7 +581,7 @@ func Businesses_Reviews_Users_GET(params map[string]interface{}, businessID int)
 	sql.WriteString("	u.userID, u.username, u.email, u.accountType, u.imgID,")
 	sql.WriteString("	b.businessID, b.businessName, b.businessType, ")
 	sql.WriteString("	b.location, b.contact, b.rating AS businessRating, b.description, b.OwnerUserID,")
-	sql.WriteString("	b.imgID, b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation, r.dataLocation ")
+	sql.WriteString("	b.imgID, b.petSizePref, b.leashPolicy, b.disabledFriendly, b.dataLocation, r.dataLocation, b.geolocation ")
 	sql.WriteString("FROM reviews r ")
 	sql.WriteString("JOIN businesses b ON r.businessID = b.businessID ")
 	sql.WriteString("JOIN user u ON r.userID = u.userID")
@@ -619,6 +626,7 @@ func Businesses_Reviews_Users_GET(params map[string]interface{}, businessID int)
 			&b.DisabledFriendly,
 			&b.DataLocation,
 			&r.DataLocation,
+			&b.GeoLocation,
 		); err != nil {
 			return values, nil
 		}
