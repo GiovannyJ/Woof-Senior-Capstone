@@ -35,6 +35,7 @@ struct Event: Decodable {
     let leashPolicy: Bool
     let location: String
     let petSizePref: String
+    var geolocation: String
 }
 
 struct ImageInfo: Decodable{
@@ -67,6 +68,7 @@ struct Business: Decodable, Identifiable {
     let leashPolicy: Bool
     let disabledFriendly: Bool
     let reviews: [Review]?
+    var geolocation: String	
 
     var id: Int {
         return businessID

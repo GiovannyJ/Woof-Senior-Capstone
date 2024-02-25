@@ -10,6 +10,7 @@ import SwiftUI
 
 class SearchViewModel: ObservableObject {
     @Published var businesses: [Business] = []
+    @Published var isEmpty: Bool = false
 
     func performSearch(keyword: String) {
         // Define the URL
@@ -32,6 +33,7 @@ class SearchViewModel: ObservableObject {
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
                 print("No data")
+                self.isEmpty = true
                 return
             }
 
@@ -40,6 +42,7 @@ class SearchViewModel: ObservableObject {
                 let decodedResponse = try JSONDecoder().decode([Business].self, from: data)
                 DispatchQueue.main.async {
                     self.businesses = decodedResponse
+                    self.isEmpty = false
                 }
             } catch {
                 print("Error decoding JSON: \(error)")

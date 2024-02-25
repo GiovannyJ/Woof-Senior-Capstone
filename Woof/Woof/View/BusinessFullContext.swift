@@ -53,6 +53,9 @@ struct BusinessFullContext: View {
                     Text("Disabled Friendly: \(viewModel.business.disabledFriendly ? "Yes" : "No")")
                         .font(.title2)
                     
+                    Text("Test geolocation: \(viewModel.business.geolocation)")
+                        .font(.title2)
+                    
                     // Display business image
                     if let businessImgData = viewModel.businessImgData,
                        let uiImage = UIImage(data: businessImgData){
@@ -138,7 +141,7 @@ struct BusinessFullContext: View {
 
 struct BusinessFullContext_Previews: PreviewProvider {
     static var previews: some View {
-        let business = Business(businessID: 1, businessName: "Paws & Claws Pet Store", ownerUserID: 1, businessType: "Pet Store", location: "123 Main St", contact: "info@pawsnclaws.com", description: "cool pet store", event: "", rating: "small", dataLocation: "internal", imgID: ImageID(Int64: 1, Valid: true), petSizePref: "small", leashPolicy: true, disabledFriendly: true, reviews: nil)
+        let business = Business(businessID: 1, businessName: "Paws & Claws Pet Store", ownerUserID: 1, businessType: "Pet Store", location: "123 Main St", contact: "info@pawsnclaws.com", description: "cool pet store", event: "", rating: "small", dataLocation: "internal", imgID: ImageID(Int64: 1, Valid: true), petSizePref: "small", leashPolicy: true, disabledFriendly: true, reviews: nil, geolocation: "here")
         return BusinessFullContext(business: business)
     }
 }

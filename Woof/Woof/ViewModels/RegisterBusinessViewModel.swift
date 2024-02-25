@@ -34,7 +34,7 @@ class RegisterBusinessViewModel: ObservableObject{
             "petSizePref": petSizePref,
             "leashPolicy": leashPolicy,
             "disabledFriendly": disabledFriendly,
-            "dataLocation": "internal"
+            "dataLocation": "internal",
         ]
         print(businessData)
         

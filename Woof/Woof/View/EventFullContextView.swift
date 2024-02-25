@@ -74,7 +74,8 @@ struct EventFullContextView_Previews: PreviewProvider {
                               imgID: nil,
                               leashPolicy: true,
                               location: "Test Location",
-                              petSizePref: "Medium")
+                              petSizePref: "Medium",
+                              geolocation: "here")
 
         // Create an instance of EventFullContextView
         EventFullContextView(event: testEvent)

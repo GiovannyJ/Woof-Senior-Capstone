@@ -52,21 +52,24 @@ struct SearchView: View {
             .foregroundColor(.white)
             .cornerRadius(8)
             .padding(.top, 16)
-
-            // Business buttons
-            VStack(alignment: .leading, spacing: 8) {
-                ForEach(viewModel.businesses, id: \.businessID) { business in
-                    Button(action: {
-                        // Navigate to BusinessReviews with selected business
-                        let businessReviews = BusinessFullContext(business: business)
-                        UIApplication.shared.windows.first?.rootViewController?.present(UIHostingController(rootView: businessReviews), animated: true)
-                    }) {
-                        BusinessButton(business: business)
+            if viewModel.isEmpty {
+                Text("No results found")
+                    .foregroundColor(.red)
+                    .padding(.top, 16)
+            } else {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(viewModel.businesses, id: \.businessID) { business in
+                        Button(action: {
+                            // Navigate to BusinessReviews with selected business
+                            let businessReviews = BusinessFullContext(business: business)
+                            UIApplication.shared.windows.first?.rootViewController?.present(UIHostingController(rootView: businessReviews), animated: true)
+                        }) {
+                            BusinessButton(business: business)
+                        }
                     }
                 }
+                .padding(.top, 16)
             }
-            .padding(.top, 16)
-
             Spacer()
         }
         .padding()
