@@ -65,7 +65,7 @@ struct BusinessFullContext: View {
                             .frame(width: 200, height: 200)
                     }
                 }
-                // Button to Save Business NONFUNCTIONAL ATM
+                
                 Button(action: {
                     viewModel.saveBusiness()
                 }) {
@@ -111,37 +111,44 @@ struct BusinessFullContext: View {
                         .fontWeight(.heavy)
                 }
 
-                Section(header: Text("Other Reviews")
-                            .font(.title2)
-                            .foregroundColor(.teal)
-                            .padding(.bottom, 5)
-                ) {
-                    // Check if there are reviews
-                    if !viewModel.reviews.isEmpty {
-                        ForEach(viewModel.reviews) { review in
-                            ReviewCard(review: review)
-                        }
-                    } else {
-                        Text("No one is barking up this tree yet")
-                            .foregroundColor(.gray)
-                            .padding(.vertical)
+                Section(header: Text("Reviews")
+                        .font(.title2)
+                        .foregroundColor(.teal)
+                        .padding(.bottom, 5)
+            ) {
+                if !viewModel.reviews.isEmpty {
+                    ForEach(viewModel.reviews) { review in
+                        ReviewCard(review: review)
                     }
+                } else {
+                    Text("No reviews yet")
+                        .foregroundColor(.gray)
+                        .padding(.vertical)
                 }
-
-                
             }
-            .padding()
-            .onAppear(){
-                viewModel.fetchReviews()
-                viewModel.fetchBusinessImage()
-            }
+        }
+        .padding()
+        }
+        .onReceive(viewModel.$reviews) { _ in
+            // Force view update when reviews change
+            // This will re-render the view with the latest reviews
         }
     }
 }
 
 struct BusinessFullContext_Previews: PreviewProvider {
     static var previews: some View {
-        let business = Business(businessID: 1, businessName: "Paws & Claws Pet Store", ownerUserID: 1, businessType: "Pet Store", location: "123 Main St", contact: "info@pawsnclaws.com", description: "cool pet store", event: "", rating: "small", dataLocation: "internal", imgID: ImageID(Int64: 1, Valid: true), petSizePref: "small", leashPolicy: true, disabledFriendly: true, reviews: nil, geolocation: "here")
+        // Creating example reviews
+        let reviews: [Review] = [
+            Review(reviewID: 1, userID: 1, businessID: 1, rating: 4, comment: "Great service!", dateCreated: "2024-02-24", dataLocation: "internal", imgID: nil),
+            Review(reviewID: 2, userID: 2, businessID: 1, rating: 5, comment: "Amazing experience!", dateCreated: "2024-02-23", dataLocation: "internal", imgID: nil),
+            Review(reviewID: 3, userID: 3, businessID: 1, rating: 3, comment: "Could be better", dateCreated: "2024-02-22", dataLocation: "internal", imgID: nil)
+        ]
+        
+        // Creating a Business instance for the BusinessFullContext
+        let business = Business(businessID: 1, businessName: "Paws & Claws Pet Store", ownerUserID: 1, businessType: "Pet Store", location: "123 Main St", contact: "info@pawsnclaws.com", description: "cool pet store", event: "", rating: "small", dataLocation: "internal", imgID: ImageID(Int64: 1, Valid: true), petSizePref: "small", leashPolicy: true, disabledFriendly: true, reviews: reviews, geolocation: "here")
+        
+        // Creating the BusinessFullContext view with the example business
         return BusinessFullContext(business: business)
     }
 }

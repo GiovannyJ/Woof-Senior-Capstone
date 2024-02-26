@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 class BusinessReviewsViewModel: ObservableObject {
     @Published var business: Business
@@ -15,10 +16,12 @@ class BusinessReviewsViewModel: ObservableObject {
     private let imageCache = NSCache<NSString, NSData>()
     private let reviewCache = NSCache<NSString, NSArray>()
     
+    private var cancellables = Set<AnyCancellable>()
+    
     init(business: Business) {
         self.business = business
-//        fetchBusinessImage()
-//        fetchReviews()
+        fetchBusinessImage()
+        fetchReviews()
     }
     
     func fetchBusinessImage() {
@@ -38,20 +41,25 @@ class BusinessReviewsViewModel: ObservableObject {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data, error == nil else {
-                print("Error fetching image data:", error?.localizedDescription ?? "Unknown error")
-                return
+        URLSession.shared.dataTaskPublisher(for: url)
+            .map { $0.data }
+            .replaceError(with: nil)
+            .receive(on: DispatchQueue.main) // Ensure updates are performed on the main thread
+            .sink { [weak self] data in
+                guard let data = data else { return }
+                self?.imageCache.setObject(data as NSData, forKey: cacheKey)
+                self?.businessImgData = data
             }
-            
-            self.imageCache.setObject(data as NSData, forKey: cacheKey)
-            DispatchQueue.main.async {
-                self.businessImgData = data
-            }
-        }.resume()
+            .store(in: &cancellables)
     }
     
     func fetchReviews() {
+        if let businessReviews = self.business.reviews, !businessReviews.isEmpty {
+            // If the reviews are already available in the business model, use them directly
+            self.reviews = businessReviews
+            return
+        }
+        
         guard let url = URL(string: "http://localhost:8080/businesses/\(business.businessID)/reviews") else {
             print("Invalid URL")
             return
@@ -59,26 +67,22 @@ class BusinessReviewsViewModel: ObservableObject {
         
         let cacheKey = NSString(string: "\(business.businessID)")
         if let cachedReviews = reviewCache.object(forKey: cacheKey) as? [Review] {
+            // If reviews are already cached, use them
             self.reviews = cachedReviews
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data else {
-                print("No data received:", error?.localizedDescription ?? "Unknown error")
-                return
+        URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
+            .decode(type: [BusinessReviewInfo].self, decoder: JSONDecoder())
+            .map { $0.map { $0.reviewinfo } }
+            .replaceError(with: [])
+            .receive(on: DispatchQueue.main) // Ensure updates are performed on the main thread
+            .sink { [weak self] reviews in
+                self?.reviews = reviews
+                self?.reviewCache.setObject(reviews as NSArray, forKey: cacheKey)
             }
-            
-            do {
-                let businessReviewInfos = try JSONDecoder().decode([BusinessReviewInfo].self, from: data)
-                let reviews = businessReviewInfos.map { $0.reviewinfo }
-                self.reviews = reviews
-                print(self.reviews)
-                self.reviewCache.setObject(reviews as NSArray, forKey: cacheKey)
-            } catch {
-                print("Error decoding business review info:", error)
-            }
-        }.resume()
+            .store(in: &cancellables)
     }
     
     func submitReview(userRating: Int, userReview: String) {

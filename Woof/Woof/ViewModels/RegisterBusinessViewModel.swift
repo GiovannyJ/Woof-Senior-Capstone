@@ -62,6 +62,7 @@ class RegisterBusinessViewModel: ObservableObject{
                     // Successful response
                     print("Business Registered!")
                     // Update SessionManager on the main thread
+                    SessionManager.shared.checkUserBusinessOwner()
                 case 500:
                     // Handle 500 error
                     print("Error: \(httpResponse.statusCode)")

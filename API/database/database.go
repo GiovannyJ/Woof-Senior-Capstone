@@ -73,7 +73,6 @@ func Users_GET(params map[string]interface{}, mode int) ([]user, error) {
 	}else if mode == 1{
 		sql.WriteString(GenSelectQuery_OR(params, "", 0))
 	}
-	fmt.Println(sql.String())
 
 	result, err := connect(sql.String())
 	if err != nil {
