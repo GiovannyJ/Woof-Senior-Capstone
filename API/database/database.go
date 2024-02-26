@@ -65,10 +65,15 @@ func connect(query string) (*sql.Rows, error) {
 *TESTED WORKING
 returns: all users in database
 */
-func Users_GET(params map[string]interface{}) ([]user, error) {
+func Users_GET(params map[string]interface{}, mode int) ([]user, error) {
 	var sql strings.Builder
 	sql.WriteString("SELECT userID, username, email, accountType, imgID FROM user")
-	sql.WriteString(GenSelectQuery(params, "", 0))
+	if mode == 0{
+		sql.WriteString(GenSelectQuery(params, "", 0))
+	}else if mode == 1{
+		sql.WriteString(GenSelectQuery_OR(params, "", 0))
+	}
+	fmt.Println(sql.String())
 
 	result, err := connect(sql.String())
 	if err != nil {
@@ -662,7 +667,7 @@ func CreateNewAccount(data login) error {
 	var columns []string
 	var values []string
 
-	if AccountExist(*data.Username) {
+	if AccountExist(*data.Username, *data.Email) {
 		return &s.AccountExistsError{}
 	}
 

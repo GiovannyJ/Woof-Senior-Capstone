@@ -53,10 +53,10 @@ func SavedBusinessExist(userID int, businessID int) bool{
 }
 
 //* checks if the account exits already RETURNS true if account exits and false if not
-func AccountExist(id string) bool{
-    exist_acc := map[string]interface{}{"username": id}
+func AccountExist(id string, email string) bool{
+    exist_acc := map[string]interface{}{"username": id, "email": email}
 
-    exists, err := Users_GET(exist_acc)
+    exists, err := Users_GET(exist_acc, 1)
 	if err != nil{
 		return false
 	}
@@ -230,6 +230,61 @@ func GenSelectQuery(params map[string]interface{}, columnName string, columnValu
 			if len(conditions) > 0 {
 				sql.WriteString(" WHERE ")
 				sql.WriteString(strings.Join(conditions, " AND "))
+				q := fmt.Sprintf(" AND %s = %d",columnName, columnValue)
+				sql.WriteString(q)
+			} else {
+				q := fmt.Sprintf(" WHERE %s = %d",columnName, columnValue)
+				sql.WriteString(q)
+			}
+			sql.WriteString(orderby)
+		} else {
+			q := fmt.Sprintf(" WHERE %s = %d", columnName, columnValue)
+			sql.WriteString(q)
+		}
+	}
+
+	return sql.String()
+}
+
+
+func GenSelectQuery_OR(params map[string]interface{}, columnName string, columnValue int) (string){
+	var sql strings.Builder
+	if columnName == ""{
+		if len(params) > 0 {
+			var conditions []string
+			var orderby string
+	
+			for name, value := range params {
+				if name == "order" {
+					orderby = fmt.Sprintf(" ORDER BY %s", value)
+				} else {
+					condition := fmt.Sprintf("%s='%v'", name, value)
+					conditions = append(conditions, condition)
+				}
+			}
+	
+			if len(conditions) > 0 {
+				sql.WriteString(" WHERE ")
+				sql.WriteString(strings.Join(conditions, " OR "))
+			}
+	
+			sql.WriteString(orderby)
+		}
+	}else{
+		if len(params) > 0 {
+			var conditions []string
+			var orderby string
+			for name, value := range params {
+				if name == "order" {
+					orderby = fmt.Sprintf(" ORDER BY %s", value)
+				} else {
+					condition := fmt.Sprintf("%s='%v'", name, value)
+					conditions = append(conditions, condition)
+				}
+			}
+			if len(conditions) > 0 {
+				sql.WriteString(" WHERE ")
+				sql.WriteString(strings.Join(conditions, " OR "))
 				q := fmt.Sprintf(" AND %s = %d",columnName, columnValue)
 				sql.WriteString(q)
 			} else {

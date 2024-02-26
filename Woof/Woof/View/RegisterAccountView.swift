@@ -4,13 +4,14 @@
 //
 //  Created by Giovanny Joseph on 2/22/24.
 //
-
 import SwiftUI
+import Foundation
+import Combine
 
 struct RegisterAccountView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
     @StateObject var viewModel = RegisterAccountViewModel()
-
+    @State private var isAlertShown = false
 
     var body: some View {
         NavigationView {
@@ -69,20 +70,22 @@ struct RegisterAccountView: View {
                         .fontWeight(Font.Weight.heavy)
                 }
                 .padding(.horizontal)
-
                 .padding()
                 .navigationTitle("Register")
                 .alert(isPresented: $viewModel.showAlert) {
-                    Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")))
+                    Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
+                        if viewModel.isRegistered {
+                            // Navigate to LoginView after dismiss
+                            // Ensure to use a coordinator to navigate programmatically
+                            // e.g., NavigationCoordinator.shared.navigateToLoginView()
+                        }
+                    })
                 }
-                .navigationDestination(
-                    isPresented: $viewModel.isRegistered){
-                        LoginView()
-                    }
             }
         }
     }
 }
+
 
 struct RegisterAccountView_Previews: PreviewProvider {
     static var previews: some View {
