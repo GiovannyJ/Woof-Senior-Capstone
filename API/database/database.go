@@ -11,6 +11,26 @@ import (
 	"strings"
 )
 
+var (
+	dbName     string
+	dbUsername string
+	dbPassword string
+	dbHost     string
+	dbPort     string
+)
+
+func SetMode(mode string) {
+    dbName = EnvVar("DB_NAME")
+    dbUsername = EnvVar("DB_USERNAME")
+    dbPassword = EnvVar("DB_PASSWORD")
+    dbHost = EnvVar("DB_HOST")
+    dbPort = EnvVar("DB_PORT")
+
+    if mode == "test" {
+        dbName = EnvVar("T_DB_NAME")
+    }
+}
+
 type user = s.User
 type login = s.LogIn
 type business = s.Business
@@ -36,13 +56,8 @@ query: sql query to run
 returns the sql values or error
 */
 func connect(query string) (*sql.Rows, error) {
-	username := EnvVar("DB_USERNAME")
-	password := EnvVar("DB_PASSWORD")
-	host := EnvVar("DB_HOST")
-	port := EnvVar("DB_PORT")
-	name := EnvVar("DB_NAME")
 
-	configOS := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, name)
+	configOS := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUsername, dbPassword, dbHost, dbPort, dbName)
 
 	db, err := sql.Open("mysql", configOS)
 	if err != nil {
@@ -68,9 +83,9 @@ returns: all users in database
 func Users_GET(params map[string]interface{}, mode int) ([]user, error) {
 	var sql strings.Builder
 	sql.WriteString("SELECT userID, username, email, accountType, imgID FROM user")
-	if mode == 0{
+	if mode == 0 {
 		sql.WriteString(GenSelectQuery(params, "", 0))
-	}else if mode == 1{
+	} else if mode == 1 {
 		sql.WriteString(GenSelectQuery_OR(params, "", 0))
 	}
 
