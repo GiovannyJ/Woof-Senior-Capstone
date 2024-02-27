@@ -3,16 +3,16 @@ Backend:
 -fix bugs
 
 Frontend:
-- create different views depending on access level
+- create different views depending on access level Gio after pages are done
     - regular users
     - business users
     - admin users?
-- create update pages
+- create update pages Bo
     - account (updateAccount.swift)
         - will allow update password and all other info
     - business (updateBusiness.swift)
     - events (updateEvent.swift)
-- add delete buttons where necessary
+- add delete buttons where necessary Bo
     - delete user
     - delete business
     - delete review
@@ -25,8 +25,8 @@ Frontend:
     - event
     - review
 
-Research:
+Research/implementation: martin
 -3rd party APIs to get more data from web
 
-Feature Integration:
+Feature Integration: gio and martin
 -add map feature to necessary pages

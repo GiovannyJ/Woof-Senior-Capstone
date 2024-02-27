@@ -20,7 +20,7 @@ class BusinessReviewsViewModel: ObservableObject {
     
     init(business: Business) {
         self.business = business
-        fetchBusinessImage()
+//        fetchBusinessImage()
         fetchReviews()
     }
     
@@ -54,24 +54,20 @@ class BusinessReviewsViewModel: ObservableObject {
     }
     
     func fetchReviews() {
+        // Check if the reviews are already available in the business model
         if let businessReviews = self.business.reviews, !businessReviews.isEmpty {
-            // If the reviews are already available in the business model, use them directly
             self.reviews = businessReviews
             return
         }
         
+        // Construct the URL for fetching reviews
         guard let url = URL(string: "http://localhost:8080/businesses/\(business.businessID)/reviews") else {
             print("Invalid URL")
             return
         }
         
-        let cacheKey = NSString(string: "\(business.businessID)")
-        if let cachedReviews = reviewCache.object(forKey: cacheKey) as? [Review] {
-            // If reviews are already cached, use them
-            self.reviews = cachedReviews
-            return
-        }
         
+        // Fetch reviews from the network
         URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
             .decode(type: [BusinessReviewInfo].self, decoder: JSONDecoder())
@@ -80,10 +76,11 @@ class BusinessReviewsViewModel: ObservableObject {
             .receive(on: DispatchQueue.main) // Ensure updates are performed on the main thread
             .sink { [weak self] reviews in
                 self?.reviews = reviews
-                self?.reviewCache.setObject(reviews as NSArray, forKey: cacheKey)
+//                print(self?.reviews)
             }
             .store(in: &cancellables)
     }
+
     
     func submitReview(userRating: Int, userReview: String) {
         guard let currentUserID = SessionManager.shared.currentUser?.userID else {

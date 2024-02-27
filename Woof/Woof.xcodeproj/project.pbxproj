@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -375,7 +375,6 @@
 			);
 			mainGroup = C0F297772B4851C40096E053;
 			packageReferences = (
-				3FD4A3CA2B88196800E92B07 /* XCLocalSwiftPackageReference "Woof/ViewModel" */,
 			);
 			productRefGroup = C0F297812B4851C40096E053 /* Products */;
 			projectDirPath = "";
@@ -780,13 +779,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		3FD4A3CA2B88196800E92B07 /* XCLocalSwiftPackageReference "Woof/ViewModel" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Woof/ViewModel;
-		};
-/* End XCLocalSwiftPackageReference section */
 	};
 	rootObject = C0F297782B4851C40096E053 /* Project object */;
 }

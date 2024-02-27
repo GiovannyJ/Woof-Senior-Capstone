@@ -11,11 +11,13 @@ struct BusinessFullContext: View {
     let viewModel: BusinessReviewsViewModel
     @State private var userReview: String = ""
     @State private var userRating: Int = 0 // Default rating
-
+    
     public init(business: Business) {
         self.viewModel = BusinessReviewsViewModel(business: business)
+//        viewModel.fetchReviews()
+        print(viewModel.reviews)
     }
-
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -38,7 +40,7 @@ struct BusinessFullContext: View {
                         .font(.title2)
                     if let rating = viewModel.business.rating {
                         Text("Rating: \(rating)")
-                        .font(.title2)
+                            .font(.title2)
                     }
                     
                     // Example: Display pet-related preferences
@@ -57,13 +59,13 @@ struct BusinessFullContext: View {
                         .font(.title2)
                     
                     // Display business image
-                    if let businessImgData = viewModel.businessImgData,
-                       let uiImage = UIImage(data: businessImgData){
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 200, height: 200)
-                    }
+                    //                    if let businessImgData = viewModel.businessImgData,
+                    //                       let uiImage = UIImage(data: businessImgData) {
+                    //                        Image(uiImage: uiImage)
+                    //                            .resizable()
+                    //                            .aspectRatio(contentMode: .fit)
+                    //                            .frame(width: 200, height: 200)
+                    //                    }
                 }
                 
                 Button(action: {
@@ -77,12 +79,15 @@ struct BusinessFullContext: View {
                         .cornerRadius(8)
                         .fontWeight(.heavy)
                 }
+                .padding()
+                
                 // User's review section
                 Section(header: Text("Your Review")
-                            .font(.title2)
-                            .foregroundColor(.teal)
-                            .padding(.bottom, 5)
-                ) {
+                    .font(.title2)
+                    .foregroundColor(.teal)
+                    .padding(.bottom, 5)
+                )
+                {
                     // Rating picker
                     Picker("Rating", selection: $userRating) {
                         ForEach(1..<6) { rating in
@@ -90,7 +95,7 @@ struct BusinessFullContext: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-
+                    
                     // Review text field
                     TextField("Leave a review", text: $userReview)
                         .padding()
@@ -110,31 +115,34 @@ struct BusinessFullContext: View {
                         .cornerRadius(8)
                         .fontWeight(.heavy)
                 }
-
+                //MAKE INTO SEPARATE VIEW AND ADD BUTTON TO MAKE APPEAR
                 Section(header: Text("Reviews")
-                        .font(.title2)
-                        .foregroundColor(.teal)
-                        .padding(.bottom, 5)
-            ) {
-                if !viewModel.reviews.isEmpty {
-                    ForEach(viewModel.reviews) { review in
-                        ReviewCard(review: review)
+                    .font(.title2)
+                    .foregroundColor(.teal)
+                    .padding(.bottom, 5)
+                ) {
+                    if !viewModel.reviews.isEmpty {
+                        ForEach(viewModel.reviews) { review in
+                            ReviewCard(review: review)
+                        }
+                    } else {
+                        Text("No reviews yet")
+                            .foregroundColor(.gray)
+                            .padding(.vertical)
                     }
-                } else {
-                    Text("No reviews yet")
-                        .foregroundColor(.gray)
-                        .padding(.vertical)
                 }
             }
-        }
-        .padding()
+            .padding()
         }
         .onReceive(viewModel.$reviews) { _ in
-            // Force view update when reviews change
-            // This will re-render the view with the latest reviews
+            // This closure will be called when viewModel.reviews is updated
+            // Ensure that the view refreshes when reviews are received
+            print(viewModel.reviews)
         }
     }
 }
+
+
 
 struct BusinessFullContext_Previews: PreviewProvider {
     static var previews: some View {
