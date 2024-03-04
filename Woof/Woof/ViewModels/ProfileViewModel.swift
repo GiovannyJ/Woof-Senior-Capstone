@@ -10,6 +10,7 @@ import SwiftUI
 
 class ProfileViewModel: ObservableObject {
     @Published var savedBusinesses: [SavedBusinessResponse]?
+    @Published var eventsAttending: [Event]?
     @Published var profileImage: UIImage?
     @Published var errorMessage: String?
     @ObservedObject var sessionManager = SessionManager.shared
@@ -103,4 +104,37 @@ class ProfileViewModel: ObservableObject {
             }
         }.resume()
     }
+    
+    func fetchEventsAttending() {
+        guard let currentUserID = sessionManager.currentUser?.userID else {
+            print("User ID not found")
+            return
+        }
+        guard let url = URL(string: "http://localhost:8080/users/\(currentUserID)/attendance") else {
+            print("Invalid URL")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                if let error = error {
+                    print("Error fetching events data:", error.localizedDescription)
+                } else {
+                    print("No data received for events")
+                }
+                return
+            }
+            
+            do {
+                let eventAttendanceResponses = try JSONDecoder().decode([EventAttendanceResponse].self, from: data)
+                let events = eventAttendanceResponses.map { $0.eventinfo }
+                DispatchQueue.main.async {
+                    self.eventsAttending = events
+                }
+            } catch {
+                print("Error decoding events JSON:", error)
+            }
+        }.resume()
+    }
+
 }

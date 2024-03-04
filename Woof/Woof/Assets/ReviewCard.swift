@@ -12,7 +12,11 @@ struct ReviewCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("User: \(review.userID)").font(.headline)
+            if let username = review.username {
+                Text("User: \(username)").font(.headline)
+            } else {
+                Text("User: Guest").font(.headline)
+            }
             Text("Rating: \(review.rating)").font(.headline)
             Text("Comment: \(review.comment)").font(.headline)
         }
@@ -22,8 +26,9 @@ struct ReviewCard: View {
     }
 }
 
+
 struct ReviewCard_Previews: PreviewProvider {
-    static let testReview = Review(reviewID: 1, userID: 1, businessID: 1, rating: 5, comment: "test comment", dateCreated: "1/1/2024", dataLocation: "internal", imgID: nil)
+    static let testReview = Review(reviewID: 1, userID: 1,businessID: 1, rating: 5, comment: "test comment", dateCreated: "1/1/2024", dataLocation: "internal", imgID: nil)
     
     static var previews: some View {
         ReviewCard(review: testReview)

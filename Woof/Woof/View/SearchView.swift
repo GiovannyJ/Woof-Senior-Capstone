@@ -18,62 +18,66 @@ struct SearchView: View {
     let businessTypes = ["All", "Hotel", "Restaurant", "Daycare", "Park", "Other"]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Search for Pet-Friendly Businesses")
-                .font(.largeTitle)
-                .foregroundColor(.orange)
-                .padding()
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Search for Pet-Friendly Businesses")
+                        .font(.largeTitle)
+                        .foregroundColor(.orange)
+                        .padding()
 
-            // SearchBar
-            SearchBar(text: $searchKeyword)
+                    // SearchBar
+                    SearchBar(text: $searchKeyword)
 
-            // Business Type Picker
-            Picker("Select Business Type", selection: $selectedBusinessType) {
-                ForEach(businessTypes, id: \.self) {
-                    Text($0)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .padding()
-            .background(Color.teal.opacity(0.2))
-            .cornerRadius(8)
-
-            // Filters
-            Toggle("Hotels", isOn: $filterByHotel)
-            Toggle("Restaurants", isOn: $filterByRestaurant)
-
-            // Search button
-            Button("Search") {
-                viewModel.performSearch(keyword: searchKeyword)
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.teal)
-            .foregroundColor(.white)
-            .cornerRadius(8)
-            .padding(.top, 16)
-            if viewModel.isEmpty {
-                Text("No results found")
-                    .foregroundColor(.red)
-                    .padding(.top, 16)
-            } else {
-                VStack(alignment: .leading, spacing: 8) {
-                    ForEach(viewModel.businesses, id: \.businessID) { business in
-                        Button(action: {
-                            // Navigate to BusinessReviews with selected business
-                            let businessReviews = BusinessFullContext(business: business)
-                            UIApplication.shared.windows.first?.rootViewController?.present(UIHostingController(rootView: businessReviews), animated: true)
-                        }) {
-                            BusinessButton(business: business)
+                    // Business Type Picker
+                    Picker("Select Business Type", selection: $selectedBusinessType) {
+                        ForEach(businessTypes, id: \.self) {
+                            Text($0)
                         }
                     }
+                    .pickerStyle(MenuPickerStyle())
+                    .padding()
+                    .background(Color.teal.opacity(0.2))
+                    .cornerRadius(8)
+
+                    // Filters
+                    Toggle("Hotels", isOn: $filterByHotel)
+                    Toggle("Restaurants", isOn: $filterByRestaurant)
+
+                    // Search button
+                    Button("Search") {
+                        viewModel.performSearch(keyword: searchKeyword)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.teal)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    .padding(.top, 16)
+                    if viewModel.isEmpty {
+                        Text("No results found")
+                            .foregroundColor(.red)
+                            .padding(.top, 16)
+                    } else {
+                        VStack(alignment: .leading, spacing: 8) {
+                            ForEach(viewModel.businesses, id: \.businessID) { business in
+                                Button(action: {
+                                    // Navigate to BusinessReviews with selected business
+                                    let businessReviews = BusinessFullContext(business: business)
+                                    UIApplication.shared.windows.first?.rootViewController?.present(UIHostingController(rootView: businessReviews), animated: true)
+                                }) {
+                                    BusinessButton(business: business)
+                                }
+                            }
+                        }
+                        .padding(.top, 16)
+                    }
+                    Spacer()
                 }
-                .padding(.top, 16)
+                .padding()
             }
-            Spacer()
+            .navigationTitle("Search")
         }
-        .padding()
-        .navigationTitle("Search")
         .sheet(isPresented: .constant(false)) {
             EmptyView()
         }
@@ -86,3 +90,4 @@ struct Search_Previews: PreviewProvider {
         SearchView()
     }
 }
+

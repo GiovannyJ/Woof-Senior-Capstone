@@ -66,6 +66,26 @@ struct ProfileView: View {
                         Text("No saved businesses.").foregroundColor(.gray)
                     }
                 }
+                Section(header: Text("Events Attending")) {
+                    if let events = viewModel.eventsAttending {
+                        if events.isEmpty {
+                            Text("Not attending any events.")
+                        } else {
+                            ForEach(events, id: \.eventID) { event in // Use \.eventID directly for id
+                                NavigationLink(destination: EventFullContextView(event: event)) {
+                                    Text(event.eventName)
+                                        .padding()
+                                        .background(Color.purple)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(8)
+                                }
+                            }
+                        }
+                    } else {
+                        Text("Loading events...").foregroundColor(.gray)
+                    }
+                }
+
             }
         }
         .padding()
@@ -73,6 +93,7 @@ struct ProfileView: View {
         .onAppear {
             viewModel.fetchSavedBusinesses()
             viewModel.fetchProfileImage()
+            viewModel.fetchEventsAttending()
         }
     }
 }

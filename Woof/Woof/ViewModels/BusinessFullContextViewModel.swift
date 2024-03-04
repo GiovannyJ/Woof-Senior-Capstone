@@ -66,20 +66,31 @@ class BusinessReviewsViewModel: ObservableObject {
             return
         }
         
-        
         // Fetch reviews from the network
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map(\.data)
-            .decode(type: [BusinessReviewInfo].self, decoder: JSONDecoder())
-            .map { $0.map { $0.reviewinfo } }
-            .replaceError(with: [])
-            .receive(on: DispatchQueue.main) // Ensure updates are performed on the main thread
-            .sink { [weak self] reviews in
-                self?.reviews = reviews
-//                print(self?.reviews)
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching reviews: \(error?.localizedDescription ?? "Unknown error")")
+                return
             }
-            .store(in: &cancellables)
+            
+            do {
+                let businessReviewInfos = try JSONDecoder().decode([BusinessReviewInfo].self, from: data)
+                let reviewsWithUsernames = businessReviewInfos.map { businessReviewInfo -> Review in
+                    var review = businessReviewInfo.reviewinfo
+                    review.username = businessReviewInfo.userinfo.username
+                    return review
+                }
+                DispatchQueue.main.async {
+                    self.reviews = reviewsWithUsernames
+                }
+            } catch {
+                print("Error decoding reviews JSON: \(error)")
+            }
+        }.resume()
     }
+
+
+
 
     
     func submitReview(userRating: Int, userReview: String) {

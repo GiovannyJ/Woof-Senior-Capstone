@@ -38,6 +38,12 @@ struct Event: Decodable {
     var geolocation: String
 }
 
+struct EventAttendanceResponse: Decodable{
+    let userinfo: User
+    let businessinfo: Business
+    let eventinfo: Event
+}
+
 struct ImageInfo: Decodable{
     let imgID: Int
     let size: Int
@@ -81,7 +87,7 @@ struct ErrorResponse: Decodable {
 }
 
 
-struct Review: Decodable, Identifiable{
+struct Review: Decodable, Identifiable {
     let reviewID: Int
     let userID: Int
     let businessID: Int
@@ -90,11 +96,13 @@ struct Review: Decodable, Identifiable{
     let dateCreated: String
     let dataLocation: String
     let imgID: ImageID?
+    var username: String? // Make username optional
     
     var id: Int {
         return reviewID
     }
 }
+
 
 struct BusinessReviewInfo: Decodable{
     let businessinfo: Business

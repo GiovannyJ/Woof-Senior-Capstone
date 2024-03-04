@@ -1,0 +1,14 @@
+Added:
+-tracking for events attending
+
+Fixed:
+-reviews not loading on page load
+-usernames appear in review card
+-scroll on search
+-review min and max (0-4 -> 1-5)
+
+Bugs:
+-new reviews do not load into view when created
+
+need to work on:
+-disable buttons for attending event if user is already going
