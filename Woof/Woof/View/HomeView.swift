@@ -78,7 +78,39 @@ struct HomeView: View {
                             .background(Color.teal)
                             .foregroundColor(.white)
                             .cornerRadius(10)
-                    }                    // Add more features as needed
+                    }
+                    
+                    NavigationLink(destination: UpdateAccountView()) {
+                        Text("Update Profile")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    
+                    NavigationLink(destination: UpdateEventView()) {
+                        Text("Update Event")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    
+                    NavigationLink(destination: UpdateBusinessView()) {
+                        Text("Update Business")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    // Add more features as needed
+                    
 
                     Spacer()
                 }

@@ -20,7 +20,7 @@ class BusinessReviewsViewModel: ObservableObject {
     
     init(business: Business) {
         self.business = business
-//        fetchBusinessImage()
+        fetchBusinessImage()
         fetchReviews()
     }
     

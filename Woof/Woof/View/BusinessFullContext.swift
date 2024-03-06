@@ -82,13 +82,13 @@ struct BusinessFullContext: View {
                         .font(.title2)
                     
                     // Display business image
-                    //                    if let businessImgData = viewModel.businessImgData,
-                    //                       let uiImage = UIImage(data: businessImgData) {
-                    //                        Image(uiImage: uiImage)
-                    //                            .resizable()
-                    //                            .aspectRatio(contentMode: .fit)
-                    //                            .frame(width: 200, height: 200)
-                    //                    }
+                    if let businessImgData = viewModel.businessImgData,
+                       let uiImage = UIImage(data: businessImgData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200, height: 200)
+                    }
                 }
                 
                 Button(action: {

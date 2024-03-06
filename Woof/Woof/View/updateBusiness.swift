@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UpdateBusiness: View {
+struct UpdateBusinessView: View {
     @State private var businessName: String = ""
     @State private var businessType: String = ""
     @State private var location: String = ""
@@ -116,7 +116,7 @@ struct UpdateBusiness: View {
 
 struct UpdateBusiness_Previews: PreviewProvider {
     static var previews: some View {
-        UpdateBusiness()
+        UpdateBusinessView()
     }
 }
 

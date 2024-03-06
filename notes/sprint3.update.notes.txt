@@ -12,3 +12,9 @@ Bugs:
 
 need to work on:
 -disable buttons for attending event if user is already going
+-loading image into business
+-fix multi thread bc it messes up when theres too many (find out how to do thread closure)
+
+
+FOR UPDATE BUSINESS TAKE IT FROM SESSION MANGER
+IF UR BUSINESS OWNS ANY EVENTS ALLOW USER TO UPDATE THEM AS WELL
