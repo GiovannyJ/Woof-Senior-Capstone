@@ -1,0 +1,74 @@
+making delete button modular
+
+add to assets deletebutton.swift
+properties:
+    type: String (used to see where the obj is deleted from)
+    id: Int (used to see what value is deleted)
+
+in the DELETE reqeust it is sent like 
+{
+    "tablename": "user",
+    "column": "userID",
+    "id": 39
+}
+so we can make a switch statement for each type to make the body
+and endpoint be modular
+
+we can also use the type property to assign what text is gonna be
+on the button 
+
+sample sudo code:
+import SwiftUI
+
+struct DeleteButton: View {
+    let type: String
+    let ID: Int
+    
+    var body: some View {
+        Button(action: deleteFromAPI) {
+            Text("Delete \(type)")
+                .foregroundColor(.white)
+                .padding()
+                .background(Color.red)
+                .cornerRadius(8)
+        }
+    }
+    
+    private func deleteFromAPI() {
+        // Placeholder method for deleting from API
+        print("Delete \(type) with ID \(ID)")
+    }
+}
+
+struct DeleteButton_Previews: PreviewProvider {
+    static var previews: some View {
+        DeleteButton(type: "Account", ID: 1)
+    }
+}
+
+with this we can make it so that when the button is clicked 
+we know what to delete and where, also making sure that when we 
+import the asset it generates the text that we want
+
+This is how we generated business buttons, we pass a business inside of the button 
+and it can do what we want with that context inside of it 
+
+ForEach(viewModel.businesses, id: \.businessID) { business in
+        Button(action: {
+            // Navigate to BusinessReviews with selected business
+            let businessReviews = BusinessFullContext(business: business)
+            UIApplication.shared.windows.first?.rootViewController?.present(UIHostingController(rootView: businessReviews), animated: true)
+        }) {
+            BusinessButton(business: business)
+        }
+    }
+}
+.padding(.top, 16)
+
+calling the delete button would be similar
+
+DeleteButton(type: "Account", ID: 1)
+DeleteButton(type: "Business", ID: 10)
+DeleteButton(type: "Event", ID: 10)
+This would generate delete buttons with the proper text and then the
+id can be used to delete them from the API in the private method
