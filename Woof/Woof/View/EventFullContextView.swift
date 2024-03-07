@@ -12,6 +12,11 @@ struct EventFullContextView: View {
     @State private var isAttending = false // Track whether the user is attending the event
     @ObservedObject var sessionManager = SessionManager.shared
 
+    
+    private var buttonColor: Color {
+        return isAttending ? .gray : .teal
+    }
+    
     public init(event: Event) {
         self.viewModel = EventFullContextViewModel(event: event)
     }
@@ -52,12 +57,11 @@ struct EventFullContextView: View {
                     .foregroundColor(.white)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 16)
-                    .background(Color.teal)
+                    .background(buttonColor)
                     .cornerRadius(8)
                     .font(.headline)
             }
             .disabled(isAttending)
-            .foregroundColor(isAttending ? .gray : .white) // Change text color to gray when disabled
 
             
             // Display image if available

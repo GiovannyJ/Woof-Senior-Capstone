@@ -10,14 +10,14 @@ struct EventCard: View {
     let event: Event
     let type: String
     
-    // DateFormatter for formatting the date
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .short
-        return formatter
-    }()
-
+    private var buttonColor: Color {
+        return type == "disabled" ? .gray : .teal
+    }
+    
+    private var isDisabled: Bool {
+        return type == "disabled"
+    }
+    
     var body: some View {
         NavigationLink(destination: type == "business" ? AnyView(UpdateEventView(event: event)) : AnyView(EventFullContextView(event: event))) {
             VStack(alignment: .leading, spacing: 8) {
@@ -47,28 +47,26 @@ struct EventCard: View {
                     .font(.subheadline)
                 
                 // Attend Event Button
-                // Attend Event Button
-                    if type != "business" {
-                        Button(action: {
-                            attendEvent(event: event)
-                            print("Attend Event: \(event.eventName)")
-                        }) {
-                            Text("Attend Event")
-                                .foregroundColor(.white)
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 16)
-                                .background(Color.teal)
-                                .cornerRadius(8)
-                                .font(.headline)
-                        }
-                        // Disable the button if type is "disabled"
-                        .disabled(type == "disabled")
+                if type != "business" {
+                    Button(action: {
+                        attendEvent(event: event)
+                        print("Attend Event: \(event.eventName)")
+                    }) {
+                        Text("Attend Event")
+                            .foregroundColor(.white)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 16)
+                            .background(buttonColor)
+                            .cornerRadius(8)
+                            .font(.headline)
                     }
+                    .disabled(isDisabled)
+                    
                 }
-                .padding()
-                .background(Color.teal.opacity(0.2))
-                .cornerRadius(8)
             }
+            .padding()
+            .background(Color.teal.opacity(0.2))
+            .cornerRadius(8)
         }
     }
     
@@ -110,11 +108,13 @@ struct EventCard: View {
             }
         }.resume()
     }
+}
+
 
 struct EventCard_Preview: PreviewProvider {
     static let testEvent = Event(eventID: 1, attendance_count: 10, businessID: 1, contactInfo: "100-200-2020", dataLocation: "internal", disabledFriendly: true, eventDate: "2024-03-06", eventDescription: "This is a test event with test data and whatnot", eventName: "test event", imgID: nil, leashPolicy: true, location: "1800 Test Street", petSizePref: "small", geolocation: "thisplace")
     
     static var previews: some View {
-        EventCard(event: testEvent, type: "local")
+        EventCard(event: testEvent, type: "disabled")
     }
 }

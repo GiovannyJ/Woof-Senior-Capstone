@@ -67,7 +67,7 @@ ForEach(viewModel.businesses, id: \.businessID) { business in
 
 calling the delete button would be similar
 
-DeleteButton(type: "Account", ID: 1)
+DeleteButton(type: "Account", ID: 1)    
 DeleteButton(type: "Business", ID: 10)
 DeleteButton(type: "Event", ID: 10)
 This would generate delete buttons with the proper text and then the

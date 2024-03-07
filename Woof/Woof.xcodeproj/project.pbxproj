@@ -32,6 +32,7 @@
 		3FD97F5C2B993CA600A53464 /* UpdateBusinessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F5B2B993CA600A53464 /* UpdateBusinessViewModel.swift */; };
 		3FD97F5E2B99444000A53464 /* UpdateEventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F5D2B99443F00A53464 /* UpdateEventsListView.swift */; };
 		3FD97F612B99480E00A53464 /* UpdateEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F602B99480E00A53464 /* UpdateEventViewModel.swift */; };
+		3FD97F652B9A357F00A53464 /* DeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F642B9A357F00A53464 /* DeleteButton.swift */; };
 		3FE90D572B8829F100FCCF54 /* archive_Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4D2B8829F100FCCF54 /* archive_Register.swift */; };
 		3FE90D582B8829F100FCCF54 /* archive_Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4E2B8829F100FCCF54 /* archive_Home.swift */; };
 		3FE90D592B8829F100FCCF54 /* archive_BusinessReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4F2B8829F100FCCF54 /* archive_BusinessReviews.swift */; };
@@ -103,6 +104,7 @@
 		3FD97F5B2B993CA600A53464 /* UpdateBusinessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateBusinessViewModel.swift; sourceTree = "<group>"; };
 		3FD97F5D2B99443F00A53464 /* UpdateEventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEventsListView.swift; sourceTree = "<group>"; };
 		3FD97F602B99480E00A53464 /* UpdateEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEventViewModel.swift; sourceTree = "<group>"; };
+		3FD97F642B9A357F00A53464 /* DeleteButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteButton.swift; sourceTree = "<group>"; };
 		3FE90D4D2B8829F100FCCF54 /* archive_Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_Register.swift; sourceTree = "<group>"; };
 		3FE90D4E2B8829F100FCCF54 /* archive_Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_Home.swift; sourceTree = "<group>"; };
 		3FE90D4F2B8829F100FCCF54 /* archive_BusinessReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_BusinessReviews.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 		3FBB50FA2B87D1D700F5175C /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				3FD97F642B9A357F00A53464 /* DeleteButton.swift */,
 				3FD4A4272B8820C300E92B07 /* EventCard.swift */,
 				3FD4A4292B88214900E92B07 /* ReviewCard.swift */,
 				3FD4A4392B88238600E92B07 /* SearchBar.swift */,
@@ -473,6 +476,7 @@
 				3FE90D622B882A7900FCCF54 /* RegisterBusinessViewModel.swift in Sources */,
 				3FD4A42C2B88217C00E92B07 /* BusinessFullContext.swift in Sources */,
 				3FD4A4382B88234D00E92B07 /* RegisterAccountView.swift in Sources */,
+				3FD97F652B9A357F00A53464 /* DeleteButton.swift in Sources */,
 				3F514F982B70A25B00C1DEE7 /* SessionManager.swift in Sources */,
 				C0F297842B4851C40096E053 /* WoofApp.swift in Sources */,
 				3FE90D642B88305E00FCCF54 /* RegisterAccountViewModel.swift in Sources */,

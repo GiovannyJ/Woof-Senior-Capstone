@@ -17,14 +17,16 @@ Fixed:
 -scroll on search
 -review min and max (0-4 -> 1-5)
 -multi thread bc it messes up when theres too many (find out how to do thread closure)
+-disable buttons for attending event if user is already going
+    -make call to events -> make call to attendance see what eventID match up and disable button
 
 
 Bugs:
 -new reviews do not load into view when created
+-when attending event screen goes blank
 
 need to work on:
--disable buttons for attending event if user is already going
-    -make call to events -> make call to attendance see what eventID match up and disable button
--loading image into business
+-loading images
 -upload image
 -download image
+-delete functionality
