@@ -73,7 +73,18 @@ struct UpdateBusinessView: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                }
+                    
+                //delete business button
+                        Button(action: {
+                            deleteBusiness()
+                                }) {
+                            Text("Delete Business")
+                                .padding()
+                                .background(Color.red.opacity(0.8))
+                                .fontWeight(.heavy)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                                .frame(maxWidth: .infinity)               }                }
                 .cornerRadius(10)
                 .padding(.vertical, 5)
             }
@@ -97,8 +108,12 @@ struct UpdateBusinessView: View {
                 .foregroundColor(.red)
         }
         .padding()
-        .background(Color.orange.opacity(0.2))
+        .background(Color.white.opacity(0.2))
     }
+}
+
+private func deleteBusiness(){
+    //nothing lol
 }
 
 struct UpdateBusinessView_Previews: PreviewProvider {
