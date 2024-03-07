@@ -117,13 +117,22 @@ struct UpdateAccountView: View {
                 }
                 .padding()
                 
-                
-            }
+                Button(action: {
+                    deleteAccount()
+                }) {
+                    Text("Delete Account")
+                        .padding()
+                        .background(Color.red.opacity(0.8))
+                        .fontWeight(.heavy)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                        .frame(maxWidth: .infinity)               }
+                .padding()    }
+
             .padding()
             .navigationTitle("Update Account")
         }
     }
-    
     func updateAccount() {
         viewModel.updateAccount { isSuccess in
             if isSuccess {
@@ -137,6 +146,9 @@ struct UpdateAccountView: View {
         }
     }
 }
+func deleteAccount() {
+    //no function rn
+    }
 
 struct UpdateAccountView_Previews: PreviewProvider {
     static var previews: some View {

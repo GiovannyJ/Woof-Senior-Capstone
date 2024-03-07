@@ -28,7 +28,10 @@ struct ProfileView: View {
                 .font(.largeTitle)
                 .foregroundColor(.orange)
                 .padding()
-
+            
+            
+            
+            
             // Display user information, history, saved businesses, and reviews
             ScrollView {
                 Section(header: Text("User Information")) {
