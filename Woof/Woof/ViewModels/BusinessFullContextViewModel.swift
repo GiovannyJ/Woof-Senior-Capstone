@@ -20,8 +20,8 @@ class BusinessReviewsViewModel: ObservableObject {
     
     init(business: Business) {
         self.business = business
-        fetchBusinessImage()
-        fetchReviews()
+//        fetchBusinessImage()
+//        fetchReviews()
     }
     
     func fetchBusinessImage() {

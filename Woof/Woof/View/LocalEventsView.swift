@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LocalEventsView: View {
     @ObservedObject var viewModel = LocalEventsViewModel()
+    @ObservedObject var sessionManager = SessionManager.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -19,9 +20,9 @@ struct LocalEventsView: View {
 
             // Display a list of events created and promoted by businesses
             ScrollView {
-                //MAPVIEW
+                // MAPVIEW
                 ForEach(viewModel.events, id: \.eventID) { event in
-                    EventCard(event: event, type: "local")
+                    EventCard(event: event, type: eventType(for: event))
                         .padding(.vertical, 8)
                 }
             }
@@ -31,6 +32,16 @@ struct LocalEventsView: View {
             viewModel.fetchEvents(type: "local")
         }
         .navigationTitle("Local Events")
+    }
+
+    private func eventType(for event: Event) -> String {
+        if let currentUser = sessionManager.currentUser,
+           let eventsAttending = sessionManager.eventsAttending,
+           eventsAttending.contains(where: { $0.eventID == event.eventID }) {
+            return "disabled"
+        } else {
+            return "local"
+        }
     }
 }
 

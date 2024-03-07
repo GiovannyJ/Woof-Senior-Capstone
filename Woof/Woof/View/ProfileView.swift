@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @ObservedObject var viewModel = ProfileViewModel()
+    @ObservedObject  var sessionManager = SessionManager.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -67,7 +68,7 @@ struct ProfileView: View {
                     }
                 }
                 Section(header: Text("Events Attending")) {
-                    if let events = viewModel.eventsAttending {
+                    if let events = sessionManager.eventsAttending {
                         if events.isEmpty {
                             Text("Not attending any events.")
                         } else {
@@ -93,7 +94,7 @@ struct ProfileView: View {
         .onAppear {
             viewModel.fetchSavedBusinesses()
             viewModel.fetchProfileImage()
-            viewModel.fetchEventsAttending()
+//            SessionManager.shared.fetchEventsAttending()
         }
     }
 }

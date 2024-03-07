@@ -13,7 +13,6 @@ class EventFullContextViewModel: ObservableObject {
 
     init(event: Event) {
         self.event = event
-        fetchEventImage()
     }
 
     func fetchEventImage() {

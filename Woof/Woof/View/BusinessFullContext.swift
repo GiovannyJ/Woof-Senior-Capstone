@@ -32,13 +32,12 @@ struct ReviewsView: View {
 struct BusinessFullContext: View {
     let viewModel: BusinessReviewsViewModel
     @State private var userReview: String = ""
-    @State private var userRating: Int = 0 // Default rating
+    @State private var userRating: Int = 1 // Default rating
     @State private var reviews: [Review] = [] // Track reviews separately
     
     public init(business: Business) {
         self.viewModel = BusinessReviewsViewModel(business: business)
         self.reviews = viewModel.reviews // Initialize reviews with initial data
-        print(viewModel.reviews)
     }
     
     var body: some View {
@@ -149,6 +148,9 @@ struct BusinessFullContext: View {
         .onReceive(viewModel.$reviews) { newReviews in
             // Update the reviews when the view model's reviews change
             self.reviews = newReviews
+        }.onAppear(){
+            viewModel.fetchReviews()
+            viewModel.fetchBusinessImage()
         }
     }
 }

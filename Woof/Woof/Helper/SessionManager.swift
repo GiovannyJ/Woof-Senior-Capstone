@@ -16,11 +16,13 @@ class SessionManager: ObservableObject {
     @Published var isBusinessOwner: Bool = false
     @Published var userBusinessID: Int?
     @Published var ownedBusiness: Business?
+    @Published var eventsAttending: [Event]?
     
     static let shared = SessionManager()
     
     private init() {
         checkUserBusinessOwner()
+        fetchEventsAttending()
     }
     
     func getUserID() -> Int? {
@@ -76,5 +78,36 @@ class SessionManager: ObservableObject {
             }
         }.resume()
     }
-
+    
+    public func fetchEventsAttending() {
+        guard let currentUserID = self.currentUser?.userID else {
+            print("User ID not found")
+            return
+        }
+        guard let url = URL(string: "http://localhost:8080/users/\(currentUserID)/attendance") else {
+            print("Invalid URL")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                if let error = error {
+                    print("Error fetching events data:", error.localizedDescription)
+                } else {
+                    print("No data received for events")
+                }
+                return
+            }
+            
+            do {
+                let eventAttendanceResponses = try JSONDecoder().decode([EventAttendanceResponse].self, from: data)
+                let events = eventAttendanceResponses.map { $0.eventinfo }
+                DispatchQueue.main.async {
+                    self.eventsAttending = events
+                }
+            } catch {
+                print("Error decoding events JSON:", error)
+            }
+        }.resume()
+    }
 }

@@ -47,24 +47,28 @@ struct EventCard: View {
                     .font(.subheadline)
                 
                 // Attend Event Button
-                if type == "local" {
-                    Button(action: {
-                        attendEvent(event: event)
-                        print("Attend Event: \(event.eventName)")
-                    }) {
-                        Text("Attend Event")
-                            .foregroundColor(.white)
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 16)
-                            .background(Color.teal)
-                            .cornerRadius(8)
-                            .font(.headline)
+                // Attend Event Button
+                    if type != "business" {
+                        Button(action: {
+                            attendEvent(event: event)
+                            print("Attend Event: \(event.eventName)")
+                        }) {
+                            Text("Attend Event")
+                                .foregroundColor(.white)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 16)
+                                .background(Color.teal)
+                                .cornerRadius(8)
+                                .font(.headline)
+                        }
+                        // Disable the button if type is "disabled"
+                        .disabled(type == "disabled")
                     }
                 }
+                .padding()
+                .background(Color.teal.opacity(0.2))
+                .cornerRadius(8)
             }
-            .padding()
-            .background(Color.teal.opacity(0.2))
-            .cornerRadius(8)
         }
     }
     
@@ -92,6 +96,7 @@ struct EventCard: View {
                 case 201:
                     // Successful response
                     print("Event Attending!")
+                    SessionManager.shared.fetchEventsAttending()
                 case 400:
                     //MAKE POPUP HERE LATER
                     print("User is already attending event")
@@ -105,7 +110,6 @@ struct EventCard: View {
             }
         }.resume()
     }
-}
 
 struct EventCard_Preview: PreviewProvider {
     static let testEvent = Event(eventID: 1, attendance_count: 10, businessID: 1, contactInfo: "100-200-2020", dataLocation: "internal", disabledFriendly: true, eventDate: "2024-03-06", eventDescription: "This is a test event with test data and whatnot", eventName: "test event", imgID: nil, leashPolicy: true, location: "1800 Test Street", petSizePref: "small", geolocation: "thisplace")
