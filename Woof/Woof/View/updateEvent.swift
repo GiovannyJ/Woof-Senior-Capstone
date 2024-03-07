@@ -49,7 +49,16 @@ struct UpdateEventView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                 }
-                
+                Button(action: {
+                    
+                }) {
+                    Text("Delete Event")
+                        .padding()
+                        .background(Color.red.opacity(0.8))
+                        .fontWeight(.heavy)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    .frame(maxWidth: .infinity)               }
                 // Submit the event update
                 Section {
                     Button(action: {
