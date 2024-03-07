@@ -8,87 +8,78 @@
 import SwiftUI
 
 struct UpdateBusinessView: View {
-    @State private var businessName: String = ""
-    @State private var businessType: String = ""
-    @State private var location: String = ""
-    @State private var contact: String = ""
-    @State private var description: String = ""
-    @State private var events: String = ""
-    @State private var petSizePreference: String = "small"
-    @State private var leashPolicy: String = ""
-    @State private var disabledFriendly: String = ""
-    
-    @State private var updateStatus: String = ""
+    @ObservedObject var viewModel: UpdateBusinessViewModel
     @ObservedObject private var sessionManager = SessionManager.shared
+    
+    init() {
+        self.viewModel = UpdateBusinessViewModel()
+    }
     
     var body: some View {
         VStack {
             Form {
                 Section(header: Text("Update Business Details")
-                    .foregroundColor(.orange)
-                    .font(.title)
-                    .padding(.vertical)
-                    .fontWeight(.regular)) {
-                        TextField("Business Name", text: $businessName)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        Picker("Business Type", selection: $businessType) {
-                            Text("Arts & Entertainment").tag("T1")
-                                .foregroundColor(.gray)
-                            Text("Active Life").tag("T2")
-                                .foregroundColor(.gray)
-                            Text("Hotels & Travel").tag("T3")
-                            Text("Local Flavor").tag("T5")
-                            Text("Restaurants").tag("T6")
-                            Text("Shopping").tag("T7")
-                            Text("Other").tag("T8")
-                        }
-                        .pickerStyle(MenuPickerStyle())
+                            .foregroundColor(.orange)
+                            .font(.title)
+                            .padding(.vertical)
+                            .fontWeight(.regular)) {
+                    TextField("Business Name", text: $viewModel.businessName)
                         .padding()
                         .background(Color.teal.opacity(0.2))
                         .cornerRadius(8)
-                        TextField("Location", text: $location)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        TextField("Contact", text: $contact)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
+                    Picker("Business Type", selection: $viewModel.businessType) {
+                        ForEach(viewModel.businessTypes, id: \.self) { type in
+                            Text(type)
+                                .tag(type)
+                                .foregroundColor(.gray)
+                        }
                     }
-                    .cornerRadius(4)
-                    .padding(.vertical, 5)
+                    .pickerStyle(MenuPickerStyle())
+                    .padding()
+                    .background(Color.teal.opacity(0.2))
+                    .cornerRadius(8)
+                    TextField("Location", text: $viewModel.location)
+                        .padding()
+                        .background(Color.teal.opacity(0.2))
+                        .cornerRadius(8)
+                    TextField("Contact", text: $viewModel.contact)
+                        .padding()
+                        .background(Color.teal.opacity(0.2))
+                        .cornerRadius(8)
+                }
+                .cornerRadius(4)
+                .padding(.vertical, 5)
                 
                 Section(header: Text("Additional Information").foregroundColor(.teal)
-                    .font(.headline)
-                    .padding(.vertical)
-                    .fontWeight(.medium)) {
-                        TextField("Description", text: $description)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        TextField("Leash Policy", text: $leashPolicy)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        TextField("Disabled Pet Friendly", text: $disabledFriendly)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        Picker("Pet Size Preference", selection: $petSizePreference) {
-                            Text("Small Pets").tag("small")
-                            Text("Medium Pets").tag("medium")
-                            Text("Large Pets").tag("large")
+                            .font(.headline)
+                            .padding(.vertical)
+                            .fontWeight(.medium)) {
+                    TextField("Description", text: $viewModel.description)
+                        .padding()
+                        .background(Color.teal.opacity(0.2))
+                        .cornerRadius(8)
+                    TextField("Leash Policy", text: $viewModel.leashPolicy)
+                        .padding()
+                        .background(Color.teal.opacity(0.2))
+                        .cornerRadius(8)
+                    TextField("Disabled Pet Friendly", text: $viewModel.disabledFriendly)
+                        .padding()
+                        .background(Color.teal.opacity(0.2))
+                        .cornerRadius(8)
+                    Picker("Pet Size Preference", selection: $viewModel.petSizePreference) {
+                        ForEach(viewModel.petSizePreferences, id: \.self) { size in
+                            Text(size)
+                                .tag(size)
                         }
-                        .pickerStyle(SegmentedPickerStyle())
                     }
-                    .cornerRadius(10)
-                    .padding(.vertical, 5)
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                .cornerRadius(10)
+                .padding(.vertical, 5)
             }
             
             Button(action: {
-                updateBusiness()
+                viewModel.updateBusiness()
             }) {
                 Text("Update Business")
                     .foregroundColor(.white)
@@ -101,22 +92,17 @@ struct UpdateBusinessView: View {
             .padding(.vertical)
             .buttonStyle(PlainButtonStyle())
             
-            Text(updateStatus)
+            Text(viewModel.updateStatus)
                 .padding()
                 .foregroundColor(.red)
         }
         .padding()
         .background(Color.orange.opacity(0.2))
     }
-    
-    private func updateBusiness() {
-        // Update business logic here
-    }
 }
 
-struct UpdateBusiness_Previews: PreviewProvider {
+struct UpdateBusinessView_Previews: PreviewProvider {
     static var previews: some View {
         UpdateBusinessView()
     }
 }
-
