@@ -90,7 +90,7 @@ struct HomeView: View {
                             .cornerRadius(10)
                     }
                     
-                    NavigationLink(destination: UpdateEventView()) {
+                    NavigationLink(destination: UpdateEventsListView()) {
                         Text("Update Event")
                             .fontWeight(.heavy)
                             .padding()

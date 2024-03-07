@@ -24,17 +24,17 @@ struct ImageID: Decodable {
 struct Event: Decodable {
     let eventID: Int
     var attendance_count: Int
-    let businessID: Int
-    let contactInfo: String
-    let dataLocation: String
-    let disabledFriendly: Bool
-    let eventDate: String
-    let eventDescription: String
-    let eventName: String
-    let imgID: ImageID?
-    let leashPolicy: Bool
-    let location: String
-    let petSizePref: String
+    var businessID: Int
+    var contactInfo: String
+    var dataLocation: String
+    var disabledFriendly: Bool
+    var eventDate: String
+    var eventDescription: String
+    var eventName: String
+    var imgID: ImageID?
+    var leashPolicy: Bool
+    var location: String
+    var petSizePref: String
     var geolocation: String
 }
 

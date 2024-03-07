@@ -68,7 +68,7 @@ struct EventFullContextView_Previews: PreviewProvider {
                               contactInfo: "test@example.com",
                               dataLocation: "internal",
                               disabledFriendly: true,
-                              eventDate: "2024-02-21",
+                              eventDate: "2024-01-09",
                               eventDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                               eventName: "Test Event",
                               imgID: nil,

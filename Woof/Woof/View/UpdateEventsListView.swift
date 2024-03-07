@@ -1,18 +1,17 @@
 //
-//  LocalEventsView.swift
+//  UpdateEventsListView.swift
 //  Woof
 //
-//  Created by Giovanny Joseph on 2/22/24.
+//  Created by Giovanny Joseph on 3/6/24.
 //
-
 import SwiftUI
 
-struct LocalEventsView: View {
+struct UpdateEventsListView: View {
     @ObservedObject var viewModel = LocalEventsViewModel()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Pet-Friendly Events Near You")
+            Text("Your Businesses Events")
                 .font(.largeTitle)
                 .foregroundColor(.orange)
                 .padding()
@@ -21,21 +20,21 @@ struct LocalEventsView: View {
             ScrollView {
                 //MAPVIEW
                 ForEach(viewModel.events, id: \.eventID) { event in
-                    EventCard(event: event, type: "local")
+                    EventCard(event: event, type: "business")
                         .padding(.vertical, 8)
                 }
             }
         }
         .padding()
         .onAppear {
-            viewModel.fetchEvents(type: "local")
+            viewModel.fetchEvents(type: "business")
         }
         .navigationTitle("Local Events")
     }
 }
 
-struct LocalEvents_Previews: PreviewProvider {
+struct UpdateEventsListViewPreview: PreviewProvider {
     static var previews: some View {
-        LocalEventsView()
+        UpdateEventsListView()
     }
 }

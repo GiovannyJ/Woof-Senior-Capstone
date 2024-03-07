@@ -11,8 +11,17 @@ import SwiftUI
 class LocalEventsViewModel: ObservableObject {
     @Published var events: [Event] = []
 
-    func fetchEvents() {
-        guard let url = URL(string: "http://localhost:8080/events") else {
+    func fetchEvents(type: String) {
+        var urlString = "http://localhost:8080/events"
+        if type == "business" {
+            guard let ownedBusinessID = SessionManager.shared.ownedBusiness?.businessID else {
+                print("Error: No owned business found")
+                return
+            }
+            urlString += "?businessID=\(ownedBusinessID)"
+        }
+
+        guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return
         }
