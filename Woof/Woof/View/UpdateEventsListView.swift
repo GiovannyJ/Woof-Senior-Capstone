@@ -29,7 +29,6 @@ struct UpdateEventsListView: View {
         .onAppear {
             viewModel.fetchEvents(type: "business")
         }
-        .navigationTitle("Local Events")
     }
 }
 

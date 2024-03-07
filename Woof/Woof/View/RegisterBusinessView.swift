@@ -11,6 +11,10 @@ struct RegisterBusinessView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
     @ObservedObject var viewModel: RegisterBusinessViewModel
     
+    init(){
+        viewModel = RegisterBusinessViewModel()
+    }
+    
     
     var body: some View {
         VStack {
@@ -109,6 +113,6 @@ struct RegisterBusinessView: View {
 
 struct RegisterBusinessView_Preview: PreviewProvider {
     static var previews: some View {
-        RegisterBusinessView(viewModel: RegisterBusinessViewModel())
+        RegisterBusinessView()
     }
 }

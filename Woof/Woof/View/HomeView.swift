@@ -16,7 +16,7 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Welcome Back \(sessionManager.currentUser?.username ?? "Guest")!")
                         .font(.subheadline)
-                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        .fontWeight(.bold)
                         .padding(.leading)
                     
                     Text("Discover Pet-Friendly Businesses and Events.")
@@ -60,58 +60,62 @@ struct HomeView: View {
                             .cornerRadius(10)
                     }
                     
-                    NavigationLink(destination: CreateEventView()) {
-                        Text("Create an Event")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                        NavigationLink(destination: UpdateAccountView()) {
+                            Text("Update Profile")
+                                .fontWeight(.heavy)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                    
+                    // Buttons for business user
+                    if sessionManager.currentUser?.accountType == "business" {
+                        NavigationLink(destination: RegisterBusinessView()) {
+                            Text("Register Your Business")
+                                .fontWeight(.heavy)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.teal)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                        if sessionManager.isBusinessOwner{
+                            NavigationLink(destination: CreateEventView()) {
+                                Text("Create an Event")
+                                    .fontWeight(.heavy)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.teal)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                            
+                            
+                            NavigationLink(destination: UpdateEventsListView()) {
+                                Text("Update Your Events")
+                                    .fontWeight(.heavy)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.red)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                            
+                            NavigationLink(destination: UpdateBusinessView()) {
+                                Text("Update Your Business")
+                                    .fontWeight(.heavy)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.red)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                        }
+                        
                     }
                     
-                    NavigationLink(destination: RegisterBusinessView(viewModel: RegisterBusinessViewModel())) {
-                        Text("Register Your Business")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    NavigationLink(destination: UpdateAccountView()) {
-                        Text("Update Profile")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    NavigationLink(destination: UpdateEventsListView()) {
-                        Text("Update Event")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    NavigationLink(destination: UpdateBusinessView()) {
-                        Text("Update Business")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    // Add more features as needed
-                    
-
                     Spacer()
                 }
                 .padding()
@@ -127,3 +131,4 @@ struct HomeView_Previews: PreviewProvider {
         HomeView()
     }
 }
+
