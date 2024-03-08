@@ -67,6 +67,7 @@ struct SearchView: View {
                                     UIApplication.shared.windows.first?.rootViewController?.present(UIHostingController(rootView: businessReviews), animated: true)
                                 }) {
                                     BusinessButton(business: business)
+                                 
                                 }
                             }
                         }
