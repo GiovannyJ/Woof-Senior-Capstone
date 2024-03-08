@@ -808,7 +808,7 @@ func CreateNewImgInfo(data imgInfo) error {
 	ignoreColumns := []string{"id", "imgID", "imgid"}
 
 	sql, err := GenInsertQuery(tableName, data, ignoreColumns)
-	fmt.Println(sql)
+	// fmt.Println(sql)
 	if err != nil {
 		return err
 	}
@@ -1023,7 +1023,7 @@ func CheckToken(userID string, tokenString string) bool {
 
 	result, err := connect(sql.String())
 	if err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
 		return false
 	}
 
@@ -1042,14 +1042,14 @@ func CheckToken(userID string, tokenString string) bool {
 			t.Name,
 			t.Token,
 		); err != nil {
-			fmt.Println(err)
+			// fmt.Println(err)
 			return false
 		}
 		values = append(values, t)
 	}
 
 	if err = result.Err(); err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
 		return false
 	}
 

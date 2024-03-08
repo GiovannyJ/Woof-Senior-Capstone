@@ -3,11 +3,13 @@ package rest
 import (
 	db "API/database"
 	s "API/models"
+	// "fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,9 +27,10 @@ func UploadFile(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 
 	// Parse multipart form for file upload
-	err := c.Request.ParseMultipartForm(32 << 20) // 32 MB max file size
+	err := c.Request.ParseMultipartForm(100 << 20) // 100 MB max file size
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Failed to parse multipart form"})
+		// fmt.Println("file too big " + err.Error())
 		return
 	}
 
@@ -37,6 +40,7 @@ func UploadFile(c *gin.Context) {
 	file, header, err := c.Request.FormFile("file")
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Failed to get file from request"})
+		// fmt.Println("failed to get file from request " + err.Error())
 		return
 	}
 	defer file.Close()
@@ -44,6 +48,7 @@ func UploadFile(c *gin.Context) {
 	out, err := os.Create(path + imgType + "/" + header.Filename)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, err.Error())
+		// fmt.Println("failed to create" + err.Error())
 		return
 	}
 	defer out.Close()
@@ -51,6 +56,7 @@ func UploadFile(c *gin.Context) {
 	_, err = io.Copy(out, file)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, err.Error())
+		// ("failed to copy " + err.Error())
 		return
 	}
 
@@ -89,6 +95,7 @@ func UploadFile(c *gin.Context) {
 	results, err := db.ImgInfo_GET(query)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		// fmt.Println("failed to get info " + err.Error())
 		return
 	}
 	c.IndentedJSON(http.StatusOK, results)

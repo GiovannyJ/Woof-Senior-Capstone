@@ -8,14 +8,15 @@ import SwiftUI
 import Foundation
 import Combine
 
+
 struct RegisterAccountView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
     @StateObject var viewModel = RegisterAccountViewModel()
     @State private var isAlertShown = false
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
+        NavigationStack {
+            VStack(spacing: 13.0) {
                 // Email text field
                 VStack(alignment: .leading) {
                     Text("Email")
@@ -55,6 +56,30 @@ struct RegisterAccountView: View {
                         .background(Color.teal.opacity(0.2))
                         .cornerRadius(8)
                 }
+                
+                VStack(alignment: .leading) {
+                    Button(action: {
+                        viewModel.selectProfilePicture()
+                    }) {
+                        HStack {
+                            Text("Select Profile Picture")
+                            if let newProfileImage = viewModel.newProfileImage {
+                                Image(uiImage: newProfileImage)
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Circle())
+                            }
+                        }
+                        .padding()
+                        .background(Color.teal.opacity(0.5))
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                    .padding()
+                    .sheet(isPresented: $viewModel.isShowingImagePicker) {
+                        ImagePicker(image: $viewModel.newProfileImage, isPresented: $viewModel.isShowingImagePicker, didSelectImage: viewModel.imagePickerDidSelectImage)
+                    }
+                }
 
                 // Register button
                 Button(action: {
@@ -74,15 +99,15 @@ struct RegisterAccountView: View {
                 .navigationTitle("Register")
                 .alert(isPresented: $viewModel.showAlert) {
                     Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
-                        if viewModel.isRegistered {
-                            // Navigate to LoginView after dismiss
-                            // Ensure to use a coordinator to navigate programmatically
-                            // e.g., NavigationCoordinator.shared.navigateToLoginView()
-                        }
                     })
                 }
             }
-        }
+        }.padding(.horizontal)
+        .padding()
+        .navigationDestination(
+            isPresented: $viewModel.isRegistered) {
+                LoginView()
+            }
     }
 }
 

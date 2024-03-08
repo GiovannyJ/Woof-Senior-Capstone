@@ -33,6 +33,7 @@
 		3FD97F5E2B99444000A53464 /* UpdateEventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F5D2B99443F00A53464 /* UpdateEventsListView.swift */; };
 		3FD97F612B99480E00A53464 /* UpdateEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F602B99480E00A53464 /* UpdateEventViewModel.swift */; };
 		3FD97F652B9A357F00A53464 /* DeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F642B9A357F00A53464 /* DeleteButton.swift */; };
+		3FD97F672B9B9AB900A53464 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F662B9B9AB800A53464 /* ImageUploader.swift */; };
 		3FE90D572B8829F100FCCF54 /* archive_Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4D2B8829F100FCCF54 /* archive_Register.swift */; };
 		3FE90D582B8829F100FCCF54 /* archive_Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4E2B8829F100FCCF54 /* archive_Home.swift */; };
 		3FE90D592B8829F100FCCF54 /* archive_BusinessReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4F2B8829F100FCCF54 /* archive_BusinessReviews.swift */; };
@@ -105,6 +106,7 @@
 		3FD97F5D2B99443F00A53464 /* UpdateEventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEventsListView.swift; sourceTree = "<group>"; };
 		3FD97F602B99480E00A53464 /* UpdateEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEventViewModel.swift; sourceTree = "<group>"; };
 		3FD97F642B9A357F00A53464 /* DeleteButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteButton.swift; sourceTree = "<group>"; };
+		3FD97F662B9B9AB800A53464 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		3FE90D4D2B8829F100FCCF54 /* archive_Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_Register.swift; sourceTree = "<group>"; };
 		3FE90D4E2B8829F100FCCF54 /* archive_Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_Home.swift; sourceTree = "<group>"; };
 		3FE90D4F2B8829F100FCCF54 /* archive_BusinessReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_BusinessReviews.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				3F514F972B70A25B00C1DEE7 /* SessionManager.swift */,
+				3FD97F662B9B9AB800A53464 /* ImageUploader.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				3FD97F612B99480E00A53464 /* UpdateEventViewModel.swift in Sources */,
 				3FD4A43E2B8823C900E92B07 /* SearchView.swift in Sources */,
 				3FE90D682B883A2900FCCF54 /* LoginViewModel.swift in Sources */,
+				3FD97F672B9B9AB900A53464 /* ImageUploader.swift in Sources */,
 				3FD4A4302B88221500E92B07 /* CreateEventView.swift in Sources */,
 				C03488782B9609D600D4AD91 /* updateBusiness.swift in Sources */,
 				3FCE1E402B7339B200C9E182 /* Types.swift in Sources */,

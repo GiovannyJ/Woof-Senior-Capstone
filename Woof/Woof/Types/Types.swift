@@ -47,7 +47,7 @@ struct EventAttendanceResponse: Decodable{
 struct ImageInfo: Decodable{
     let imgID: Int
     let size: Int
-    let imgData: String
+    var imgData: String?
     let imgName: String
     let imgType: String
     let dateCreated: String

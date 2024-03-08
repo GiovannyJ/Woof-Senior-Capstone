@@ -27,6 +27,5 @@ Bugs:
 
 need to work on:
 -loading images
--upload image
--download image
+-upload image (profile working)
 -delete functionality

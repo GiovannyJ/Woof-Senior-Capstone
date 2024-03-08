@@ -22,22 +22,71 @@ struct DeleteButton: View {
 
     private func deleteFromAPI() {
         let endpoint: String
+        let table: String
+        let column: String
         switch type {
         case "Account":
             endpoint = "user"
+            table = "user"
+            column = "userID"
         case "Business":
-            endpoint = "business"
+            endpoint = "businesses"
+            table = "businesses"
+            column = "businessID"
         case "Event":
-            endpoint = "event"
+            endpoint = "events"
+            table = "events"
+            column = "eventID"
+        case "Review":
+            endpoint = "reviews"
+            table = "reviews"
+            column = "reviewID"
+        case "SavedBusiness":
+            endpoint = "savedBusinesses"
+            table = "savedBusiness"
+            column = "saveID"
         default:
             fatalError("Invalid type")
         }
         
-        let parameters = ["tablename": endpoint, "column": "\(type)ID", "id": "\(id)"]
+        let urlString = "http://localhost:8080/\(endpoint)"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
         
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        print("Delete \(type) with ID \(id)")
+        // Create the request body
+        let requestBody: [String: Any] = [
+            "tablename": table,
+            "column": column,
+            "id": id
+        ]
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+        } catch {
+            print("Error encoding request body: \(error)")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
+                print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            if (200...299).contains(httpResponse.statusCode) {
+                print("\(type) deleted successfully")
+            } else {
+                print("Failed to delete \(type)")
+            }
+        }.resume()
     }
+
 }
 
 struct DeleteButton_Previews: PreviewProvider {

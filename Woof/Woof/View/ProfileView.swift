@@ -13,7 +13,7 @@ struct ProfileView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            if let profileImage = viewModel.profileImage {
+            if let profileImage = SessionManager.shared.profileImage {
                 Image(uiImage: profileImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -35,24 +35,27 @@ struct ProfileView: View {
             // Display user information, history, saved businesses, and reviews
             ScrollView {
                 Section(header: Text("User Information")) {
-                    Text("Username: \(viewModel.sessionManager.currentUser?.username ?? "Guest")")
-                    Text("Email: \(viewModel.sessionManager.currentUser?.email ?? "Guest")")
-                    Text("Owned Business: ")
-                    if let ownedBusiness = viewModel.sessionManager.ownedBusiness {
-                        NavigationLink(destination: BusinessFullContext(business: ownedBusiness)) {
-                            Text(ownedBusiness.businessName)
-                                .padding()
-                                .background(Color.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
+                    Text("Username: \(SessionManager.shared.currentUser?.username ?? "Guest")")
+                    Text("Email: \(SessionManager.shared.currentUser?.email ?? "Guest")")
+                    
+                    if(SessionManager.shared.isBusinessOwner){
+                        Text("Owned Business: ")
+                        if let ownedBusiness = SessionManager.shared.ownedBusiness {
+                            NavigationLink(destination: BusinessFullContext(business: ownedBusiness)) {
+                                Text(ownedBusiness.businessName)
+                                    .padding()
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                        } else {
+                            Text("None").foregroundColor(.gray)
                         }
-                    } else {
-                        Text("None").foregroundColor(.gray)
                     }
                 }
 
                 Section(header: Text("Saved Businesses")) {
-                    if let businesses = viewModel.savedBusinesses {
+                    if let businesses = SessionManager.shared.savedBusinesses {
                         if businesses.isEmpty {
                             Text("No saved businesses.")
                         } else {
@@ -71,7 +74,7 @@ struct ProfileView: View {
                     }
                 }
                 Section(header: Text("Events Attending")) {
-                    if let events = sessionManager.eventsAttending {
+                    if let events = SessionManager.shared.eventsAttending {
                         if events.isEmpty {
                             Text("Not attending any events.")
                         } else {
@@ -86,7 +89,7 @@ struct ProfileView: View {
                             }
                         }
                     } else {
-                        Text("Loading events...").foregroundColor(.gray)
+                        Text("Not attending any events.").foregroundColor(.gray)
                     }
                 }
 
@@ -95,8 +98,8 @@ struct ProfileView: View {
         .padding()
         .navigationTitle("Profile")
         .onAppear {
-            viewModel.fetchSavedBusinesses()
-            viewModel.fetchProfileImage()
+//            viewModel.fetchSavedBusinesses()
+//            viewModel.fetchProfileImage()
 //            SessionManager.shared.fetchEventsAttending()
         }
     }
