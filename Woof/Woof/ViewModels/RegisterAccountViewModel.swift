@@ -8,7 +8,7 @@ class RegisterAccountViewModel: ObservableObject {
     var confirmPassword: String = ""
     var email: String = ""
     
-    @Published var showAlert = false
+    var showAlert = false
     @Published var isRegistered = false
     @Published var alertTitle: String = ""
     @Published var alertMessage: String = ""

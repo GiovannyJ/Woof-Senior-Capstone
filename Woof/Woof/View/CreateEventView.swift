@@ -12,54 +12,80 @@ struct CreateEventView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Event Information")) {
-                    TextField("Event Name", text: $viewModel.eventName)
-                    TextField("Event Description", text: $viewModel.eventDescription)
-                    DatePicker("Date", selection: $viewModel.eventDate, in: Date()..., displayedComponents: .date)
-                        .datePickerStyle(.compact)
-                        .foregroundColor(.gray)
+            VStack{
+                Form {
+                    Section(header: Text("Event Information")) {
+                        TextField("Event Name", text: $viewModel.eventName)
+                        TextField("Event Description", text: $viewModel.eventDescription)
+                        DatePicker("Date", selection: $viewModel.eventDate, in: Date()..., displayedComponents: .date)
+                            .datePickerStyle(.compact)
+                            .foregroundColor(.gray)
+                            .padding()
+                            .cornerRadius(8)
+                        TextField("Location", text: $viewModel.location)
+                        TextField("Contact Information", text: $viewModel.contactInfo)
+                        Toggle("Leash Policy", isOn: $viewModel.leashPolicy)
+                        Toggle("Disabled Friendly", isOn: $viewModel.disabledFriendly)
+                        Picker("Pet Size Preference", selection: $viewModel.petSizePref) {
+                            Text("Small Pets").tag("small")
+                            Text("Medium Pets").tag("medium")
+                            Text("Large Pets").tag("large")
+                        }
                         .padding()
                         .cornerRadius(8)
-                    TextField("Location", text: $viewModel.location)
-                    TextField("Contact Information", text: $viewModel.contactInfo)
-                    Toggle("Leash Policy", isOn: $viewModel.leashPolicy)
-                    Toggle("Disabled Friendly", isOn: $viewModel.disabledFriendly)
-                    Picker("Pet Size Preference", selection: $viewModel.petSizePref) {
-                        Text("Small Pets").tag("small")
-                        Text("Medium Pets").tag("medium")
-                        Text("Large Pets").tag("large")
-                    }
-                    .padding()
-                    .cornerRadius(8)
-                }
-                
-                // Button to submit the event
-                Section {
-                    Button(action: {
-                        viewModel.submitEvent() { success in
-                            if success {
-                                // Event submitted successfully, perform any necessary actions
-                                // For example, navigate to another view
-                            } else {
-                                // Handle submission failure
+                        VStack(alignment: .leading) {
+                            Button(action: {
+                                viewModel.selectEventPicture()
+                            }) {
+                                HStack {
+                                    Text("Select Event Picture")
+                                    if let newProfileImage = viewModel.newProfileImage {
+                                        Image(uiImage: newProfileImage)
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                            .clipShape(Circle())
+                                    }
+                                }
+                                .padding()
+                                .background(Color.teal.opacity(0.5))
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                            }
+                            .padding()
+                            .sheet(isPresented: $viewModel.isShowingImagePicker) {
+                                ImagePicker(image: $viewModel.newProfileImage, isPresented: $viewModel.isShowingImagePicker, didSelectImage: viewModel.imagePickerDidSelectImage)
                             }
                         }
-                    }) {
-                        Text("Submit Event")
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .cornerRadius(8)
-                            .fontWeight(Font.Weight.heavy)
+                    }
+                    
+                    
+                    // Button to submit the event
+                    Section {
+                        Button(action: {
+                            viewModel.submitEvent() { success in
+                                if success {
+                                    // Event submitted successfully, perform any necessary actions
+                                    // For example, navigate to another view
+                                } else {
+                                    // Handle submission failure
+                                }
+                            }
+                        }) {
+                            Text("Submit Event")
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.teal)
+                                .cornerRadius(8)
+                                .fontWeight(Font.Weight.heavy)
+                        }
                     }
                 }
             }
+        }
             .navigationTitle("Create Event")
         }
     }
-}
 
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {

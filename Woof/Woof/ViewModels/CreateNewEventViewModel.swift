@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SwiftUI
+import Combine
 
 class CreateEventViewModel: ObservableObject {
     @Published  var eventName: String = ""
@@ -16,6 +18,12 @@ class CreateEventViewModel: ObservableObject {
     @Published  var petSizePref: String = "small"
     @Published  var leashPolicy: Bool = false
     @Published  var disabledFriendly: Bool = false
+    @Published var newProfileImage: UIImage?
+    @Published var isShowingImagePicker = false
+    
+    
+    var didSelectImage: ((UIImage?) -> Void)?
+    var imageUploader = ImageUploader()
     
     
     func submitEvent(completion: @escaping (Bool) -> Void) {
@@ -54,17 +62,104 @@ class CreateEventViewModel: ObservableObject {
                 case 201:
                     // Successful response
                     print("Event Created!")
-                    completion(true)
-                case 500:
-                    // Handle 500 error
-                    print("Error: \(httpResponse.statusCode)")
-                    completion(false)
-                default:
-                    // Handle other status codes
-                    print("Unexpected error occurred")
-                    completion(false)
+                    if let responseData = data {
+                       do {
+                           let events = try JSONDecoder().decode([Event].self, from: responseData)
+                           if let firstEvent = events.first {
+                               // You can now access the first event object
+                               print("First Event ID: \(firstEvent.eventID)")
+                               self.uploadEventImage(eventID: firstEvent.eventID)
+                               completion(true)
+                           }
+                       } catch {
+                           print("Error decoding event data:", error)
+                           completion(false)
+                       }
+                   } else {
+                       print("No data received")
+                       completion(false)
+                   }
+               case 500:
+                   // Handle 500 error
+                   print("Error: \(httpResponse.statusCode)")
+                   completion(false)
+               default:
+                   // Handle other status codes
+                   print("Unexpected error occurred")
+                   completion(false)
+               }
+           }
+       }.resume()
+    }
+    
+    func uploadEventImage(eventID: Int) {
+        guard let image = newProfileImage else {
+            return
+        }
+        imageUploader.uploadImage(image: image, type: "event") { result in
+            switch result {
+            case .success(let imgID):
+                self.updateEventWithImageID(eventID: eventID, imgID: imgID)
+            case .failure(let error):
+                print("Error uploading profile image:", error)
+            }
+        }
+    }
+
+    private func updateEventWithImageID(eventID: Int, imgID: Int) {
+        // Define the URL for updating the user's profile
+        guard let updateUserURL = URL(string: "http://localhost:8080/events") else {
+            return
+        }
+        
+        // Prepare the request body
+        let requestBody: [String: Any] = [
+            "tablename": "events",
+            "columns_old": ["eventID"],
+            "values_old": [eventID],
+            "columns_new": ["imgID"],
+            "values_new": [imgID]
+        ]
+        
+        // Create the request
+        var request = URLRequest(url: updateUserURL)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Convert the request body to JSON data
+        guard let requestBodyData = try? JSONSerialization.data(withJSONObject: requestBody) else {
+            return
+        }
+        
+        // Attach the request body to the request
+        request.httpBody = requestBodyData
+        
+        // Perform the request
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                // Handle network errors
+                print("Error updating profile with image ID: \(error.localizedDescription)")
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if (200...299).contains(httpResponse.statusCode) {
+                    print("Profile updated successfully with image ID \(imgID)")
+                } else {
+                    print("Failed to update profile with image ID \(imgID): HTTP status code \(httpResponse.statusCode)")
                 }
             }
         }.resume()
+    }
+    
+    
+    func selectEventPicture() {
+        isShowingImagePicker = true
+    }
+
+    func imagePickerDidSelectImage(_ image: UIImage?) {
+        newProfileImage = image
+        isShowingImagePicker = false
+        didSelectImage?(image)
     }
 }
