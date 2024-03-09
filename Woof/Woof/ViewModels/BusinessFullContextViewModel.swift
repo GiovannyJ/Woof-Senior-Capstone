@@ -24,33 +24,68 @@ class BusinessReviewsViewModel: ObservableObject {
 //        fetchReviews()
     }
     
+//    func fetchBusinessImage() {
+//        guard let imgID = self.business.imgID?.Int64 else {
+//            print("Image ID not found")
+//            return
+//        }
+//        print(imgID)
+//        guard let url = URL(string: "http://localhost:8080/imageInfo?id=\(imgID)") else {
+//            print("Invalid URL")
+//            return
+//        }
+//        
+//        URLSession.shared.dataTaskPublisher(for: url)
+//            .map { $0.data }
+//            .replaceError(with: nil)
+//            .receive(on: DispatchQueue.main) // Ensure updates are performed on the main thread
+//            .sink { [weak self] data in
+//                guard let data = data else { return }
+//                self?.businessImgData = data
+//            }
+//            .store(in: &cancellables)
+//    }
+//    
+    
     func fetchBusinessImage() {
         guard let imgID = self.business.imgID?.Int64 else {
             print("Image ID not found")
             return
         }
-        
-        let cacheKey = NSString(string: "\(imgID)")
-        if let cachedImageData = imageCache.object(forKey: cacheKey) {
-            self.businessImgData = cachedImageData as Data
-            return
-        }
-        
         guard let url = URL(string: "http://localhost:8080/imageInfo?id=\(imgID)") else {
             print("Invalid URL")
             return
         }
         
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map { $0.data }
-            .replaceError(with: nil)
-            .receive(on: DispatchQueue.main) // Ensure updates are performed on the main thread
-            .sink { [weak self] data in
-                guard let data = data else { return }
-                self?.imageCache.setObject(data as NSData, forKey: cacheKey)
-                self?.businessImgData = data
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                if let error = error {
+                    print("Error fetching image data:", error.localizedDescription)
+                } else {
+                    print("No data received for event image")
+                }
+                return
             }
-            .store(in: &cancellables)
+            
+            do {
+                let imageInfo = try JSONDecoder().decode([ImageInfo].self, from: data)
+                if let info = imageInfo.first {
+                    let fileURL = URL(fileURLWithPath: #file)
+                    let directoryURL = fileURL.deletingLastPathComponent()
+
+                    // Constructing the file URL
+                    let uploadsUrl = directoryURL.appendingPathComponent("uploads")
+                    let imageUrl = uploadsUrl.appendingPathComponent(info.imgType).appendingPathComponent(info.imgName)
+
+                    let imageData = try Data(contentsOf: imageUrl)
+                    DispatchQueue.main.async {
+                        self.businessImgData = imageData
+                    }
+                }
+            } catch {
+                print("Error decoding image info JSON:", error)
+            }
+        }.resume()
     }
     
     func fetchReviews() {
@@ -88,8 +123,6 @@ class BusinessReviewsViewModel: ObservableObject {
             }
         }.resume()
     }
-
-
 
 
     

@@ -140,14 +140,6 @@ class RegisterAccountViewModel: ObservableObject {
         }.resume()
     }
     
-    private func showAlert(title: String, message: String) {
-        DispatchQueue.main.async {
-            self.alertTitle = title
-            self.alertMessage = message
-            self.showAlert = true
-        }
-    }
-    
     func selectProfilePicture() {
         isShowingImagePicker = true
     }
@@ -156,5 +148,13 @@ class RegisterAccountViewModel: ObservableObject {
         newProfileImage = image
         isShowingImagePicker = false
         didSelectImage?(image)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            self.alertTitle = title
+            self.alertMessage = message
+            self.showAlert = true
+        }
     }
 }

@@ -10,6 +10,9 @@ Added:
         - +register your business
     -business user who own business:
         - ++ update business, update event, create event
+-upload images
+-load images
+-delete functionality
 
 Fixed:
 -reviews not loading on page load
@@ -27,5 +30,27 @@ Bugs:
 
 need to work on:
 -loading images
--upload image (profile working)
+    -profile DONE
+    -event DONE 
+    -review
+    -business DONE
+
+-upload image
+    -profile DONE
+    -event DONE
+    -review
+    -business DONE
+
+-update image: workflow(upload image -> get img info -> update prev thing with new image id -> delete old image?)
+    -profile
+    -business
+    -event
+    -review
+
 -delete functionality
+    -saved business
+    -event
+    -business
+    -review
+
+-disable saved

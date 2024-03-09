@@ -96,7 +96,7 @@ struct Review: Decodable, Identifiable {
     let dateCreated: String
     let dataLocation: String
     let imgID: ImageID?
-    var username: String? // Make username optional
+    var username: String?
     
     var id: Int {
         return reviewID

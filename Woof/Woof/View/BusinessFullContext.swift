@@ -38,6 +38,7 @@ struct BusinessFullContext: View {
     public init(business: Business) {
         self.viewModel = BusinessReviewsViewModel(business: business)
         self.reviews = viewModel.reviews // Initialize reviews with initial data
+        viewModel.fetchBusinessImage()
     }
     
     var body: some View {
@@ -150,7 +151,7 @@ struct BusinessFullContext: View {
             self.reviews = newReviews
         }.onAppear(){
             viewModel.fetchReviews()
-            viewModel.fetchBusinessImage()
+//            viewModel.fetchBusinessImage()
         }
     }
 }

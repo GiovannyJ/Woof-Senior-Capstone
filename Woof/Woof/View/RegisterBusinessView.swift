@@ -39,10 +39,10 @@ struct RegisterBusinessView: View {
                             Text("Shopping").tag("Shopping")
                             Text("Other").tag("Other")
                         }
-                            .pickerStyle(MenuPickerStyle())
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
+                        .pickerStyle(MenuPickerStyle())
+                        .padding()
+                        .background(Color.teal.opacity(0.2))
+                        .cornerRadius(8)
                         TextField("Location", text: $viewModel.location)
                             .padding()
                             .background(Color.teal.opacity(0.2))
@@ -84,10 +84,36 @@ struct RegisterBusinessView: View {
                         }
                         .padding()
                         .cornerRadius(8)
+                        
+                        VStack(alignment: .leading) {
+                            Button(action: {
+                                viewModel.selectBusinessPicture()
+                            }) {
+                                HStack {
+                                    Text("Select Business Picture")
+                                    if let newProfileImage = viewModel.newBusinessImage {
+                                        Image(uiImage: newProfileImage)
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                            .clipShape(Circle())
+                                    }
+                                }
+                                .padding()
+                                .background(Color.teal.opacity(0.5))
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                            }
+                            .padding()
+                            .sheet(isPresented: $viewModel.isShowingImagePicker) {
+                                ImagePicker(image: $viewModel.newBusinessImage, isPresented: $viewModel.isShowingImagePicker, didSelectImage: viewModel.imagePickerDidSelectImage)
+                            }
+                        }
                     }
                     .cornerRadius(10)
                     .padding(.vertical, 5)
+                
             }
+            
             
             Button(action: {
                 viewModel.registerBusiness()
