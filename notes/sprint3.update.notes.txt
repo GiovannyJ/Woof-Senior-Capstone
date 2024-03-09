@@ -32,13 +32,13 @@ need to work on:
 -loading images
     -profile DONE
     -event DONE 
-    -review
+    -review DONE
     -business DONE
 
 -upload image
     -profile DONE
     -event DONE
-    -review
+    -review DONE
     -business DONE
 
 -update image: workflow(upload image -> get img info -> update prev thing with new image id -> delete old image?)
@@ -48,9 +48,8 @@ need to work on:
     -review
 
 -delete functionality
+    -account DONE
     -saved business
     -event
     -business
     -review
-
--disable saved

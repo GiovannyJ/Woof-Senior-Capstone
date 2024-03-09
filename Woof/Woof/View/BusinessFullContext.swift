@@ -30,16 +30,20 @@ struct ReviewsView: View {
 }
 
 struct BusinessFullContext: View {
-    let viewModel: BusinessReviewsViewModel
+//    let viewModel: BusinessReviewsViewModel
+    @ObservedObject var viewModel: BusinessReviewsViewModel
     @State private var userReview: String = ""
     @State private var userRating: Int = 1 // Default rating
     @State private var reviews: [Review] = [] // Track reviews separately
     
     public init(business: Business) {
-        self.viewModel = BusinessReviewsViewModel(business: business)
+        viewModel = BusinessReviewsViewModel(business: business)
         self.reviews = viewModel.reviews // Initialize reviews with initial data
         viewModel.fetchBusinessImage()
     }
+    
+    
+    
     
     var body: some View {
         ScrollView {
@@ -124,6 +128,31 @@ struct BusinessFullContext: View {
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
+                    
+                    
+                }
+                VStack(alignment: .leading) {
+                    Button(action: {
+                        viewModel.selectEventPicture()
+                    }) {
+                        HStack {
+                            Text("Select A Picture")
+                            if let newProfileImage = viewModel.newReviewImage {
+                                Image(uiImage: newProfileImage)
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Circle())
+                            }
+                        }
+                        .padding()
+                        .background(Color.teal.opacity(0.5))
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                
+                    .sheet(isPresented: $viewModel.isShowingImagePicker) {
+                        ImagePicker(image: $viewModel.newReviewImage, isPresented: $viewModel.isShowingImagePicker, didSelectImage: viewModel.imagePickerDidSelectImage)
+                    }
                 }
                 // Button to submit review
                 Button(action: {
