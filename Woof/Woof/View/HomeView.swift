@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
+    @ObservedObject var locationManager = LocationManager.shared
     
     var body: some View {
         NavigationView {
@@ -78,7 +79,29 @@ struct HomeView: View {
                             .background(Color.teal)
                             .foregroundColor(.white)
                             .cornerRadius(10)
-                    }                    // Add more features as needed
+                    }
+                    NavigationLink(destination:
+                        TestMapView()) {
+                        Text("Test Map Page")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.teal)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            
+                    }
+                    NavigationLink(destination:
+                    TestAddressLookupView()) {
+                    Text("Test Map Page")
+                        .fontWeight(.heavy)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.teal)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        
+                }
 
                     Spacer()
                 }
