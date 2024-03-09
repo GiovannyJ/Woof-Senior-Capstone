@@ -17,7 +17,7 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Welcome Back \(sessionManager.currentUser?.username ?? "Guest")!")
                         .font(.subheadline)
-                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        .fontWeight(.bold)
                         .padding(.leading)
                     
                     Text("Discover Pet-Friendly Businesses and Events.")
@@ -80,8 +80,8 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
-                    NavigationLink(destination:
-                        TestMapView()) {
+                    
+                    NavigationLink(destination: TestMapView()) {
                         Text("Test Map Page")
                             .fontWeight(.heavy)
                             .padding()
@@ -89,19 +89,27 @@ struct HomeView: View {
                             .background(Color.teal)
                             .foregroundColor(.white)
                             .cornerRadius(10)
-                            
                     }
-                    NavigationLink(destination:
-                    TestAddressLookupView()) {
-                    Text("Test Map Page")
-                        .fontWeight(.heavy)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.teal)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        
-                }
+                    
+                    NavigationLink(destination: TestAddressLookupView()) {
+                        Text("Test Address Lookup Page")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.teal)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    
+                    NavigationLink(destination: LocationRequestView()) {
+                        Text("Open Location Request")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
 
                     Spacer()
                 }
@@ -112,9 +120,9 @@ struct HomeView: View {
     }
 }
 
-
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
     }
 }
+
