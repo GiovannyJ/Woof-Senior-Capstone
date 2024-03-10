@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -27,6 +27,14 @@
 		3FD4A43E2B8823C900E92B07 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A43D2B8823C900E92B07 /* SearchView.swift */; };
 		3FD4A4402B8823F500E92B07 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A43F2B8823F500E92B07 /* LoginView.swift */; };
 		3FD4A4412B88265E00E92B07 /* EventFullContextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A41F2B881FC000E92B07 /* EventFullContextViewModel.swift */; };
+		3FD97F582B96179B00A53464 /* UpdateAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F572B96179B00A53464 /* UpdateAccountViewModel.swift */; };
+		3FD97F5A2B9617F400A53464 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F592B9617F400A53464 /* ImagePicker.swift */; };
+		3FD97F5C2B993CA600A53464 /* UpdateBusinessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F5B2B993CA600A53464 /* UpdateBusinessViewModel.swift */; };
+		3FD97F5E2B99444000A53464 /* UpdateEventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F5D2B99443F00A53464 /* UpdateEventsListView.swift */; };
+		3FD97F612B99480E00A53464 /* UpdateEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F602B99480E00A53464 /* UpdateEventViewModel.swift */; };
+		3FD97F652B9A357F00A53464 /* DeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F642B9A357F00A53464 /* DeleteButton.swift */; };
+		3FD97F672B9B9AB900A53464 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F662B9B9AB800A53464 /* ImageUploader.swift */; };
+		3FD97F6B2B9E478D00A53464 /* UnattendEventButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F6A2B9E478D00A53464 /* UnattendEventButton.swift */; };
 		3FE90D572B8829F100FCCF54 /* archive_Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4D2B8829F100FCCF54 /* archive_Register.swift */; };
 		3FE90D582B8829F100FCCF54 /* archive_Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4E2B8829F100FCCF54 /* archive_Home.swift */; };
 		3FE90D592B8829F100FCCF54 /* archive_BusinessReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4F2B8829F100FCCF54 /* archive_BusinessReviews.swift */; };
@@ -44,13 +52,9 @@
 		3FE90D6A2B883F7F00FCCF54 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D692B883F7F00FCCF54 /* ProfileViewModel.swift */; };
 		3FE90D6C2B8840B600FCCF54 /* LocalEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D6B2B8840B600FCCF54 /* LocalEventsViewModel.swift */; };
 		3FE90D6E2B88412000FCCF54 /* CreateNewEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D6D2B88412000FCCF54 /* CreateNewEventViewModel.swift */; };
-		5BDB24712B9D1A7A00CD5042 /* LocationRequestButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB24702B9D1A7A00CD5042 /* LocationRequestButton.swift */; };
-		5BDB247D2B9D218F00CD5042 /* Geocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB247C2B9D218F00CD5042 /* Geocoding.swift */; };
-		5BDB247F2B9D21DF00CD5042 /* AddressFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB247E2B9D21DF00CD5042 /* AddressFinder.swift */; };
-		5BDB24812B9D225B00CD5042 /* TestAddressLookupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB24802B9D225B00CD5042 /* TestAddressLookupView.swift */; };
-		5BDB24832B9D234600CD5042 /* AddressCompletionAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB24822B9D234600CD5042 /* AddressCompletionAsset.swift */; };
-		5BE7B8022B8BEEA000538B0E /* TestMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE7B8012B8BEEA000538B0E /* TestMapView.swift */; };
-		5BE7B8042B8BEF1A00538B0E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE7B8032B8BEF1A00538B0E /* LocationManager.swift */; };
+		C03488762B9608EF00D4AD91 /* updateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488752B9608EF00D4AD91 /* updateAccount.swift */; };
+		C03488782B9609D600D4AD91 /* updateBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488772B9609D600D4AD91 /* updateBusiness.swift */; };
+		C034887A2B960B0400D4AD91 /* updateEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488792B960B0400D4AD91 /* updateEvent.swift */; };
 		C0F297842B4851C40096E053 /* WoofApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F297832B4851C40096E053 /* WoofApp.swift */; };
 		C0F297882B4851C70096E053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0F297872B4851C70096E053 /* Assets.xcassets */; };
 		C0F2978B2B4851C70096E053 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0F2978A2B4851C70096E053 /* Preview Assets.xcassets */; };
@@ -97,6 +101,14 @@
 		3FD4A43B2B8823AC00E92B07 /* BusinessButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessButton.swift; sourceTree = "<group>"; };
 		3FD4A43D2B8823C900E92B07 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		3FD4A43F2B8823F500E92B07 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		3FD97F572B96179B00A53464 /* UpdateAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAccountViewModel.swift; sourceTree = "<group>"; };
+		3FD97F592B9617F400A53464 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		3FD97F5B2B993CA600A53464 /* UpdateBusinessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateBusinessViewModel.swift; sourceTree = "<group>"; };
+		3FD97F5D2B99443F00A53464 /* UpdateEventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEventsListView.swift; sourceTree = "<group>"; };
+		3FD97F602B99480E00A53464 /* UpdateEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEventViewModel.swift; sourceTree = "<group>"; };
+		3FD97F642B9A357F00A53464 /* DeleteButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteButton.swift; sourceTree = "<group>"; };
+		3FD97F662B9B9AB800A53464 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
+		3FD97F6A2B9E478D00A53464 /* UnattendEventButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnattendEventButton.swift; sourceTree = "<group>"; };
 		3FE90D4D2B8829F100FCCF54 /* archive_Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_Register.swift; sourceTree = "<group>"; };
 		3FE90D4E2B8829F100FCCF54 /* archive_Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_Home.swift; sourceTree = "<group>"; };
 		3FE90D4F2B8829F100FCCF54 /* archive_BusinessReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_BusinessReviews.swift; sourceTree = "<group>"; };
@@ -114,14 +126,9 @@
 		3FE90D692B883F7F00FCCF54 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		3FE90D6B2B8840B600FCCF54 /* LocalEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalEventsViewModel.swift; sourceTree = "<group>"; };
 		3FE90D6D2B88412000FCCF54 /* CreateNewEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewEventViewModel.swift; sourceTree = "<group>"; };
-		5BC2A09E2B8BDE1E0028A7C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		5BDB24702B9D1A7A00CD5042 /* LocationRequestButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRequestButton.swift; sourceTree = "<group>"; };
-		5BDB247C2B9D218F00CD5042 /* Geocoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Geocoding.swift; path = ../Assets/MapAssets/Geocoding.swift; sourceTree = "<group>"; };
-		5BDB247E2B9D21DF00CD5042 /* AddressFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressFinder.swift; sourceTree = "<group>"; };
-		5BDB24802B9D225B00CD5042 /* TestAddressLookupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAddressLookupView.swift; sourceTree = "<group>"; };
-		5BDB24822B9D234600CD5042 /* AddressCompletionAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressCompletionAsset.swift; sourceTree = "<group>"; };
-		5BE7B8012B8BEEA000538B0E /* TestMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestMapView.swift; sourceTree = "<group>"; };
-		5BE7B8032B8BEF1A00538B0E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		C03488752B9608EF00D4AD91 /* updateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateAccount.swift; sourceTree = "<group>"; };
+		C03488772B9609D600D4AD91 /* updateBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateBusiness.swift; sourceTree = "<group>"; };
+		C03488792B960B0400D4AD91 /* updateEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateEvent.swift; sourceTree = "<group>"; };
 		C0F297802B4851C40096E053 /* Woof.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Woof.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0F297832B4851C40096E053 /* WoofApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WoofApp.swift; sourceTree = "<group>"; };
 		C0F297872B4851C70096E053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -161,11 +168,13 @@
 		3FBB50FA2B87D1D700F5175C /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				5BE7B8052B8BEF8500538B0E /* MapAssets */,
+				3FD97F642B9A357F00A53464 /* DeleteButton.swift */,
 				3FD4A4272B8820C300E92B07 /* EventCard.swift */,
 				3FD4A4292B88214900E92B07 /* ReviewCard.swift */,
 				3FD4A4392B88238600E92B07 /* SearchBar.swift */,
 				3FD4A43B2B8823AC00E92B07 /* BusinessButton.swift */,
+				3FD97F592B9617F400A53464 /* ImagePicker.swift */,
+				3FD97F6A2B9E478D00A53464 /* UnattendEventButton.swift */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -182,9 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				3F514F972B70A25B00C1DEE7 /* SessionManager.swift */,
-				5BE7B8032B8BEF1A00538B0E /* LocationManager.swift */,
-				5BDB247E2B9D21DF00CD5042 /* AddressFinder.swift */,
-				5BDB247C2B9D218F00CD5042 /* Geocoding.swift */,
+				3FD97F662B9B9AB800A53464 /* ImageUploader.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -192,6 +199,7 @@
 		3FD4A41E2B881FC000E92B07 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				3FD97F602B99480E00A53464 /* UpdateEventViewModel.swift */,
 				3FBF9E0F2B749A03000D584B /* uploads */,
 				3FD4A42D2B8821B900E92B07 /* BusinessFullContextViewModel.swift */,
 				3FD4A41F2B881FC000E92B07 /* EventFullContextViewModel.swift */,
@@ -202,6 +210,8 @@
 				3FE90D692B883F7F00FCCF54 /* ProfileViewModel.swift */,
 				3FE90D6B2B8840B600FCCF54 /* LocalEventsViewModel.swift */,
 				3FE90D6D2B88412000FCCF54 /* CreateNewEventViewModel.swift */,
+				3FD97F572B96179B00A53464 /* UpdateAccountViewModel.swift */,
+				3FD97F5B2B993CA600A53464 /* UpdateBusinessViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -216,11 +226,13 @@
 				3FD4A4312B88225500E92B07 /* RegisterBusinessView.swift */,
 				3FD4A4332B8822B900E92B07 /* HomeView.swift */,
 				3FD4A4352B8822FC00E92B07 /* ProfileView.swift */,
-				5BE7B8012B8BEEA000538B0E /* TestMapView.swift */,
-				5BDB24802B9D225B00CD5042 /* TestAddressLookupView.swift */,
+				C03488752B9608EF00D4AD91 /* updateAccount.swift */,
+				C03488772B9609D600D4AD91 /* updateBusiness.swift */,
+				C03488792B960B0400D4AD91 /* updateEvent.swift */,
 				3FD4A4372B88234D00E92B07 /* RegisterAccountView.swift */,
 				3FD4A43D2B8823C900E92B07 /* SearchView.swift */,
 				3FD4A43F2B8823F500E92B07 /* LoginView.swift */,
+				3FD97F5D2B99443F00A53464 /* UpdateEventsListView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -241,15 +253,6 @@
 				3FBF9E112B74A775000D584B /* idkIfNeed_BusinessFullContext.swift */,
 			);
 			path = archive;
-			sourceTree = "<group>";
-		};
-		5BE7B8052B8BEF8500538B0E /* MapAssets */ = {
-			isa = PBXGroup;
-			children = (
-				5BDB24702B9D1A7A00CD5042 /* LocationRequestButton.swift */,
-				5BDB24822B9D234600CD5042 /* AddressCompletionAsset.swift */,
-			);
-			path = MapAssets;
 			sourceTree = "<group>";
 		};
 		C0F297772B4851C40096E053 = {
@@ -275,7 +278,6 @@
 		C0F297822B4851C40096E053 /* Woof */ = {
 			isa = PBXGroup;
 			children = (
-				5BC2A09E2B8BDE1E0028A7C4 /* Info.plist */,
 				3FD4A4422B88294200E92B07 /* archive */,
 				3FD4A4222B88206A00E92B07 /* View */,
 				3FD4A41E2B881FC000E92B07 /* ViewModels */,
@@ -406,8 +408,6 @@
 			);
 			mainGroup = C0F297772B4851C40096E053;
 			packageReferences = (
-				3FD4A3CA2B88196800E92B07 /* XCLocalSwiftPackageReference "Woof/ViewModel" */,
-				5BE7B8002B8BE3A800538B0E /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
 			);
 			productRefGroup = C0F297812B4851C40096E053 /* Products */;
 			projectDirPath = "";
@@ -455,47 +455,51 @@
 				3FE90D662B8839B800FCCF54 /* SearchViewModel.swift in Sources */,
 				3FE90D5F2B8829F100FCCF54 /* Archive_EventFullContextView.swift in Sources */,
 				3FE90D5C2B8829F100FCCF54 /* archive_Profile.swift in Sources */,
+				3FD97F5C2B993CA600A53464 /* UpdateBusinessViewModel.swift in Sources */,
+				3FD97F5E2B99444000A53464 /* UpdateEventsListView.swift in Sources */,
+				3FD97F6B2B9E478D00A53464 /* UnattendEventButton.swift in Sources */,
+				3FD97F5A2B9617F400A53464 /* ImagePicker.swift in Sources */,
 				3FD4A4402B8823F500E92B07 /* LoginView.swift in Sources */,
 				3FE90D5D2B8829F100FCCF54 /* archive_CreateEvent.swift in Sources */,
 				3FE90D6E2B88412000FCCF54 /* CreateNewEventViewModel.swift in Sources */,
+				C03488762B9608EF00D4AD91 /* updateAccount.swift in Sources */,
 				3FE90D592B8829F100FCCF54 /* archive_BusinessReviews.swift in Sources */,
 				3FE90D572B8829F100FCCF54 /* archive_Register.swift in Sources */,
 				3FE90D5A2B8829F100FCCF54 /* archive_RegisterBusiness.swift in Sources */,
 				3FBF9E122B74A775000D584B /* idkIfNeed_BusinessFullContext.swift in Sources */,
-				5BDB247F2B9D21DF00CD5042 /* AddressFinder.swift in Sources */,
-				5BDB24712B9D1A7A00CD5042 /* LocationRequestButton.swift in Sources */,
+				3FD97F612B99480E00A53464 /* UpdateEventViewModel.swift in Sources */,
 				3FD4A43E2B8823C900E92B07 /* SearchView.swift in Sources */,
-				5BDB24832B9D234600CD5042 /* AddressCompletionAsset.swift in Sources */,
 				3FE90D682B883A2900FCCF54 /* LoginViewModel.swift in Sources */,
+				3FD97F672B9B9AB900A53464 /* ImageUploader.swift in Sources */,
 				3FD4A4302B88221500E92B07 /* CreateEventView.swift in Sources */,
+				C03488782B9609D600D4AD91 /* updateBusiness.swift in Sources */,
 				3FCE1E402B7339B200C9E182 /* Types.swift in Sources */,
 				3FE90D5E2B8829F100FCCF54 /* archive_Search.swift in Sources */,
 				3FE90D5B2B8829F100FCCF54 /* archive_LocalEvents.swift in Sources */,
 				3FD4A4362B8822FC00E92B07 /* ProfileView.swift in Sources */,
 				3FE90D582B8829F100FCCF54 /* archive_Home.swift in Sources */,
-				5BDB247D2B9D218F00CD5042 /* Geocoding.swift in Sources */,
 				3FD4A4242B88206E00E92B07 /* EventFullContextView.swift in Sources */,
 				3FD4A4412B88265E00E92B07 /* EventFullContextViewModel.swift in Sources */,
 				3FD4A43A2B88238600E92B07 /* SearchBar.swift in Sources */,
 				3FE90D622B882A7900FCCF54 /* RegisterBusinessViewModel.swift in Sources */,
 				3FD4A42C2B88217C00E92B07 /* BusinessFullContext.swift in Sources */,
 				3FD4A4382B88234D00E92B07 /* RegisterAccountView.swift in Sources */,
+				3FD97F652B9A357F00A53464 /* DeleteButton.swift in Sources */,
 				3F514F982B70A25B00C1DEE7 /* SessionManager.swift in Sources */,
 				C0F297842B4851C40096E053 /* WoofApp.swift in Sources */,
 				3FE90D642B88305E00FCCF54 /* RegisterAccountViewModel.swift in Sources */,
 				3FE90D602B8829F100FCCF54 /* archive_login.swift in Sources */,
-				5BDB24812B9D225B00CD5042 /* TestAddressLookupView.swift in Sources */,
 				3FD4A4282B8820C300E92B07 /* EventCard.swift in Sources */,
-				5BE7B8022B8BEEA000538B0E /* TestMapView.swift in Sources */,
 				3FD4A4262B88208100E92B07 /* LocalEventsView.swift in Sources */,
 				3FD4A4322B88225500E92B07 /* RegisterBusinessView.swift in Sources */,
+				C034887A2B960B0400D4AD91 /* updateEvent.swift in Sources */,
 				3FD4A4342B8822B900E92B07 /* HomeView.swift in Sources */,
 				3FD4A42E2B8821B900E92B07 /* BusinessFullContextViewModel.swift in Sources */,
+				3FD97F582B96179B00A53464 /* UpdateAccountViewModel.swift in Sources */,
 				3FD4A42A2B88214900E92B07 /* ReviewCard.swift in Sources */,
 				3FE90D6C2B8840B600FCCF54 /* LocalEventsViewModel.swift in Sources */,
 				3FD4A43C2B8823AC00E92B07 /* BusinessButton.swift in Sources */,
 				3FE90D6A2B883F7F00FCCF54 /* ProfileViewModel.swift in Sources */,
-				5BE7B8042B8BEF1A00538B0E /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,8 +665,6 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Woof/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Woof/Info.plist;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow access to your location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -691,8 +693,6 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Woof/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Woof/Info.plist;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow access to your location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -823,24 +823,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		3FD4A3CA2B88196800E92B07 /* XCLocalSwiftPackageReference "Woof/ViewModel" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Woof/ViewModel;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		5BE7B8002B8BE3A800538B0E /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = C0F297782B4851C40096E053 /* Project object */;
 }

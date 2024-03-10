@@ -9,7 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
-    @ObservedObject var locationManager = LocationManager.shared
     
     var body: some View {
         NavigationView {
@@ -61,56 +60,62 @@ struct HomeView: View {
                             .cornerRadius(10)
                     }
                     
-                    NavigationLink(destination: CreateEventView()) {
-                        Text("Create an Event")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                        NavigationLink(destination: UpdateAccountView()) {
+                            Text("Update Profile")
+                                .fontWeight(.heavy)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                    
+                    // Buttons for business user
+                    if sessionManager.currentUser?.accountType == "business" {
+                        NavigationLink(destination: RegisterBusinessView()) {
+                            Text("Register Your Business")
+                                .fontWeight(.heavy)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.teal)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                        if sessionManager.isBusinessOwner{
+                            NavigationLink(destination: CreateEventView()) {
+                                Text("Create an Event")
+                                    .fontWeight(.heavy)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.teal)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                            
+                            
+                            NavigationLink(destination: UpdateEventsListView()) {
+                                Text("Update Your Events")
+                                    .fontWeight(.heavy)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.red)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                            
+                            NavigationLink(destination: UpdateBusinessView()) {
+                                Text("Update Your Business")
+                                    .fontWeight(.heavy)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.red)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                        }
+                        
                     }
                     
-                    NavigationLink(destination: RegisterBusinessView(viewModel: RegisterBusinessViewModel())) {
-                        Text("Register Your Business")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    NavigationLink(destination: TestMapView()) {
-                        Text("Test Map Page")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    NavigationLink(destination: TestAddressLookupView()) {
-                        Text("Test Address Lookup Page")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    NavigationLink(destination: LocationRequestView()) {
-                        Text("Open Location Request")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-
                     Spacer()
                 }
                 .padding()
@@ -119,6 +124,7 @@ struct HomeView: View {
         }
     }
 }
+
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

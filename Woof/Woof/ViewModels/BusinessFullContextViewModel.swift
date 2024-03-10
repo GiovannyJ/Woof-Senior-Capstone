@@ -6,14 +6,23 @@
 //
 
 import SwiftUI
+import Combine
 
 class BusinessReviewsViewModel: ObservableObject {
     @Published var business: Business
     @Published var reviews: [Review] = []
     @Published var businessImgData: Data?
     
+    @Published var newReviewImage: UIImage?
+    @Published var isShowingImagePicker = false
+    
+    var didSelectImage: ((UIImage?) -> Void)?
+    var imageUploader = ImageUploader()
+    
     private let imageCache = NSCache<NSString, NSData>()
     private let reviewCache = NSCache<NSString, NSArray>()
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(business: Business) {
         self.business = business
@@ -26,13 +35,6 @@ class BusinessReviewsViewModel: ObservableObject {
             print("Image ID not found")
             return
         }
-        
-        let cacheKey = NSString(string: "\(imgID)")
-        if let cachedImageData = imageCache.object(forKey: cacheKey) {
-            self.businessImgData = cachedImageData as Data
-            return
-        }
-        
         guard let url = URL(string: "http://localhost:8080/imageInfo?id=\(imgID)") else {
             print("Invalid URL")
             return
@@ -40,46 +42,72 @@ class BusinessReviewsViewModel: ObservableObject {
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
-                print("Error fetching image data:", error?.localizedDescription ?? "Unknown error")
+                if let error = error {
+                    print("Error fetching image data:", error.localizedDescription)
+                } else {
+                    print("No data received for event image")
+                }
                 return
             }
             
-            self.imageCache.setObject(data as NSData, forKey: cacheKey)
-            DispatchQueue.main.async {
-                self.businessImgData = data
+            do {
+                let imageInfo = try JSONDecoder().decode([ImageInfo].self, from: data)
+                if let info = imageInfo.first {
+                    let fileURL = URL(fileURLWithPath: #file)
+                    let directoryURL = fileURL.deletingLastPathComponent()
+
+                    // Constructing the file URL
+                    let uploadsUrl = directoryURL.appendingPathComponent("uploads")
+                    let imageUrl = uploadsUrl.appendingPathComponent(info.imgType).appendingPathComponent(info.imgName)
+
+                    let imageData = try Data(contentsOf: imageUrl)
+                    DispatchQueue.main.async {
+                        self.businessImgData = imageData
+                    }
+                }
+            } catch {
+                print("Error decoding image info JSON:", error)
             }
         }.resume()
     }
     
     func fetchReviews() {
+        // Check if the reviews are already available in the business model
+        if let businessReviews = self.business.reviews, !businessReviews.isEmpty {
+            self.reviews = businessReviews
+            return
+        }
+        
+        // Construct the URL for fetching reviews
         guard let url = URL(string: "http://localhost:8080/businesses/\(business.businessID)/reviews") else {
             print("Invalid URL")
             return
         }
         
-        let cacheKey = NSString(string: "\(business.businessID)")
-        if let cachedReviews = reviewCache.object(forKey: cacheKey) as? [Review] {
-            self.reviews = cachedReviews
-            return
-        }
-        
+        // Fetch reviews from the network
         URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data else {
-                print("No data received:", error?.localizedDescription ?? "Unknown error")
+            guard let data = data, error == nil else {
+                print("Error fetching reviews: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
             
             do {
                 let businessReviewInfos = try JSONDecoder().decode([BusinessReviewInfo].self, from: data)
-                let reviews = businessReviewInfos.map { $0.reviewinfo }
-                self.reviews = reviews
-                print(self.reviews)
-                self.reviewCache.setObject(reviews as NSArray, forKey: cacheKey)
+                let reviewsWithUsernames = businessReviewInfos.map { businessReviewInfo -> Review in
+                    var review = businessReviewInfo.reviewinfo
+                    review.username = businessReviewInfo.userinfo.username
+                    return review
+                }
+                DispatchQueue.main.async {
+                    self.reviews = reviewsWithUsernames
+                }
             } catch {
-                print("Error decoding business review info:", error)
+                print("Error decoding reviews JSON: \(error)")
             }
         }.resume()
     }
+
+
     
     func submitReview(userRating: Int, userReview: String) {
         guard let currentUserID = SessionManager.shared.currentUser?.userID else {
@@ -115,8 +143,24 @@ class BusinessReviewsViewModel: ObservableObject {
             
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 201 {
-                    print("Review submitted successfully")
-                    // Show a success popup
+                    
+                    if let responseData = data {
+                       do {
+                           let reviews = try JSONDecoder().decode([Review].self, from: responseData)
+                           if let reviewsFirst = reviews.first {
+                               // You can now access the first event object
+                               print("First Review ID: \(reviewsFirst.reviewID)")
+                               self.uploadReviewImage(reviewID: reviewsFirst.reviewID)
+                               
+                           }
+                       } catch {
+                           print("Error decoding event data:", error)
+                           
+                       }
+                   } else {
+                       print("No data received")
+                       
+                   }
                 } else {
                     print("Error submitting review. Status code: \(httpResponse.statusCode)")
                     // Show an error popup
@@ -124,6 +168,78 @@ class BusinessReviewsViewModel: ObservableObject {
             }
         }.resume()
     }
+    
+    func uploadReviewImage(reviewID: Int) {
+        guard let image = newReviewImage else {
+            return
+        }
+        imageUploader.uploadImage(image: image, type: "event") { result in
+            switch result {
+            case .success(let imgID):
+                self.updateReviewWithImageID(reviewID: reviewID, imgID: imgID)
+            case .failure(let error):
+                print("Error uploading profile image:", error)
+            }
+        }
+    }
+
+    private func updateReviewWithImageID(reviewID: Int, imgID: Int) {
+        // Define the URL for updating the user's profile
+        guard let updateUserURL = URL(string: "http://localhost:8080/reviews") else {
+            return
+        }
+        
+        // Prepare the request body
+        let requestBody: [String: Any] = [
+            "tablename": "reviews",
+            "columns_old": ["reviewID"],
+            "values_old": [reviewID],
+            "columns_new": ["imgID"],
+            "values_new": [imgID]
+        ]
+        
+        // Create the request
+        var request = URLRequest(url: updateUserURL)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Convert the request body to JSON data
+        guard let requestBodyData = try? JSONSerialization.data(withJSONObject: requestBody) else {
+            return
+        }
+        
+        // Attach the request body to the request
+        request.httpBody = requestBodyData
+        
+        // Perform the request
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                // Handle network errors
+                print("Error updating profile with image ID: \(error.localizedDescription)")
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if (200...299).contains(httpResponse.statusCode) {
+                    print("Review updated successfully with image ID \(imgID)")
+                } else {
+                    print("Failed to update review with image ID \(imgID): HTTP status code \(httpResponse.statusCode)")
+                }
+            }
+        }.resume()
+    }
+    
+    
+    func selectEventPicture() {
+        isShowingImagePicker = true
+    }
+
+    func imagePickerDidSelectImage(_ image: UIImage?) {
+        newReviewImage = image
+        isShowingImagePicker = false
+        didSelectImage?(image)
+    }
+    
     
     func saveBusiness(){
         guard let currentUserID = SessionManager.shared.currentUser?.userID else {

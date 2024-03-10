@@ -1,0 +1,56 @@
+Added:
+-tracking for events attending
+-ability to update account
+-ability to update event
+-ability to update business
+-different view:
+    -regular user:
+        -profile, search businesses, local events, update profile
+    -business user:
+        - +register your business
+    -business user who own business:
+        - ++ update business, update event, create event
+-upload images
+-load images
+-delete functionality
+
+Fixed:
+-reviews not loading on page load
+-usernames appear in review card
+-scroll on search
+-review min and max (0-4 -> 1-5)
+-multi thread bc it messes up when theres too many (find out how to do thread closure)
+-disable buttons for attending event if user is already going
+    -make call to events -> make call to attendance see what eventID match up and disable button
+
+
+Bugs:
+-new reviews do not load into view when created
+-when attending event screen goes blank
+
+need to work on:
+-loading images
+    -profile DONE
+    -event DONE 
+    -review DONE
+    -business DONE
+
+-upload image
+    -profile DONE
+    -event DONE
+    -review DONE
+    -business DONE
+
+-update image: workflow(upload image -> get img info -> update prev thing with new image id -> delete old image?)
+    -profile DONE
+    -business DONE MAKE SURE TO INVALIDATE CACHE AFTER REQUEST IS MADE IN BACKEND
+    -event DONE
+    -review
+
+-delete functionality
+    -account DONE NEED TO INVALIDATE CACHE
+    -saved business
+    -event attendance
+    -event DONE NEED TO INVALIDATE CACHE
+    -business DONE NEED TO INVALIDATE CACHE
+    -review DONE NEED TO INVALIDATE CACHE

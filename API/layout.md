@@ -19,6 +19,12 @@ cd API
 go run main.go
 ```
 
+## How to run test database version
+```
+cd API
+go run main.go -t test
+```
+
 
 ### GET REQUESTS
 These are endpoints to retrieve data from the database. They can be queried with parameters and in order of ascending or descending. The endpoints are:

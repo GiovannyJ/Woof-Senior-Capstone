@@ -1,6 +1,5 @@
 import requests
 
-print("slayyyyyy pp")
 # Define the API key and endpoint
 API_KEY = 'BPMNX6-KSFj6M8Yw4BFTGD48QlWenlvwnms89H60vasoEIIhNZ2lqpMjpnnElRZUtBqPV4tgQgwtrYMIY8W0ZYo830fMhmTZbhjymNyp_-EpeE08FG5zmeE7_4HCZXYx'
 ENDPOINT = 'https://api.yelp.com/v3/businesses/search'
@@ -29,7 +28,9 @@ if response.status_code == 200:
     #format
     for i in businesses:
         # bind to structure that looks like BODY_JSON
+        data = formatForAPI(i)
         # call to POST ENDPOINT 
-        print(businesses)
+        data.postTOAPI()
+    print(businesses)
 else:
     print(f"Error: {response.status_code}")

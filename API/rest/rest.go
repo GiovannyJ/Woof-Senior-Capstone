@@ -3,6 +3,7 @@ package rest
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	db "API/database"
 	// "fmt"
 )
 
@@ -11,6 +12,7 @@ func API(mode string){
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"*"}
 	router.Use(cors.New(config))
+	db.SetMode(mode)
 	
 	// gin.SetMode(gin.ReleaseMode)
 	

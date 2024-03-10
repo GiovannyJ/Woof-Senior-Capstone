@@ -50,6 +50,10 @@ class LoginViewModel: ObservableObject {
                             SessionManager.shared.userID = user.userID
                             SessionManager.shared.isLoggedIn = true
                             SessionManager.shared.checkUserBusinessOwner()
+                            SessionManager.shared.fetchEventsAttending()
+                            SessionManager.shared.fetchSavedBusinesses()
+                            SessionManager.shared.fetchProfileImage()
+//                            SessionManager.shared.fetchBusinessImage()
                             self.isLoggedIn = true
                             self.navigateToHome = true // Set to true to trigger navigation
                         }

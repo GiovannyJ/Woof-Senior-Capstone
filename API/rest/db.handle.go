@@ -53,7 +53,7 @@ func GetUsers(c *gin.Context) {
 		return
 	}
 
-	results, err := db.Users_GET(query)
+	results, err := db.Users_GET(query, 0)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -541,7 +541,7 @@ func NewUser(c *gin.Context) {
 		}
 	}
 
-	results, err := db.Users_GET(query)
+	results, err := db.Users_GET(query, 0)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -854,7 +854,7 @@ func Login(c *gin.Context) {
 		}
 	}
 
-	results, err := db.Users_GET(query)
+	results, err := db.Users_GET(query, 0)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -87,4 +87,9 @@ struct AddressFinderView: View {
     }
 }
 
+struct AddressFinderView_Preview: PreviewProvider {
+    static var previews: some View {
+        AddressFinderView() // Shows the LocationRequestView in the preview.
+    }
+}
 

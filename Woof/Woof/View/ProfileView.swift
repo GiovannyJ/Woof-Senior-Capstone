@@ -9,10 +9,11 @@ import SwiftUI
 
 struct ProfileView: View {
     @ObservedObject var viewModel = ProfileViewModel()
+    @ObservedObject  var sessionManager = SessionManager.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            if let profileImage = viewModel.profileImage {
+            if let profileImage = SessionManager.shared.profileImage {
                 Image(uiImage: profileImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -27,28 +28,34 @@ struct ProfileView: View {
                 .font(.largeTitle)
                 .foregroundColor(.orange)
                 .padding()
-
+            
+            
+            
+            
             // Display user information, history, saved businesses, and reviews
             ScrollView {
                 Section(header: Text("User Information")) {
-                    Text("Username: \(viewModel.sessionManager.currentUser?.username ?? "Guest")")
-                    Text("Email: \(viewModel.sessionManager.currentUser?.email ?? "Guest")")
-                    Text("Owned Business: ")
-                    if let ownedBusiness = viewModel.sessionManager.ownedBusiness {
-                        NavigationLink(destination: BusinessFullContext(business: ownedBusiness)) {
-                            Text(ownedBusiness.businessName)
-                                .padding()
-                                .background(Color.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
+                    Text("Username: \(SessionManager.shared.currentUser?.username ?? "Guest")")
+                    Text("Email: \(SessionManager.shared.currentUser?.email ?? "Guest")")
+                    
+                    if(SessionManager.shared.isBusinessOwner){
+                        Text("Owned Business: ")
+                        if let ownedBusiness = SessionManager.shared.ownedBusiness {
+                            NavigationLink(destination: BusinessFullContext(business: ownedBusiness)) {
+                                Text(ownedBusiness.businessName)
+                                    .padding()
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                        } else {
+                            Text("None").foregroundColor(.gray)
                         }
-                    } else {
-                        Text("None").foregroundColor(.gray)
                     }
                 }
 
                 Section(header: Text("Saved Businesses")) {
-                    if let businesses = viewModel.savedBusinesses {
+                    if let businesses = SessionManager.shared.savedBusinesses {
                         if businesses.isEmpty {
                             Text("No saved businesses.")
                         } else {
@@ -66,13 +73,34 @@ struct ProfileView: View {
                         Text("No saved businesses.").foregroundColor(.gray)
                     }
                 }
+                Section(header: Text("Events Attending")) {
+                    if let events = SessionManager.shared.eventsAttending {
+                        if events.isEmpty {
+                            Text("Not attending any events.")
+                        } else {
+                            ForEach(events, id: \.eventID) { event in // Use \.eventID directly for id
+                                NavigationLink(destination: EventFullContextView(event: event)) {
+                                    Text(event.eventName)
+                                        .padding()
+                                        .background(Color.purple)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(8)
+                                }
+                            }
+                        }
+                    } else {
+                        Text("Not attending any events.").foregroundColor(.gray)
+                    }
+                }
+
             }
         }
         .padding()
         .navigationTitle("Profile")
         .onAppear {
-            viewModel.fetchSavedBusinesses()
-            viewModel.fetchProfileImage()
+//            viewModel.fetchSavedBusinesses()
+//            viewModel.fetchProfileImage()
+//            SessionManager.shared.fetchEventsAttending()
         }
     }
 }
