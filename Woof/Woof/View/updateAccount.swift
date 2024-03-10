@@ -30,6 +30,14 @@ struct UpdateAccountView: View {
                     .foregroundColor(.orange)
                     .padding()
                 
+                if let profileImage = SessionManager.shared.profileImage {
+                    Image(uiImage: profileImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                        .padding()
+                }
                 
                 TextField("New Username", text: $viewModel.newUsername)
                     .foregroundColor(.black)
@@ -51,7 +59,7 @@ struct UpdateAccountView: View {
                     viewModel.selectProfilePicture()
                 }) {
                     HStack {
-                        Text("Select Profile Picture")
+                        Text("Change Profile Picture")
                         if let newProfileImage = viewModel.newProfileImage {
                             Image(uiImage: newProfileImage)
                                 .resizable()

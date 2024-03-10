@@ -27,6 +27,7 @@ struct ReviewCard: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 200, height: 200)
             }
+            DeleteButton(type: "Review", id: review.reviewID)
         }
         .padding()
         .background(Color.teal.opacity(0.1))

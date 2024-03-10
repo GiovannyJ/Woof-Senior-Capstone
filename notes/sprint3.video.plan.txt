@@ -1,27 +1,27 @@
 new features:
-tracking events user is attending
-update account: pics too
-update event: pics too
-update business: pics too 
+-update account: pics too
+-update event: pics too
+-update business: pics too 
 -UPDATE REVIEW?
-regular user view
-business user view
-registered business view
-upload profile image
-upload business image
-upload event image
-upload review image
-load business image/load review image
-load event image
-delete account
-delete event
-delete review
-delete business
+-regular user view/ business user view/registered business view
+-upload profile image
+-upload business image
+-upload event image
+-upload review image
+-load business image/load review image
+-load event image
+-delete account
+-delete event
+-delete review
+-delete business
 
-for video just make a quick clip of login and show endpoints that pop up
-session manager:
+session manager: -for video just make a quick clip of login and show endpoints that pop up
     checks if user owns business 
     checks what businesses they have saved
     gets their image id
     gets what events they're attending 
-    
+
+-map on events
+-map on user
+
+total gifs: 19 try to make around 10 seconds each on loop

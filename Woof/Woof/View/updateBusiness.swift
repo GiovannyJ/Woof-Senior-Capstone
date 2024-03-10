@@ -10,87 +10,119 @@ import SwiftUI
 struct UpdateBusinessView: View {
     @ObservedObject var viewModel: UpdateBusinessViewModel
     @ObservedObject private var sessionManager = SessionManager.shared
+    @Environment(\.presentationMode) private var presentationMode
     
     init() {
         self.viewModel = UpdateBusinessViewModel()
+        
     }
     
     var body: some View {
         VStack {
             Form {
                 Section(header: Text("Update Business Details")
-                            .foregroundColor(.orange)
-                            .font(.title)
-                            .padding(.vertical)
-                            .fontWeight(.regular)) {
-                    TextField("Business Name", text: $viewModel.businessName)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    Picker("Business Type", selection: $viewModel.businessType) {
-                        ForEach(viewModel.businessTypes, id: \.self) { type in
-                            Text(type)
-                                .tag(type)
-                                .foregroundColor(.gray)
+                    .foregroundColor(.orange)
+                    .font(.title)
+                    .padding(.vertical)
+                    .fontWeight(.regular)) {
+                        TextField("Business Name", text: $viewModel.businessName)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        Picker("Business Type", selection: $viewModel.businessType) {
+                            ForEach(viewModel.businessTypes, id: \.self) { type in
+                                Text(type)
+                                    .tag(type)
+                                    .foregroundColor(.gray)
+                            }
                         }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding()
+                        .background(Color.teal.opacity(0.2))
+                        .cornerRadius(8)
+                        TextField("Location", text: $viewModel.location)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        TextField("Contact", text: $viewModel.contact)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    .padding()
-                    .background(Color.teal.opacity(0.2))
-                    .cornerRadius(8)
-                    TextField("Location", text: $viewModel.location)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    TextField("Contact", text: $viewModel.contact)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                }
-                .cornerRadius(4)
-                .padding(.vertical, 5)
+                    .cornerRadius(4)
+                    .padding(.vertical, 5)
                 
                 Section(header: Text("Additional Information").foregroundColor(.teal)
-                            .font(.headline)
-                            .padding(.vertical)
-                            .fontWeight(.medium)) {
-                    TextField("Description", text: $viewModel.description)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    TextField("Leash Policy", text: $viewModel.leashPolicy)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    TextField("Disabled Pet Friendly", text: $viewModel.disabledFriendly)
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                    Picker("Pet Size Preference", selection: $viewModel.petSizePreference) {
-                        ForEach(viewModel.petSizePreferences, id: \.self) { size in
-                            Text(size)
-                                .tag(size)
+                    .font(.headline)
+                    .padding(.vertical)
+                    .fontWeight(.medium)) {
+                        TextField("Description", text: $viewModel.description)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        TextField("Leash Policy", text: $viewModel.leashPolicy)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        TextField("Disabled Pet Friendly", text: $viewModel.disabledFriendly)
+                            .padding()
+                            .background(Color.teal.opacity(0.2))
+                            .cornerRadius(8)
+                        Picker("Pet Size Preference", selection: $viewModel.petSizePreference) {
+                            ForEach(viewModel.petSizePreferences, id: \.self) { size in
+                                Text(size)
+                                    .tag(size)
+                            }
                         }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    
-                //delete business button
-                        Button(action: {
-                            deleteBusiness()
-                                }) {
-                            Text("Delete Business")
+                        .pickerStyle(SegmentedPickerStyle())
+                        
+                        if let businessImage = SessionManager.shared.businessImage {
+                            Image(uiImage: businessImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
                                 .padding()
-                                .background(Color.red.opacity(0.8))
-                                .fontWeight(.heavy)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                                .frame(maxWidth: .infinity)               }                }
-                .cornerRadius(10)
-                .padding(.vertical, 5)
+                        }
+                        Button(action: {
+                            viewModel.selectBusinessPicture()
+                        }) {
+                            HStack {
+                                Text("Change Profile Picture")
+                                if let newProfileImage = viewModel.newBusinessImage {
+                                    Image(uiImage: newProfileImage)
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .clipShape(Circle())
+                                }
+                            }
+                            .padding()
+                            .background(Color.teal.opacity(0.5))
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                        }
+                        .padding()
+                        .sheet(isPresented: $viewModel.isShowingImagePicker) {
+                            ImagePicker(image: $viewModel.newBusinessImage, isPresented: $viewModel.isShowingImagePicker, didSelectImage: viewModel.imagePickerDidSelectImage)
+                        }
+                        
+                        
+                        
+                        //delete business button
+                        if let businessID = SessionManager.shared.ownedBusiness?.businessID{
+                            DeleteButton(type: "Business", id: businessID)
+                        }
+                        
+                    }
+                    .cornerRadius(10)
+                    .padding(.vertical, 5)
             }
             
+            
+            
+            
             Button(action: {
-                viewModel.updateBusiness()
+                updateBusiness()
             }) {
                 Text("Update Business")
                     .foregroundColor(.white)
@@ -109,8 +141,21 @@ struct UpdateBusinessView: View {
         }
         .padding()
         .background(Color.white.opacity(0.2))
+        .onAppear {
+            sessionManager.fetchBusinessImage()
+        }
     }
-}
+        func updateBusiness() {
+            viewModel.updateBusiness() { isSuccess in
+                if isSuccess {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        }
+    }
+
+
+
 
 private func deleteBusiness(){
     //nothing lol

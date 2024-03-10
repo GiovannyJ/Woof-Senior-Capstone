@@ -10,6 +10,7 @@ import SwiftUI
 struct UpdateEventView: View {
     @ObservedObject var viewModel: UpdateEventViewModel
     @State private var eventDate: Date // State variable to hold the selected date
+    @Environment(\.presentationMode) private var presentationMode
     
     init(event: Event) {
         self.viewModel = UpdateEventViewModel(event: event)
@@ -48,7 +49,39 @@ struct UpdateEventView: View {
                         Text("Large Pets").tag("large")
                     }
                     .pickerStyle(SegmentedPickerStyle())
+                    
+                    if let imageData = viewModel.imageData,
+                       let uiImage = UIImage(data: imageData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200, height: 200)
+                    }
+                    
+                    Button(action: {
+                        viewModel.selectEventPicture()
+                    }) {
+                        HStack {
+                            Text("Change Event Picture")
+                            if let newProfileImage = viewModel.newEventImage {
+                                Image(uiImage: newProfileImage)
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Circle())
+                            }
+                        }
+                        .padding()
+                        .background(Color.teal.opacity(0.5))
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                    .padding()
+                    .sheet(isPresented: $viewModel.isShowingImagePicker) {
+                        ImagePicker(image: $viewModel.newEventImage, isPresented: $viewModel.isShowingImagePicker, didSelectImage: viewModel.imagePickerDidSelectImage)
+                    }
                 }
+                
+                
                 
                 DeleteButton(type: "Event", id: viewModel.event.eventID)
                     .frame(maxWidth: .infinity)
@@ -72,6 +105,9 @@ struct UpdateEventView: View {
         .padding()
         .navigationTitle("Update Event")
         .background(Color.orange.opacity(0.2))
+        .onAppear(){
+            viewModel.fetchEventImage()
+        }
     }
 }
 

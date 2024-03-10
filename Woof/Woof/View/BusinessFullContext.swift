@@ -30,7 +30,6 @@ struct ReviewsView: View {
 }
 
 struct BusinessFullContext: View {
-//    let viewModel: BusinessReviewsViewModel
     @ObservedObject var viewModel: BusinessReviewsViewModel
     @State private var userReview: String = ""
     @State private var userRating: Int = 1 // Default rating
@@ -41,8 +40,6 @@ struct BusinessFullContext: View {
         self.reviews = viewModel.reviews // Initialize reviews with initial data
         viewModel.fetchBusinessImage()
     }
-    
-    
     
     
     var body: some View {
@@ -95,18 +92,34 @@ struct BusinessFullContext: View {
                     }
                 }
                 
-                Button(action: {
-                    viewModel.saveBusiness()
-                }) {
-                    Text("Save Business")
-                        .foregroundColor(.teal)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.teal.opacity(0.1))
-                        .cornerRadius(8)
-                        .fontWeight(.heavy)
+                if let business = SessionManager.shared.ownedBusiness,
+                   SessionManager.shared.savedBusinesses?.contains(where: { $0.businessinfo.businessID == business.businessID }) == true {
+                    Button(action: {
+                                        
+                                    }) {
+                                        Text("Unsave Business")
+                                            .foregroundColor(.red)
+                                            .padding()
+                                            .frame(maxWidth: .infinity)
+                                            .background(Color.gray.opacity(0.1))
+                                            .cornerRadius(8)
+                                            .fontWeight(.heavy)
+                                    }
+                                    .padding()
+                } else {
+                    Button(action: {
+                        viewModel.saveBusiness()
+                    }) {
+                        Text("Save Business")
+                            .foregroundColor(.teal)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.teal.opacity(0.1))
+                            .cornerRadius(8)
+                            .fontWeight(.heavy)
+                    }
+                    .padding()
                 }
-                .padding()
 
                 // User's review section
                 Section(header: Text("Your Review")

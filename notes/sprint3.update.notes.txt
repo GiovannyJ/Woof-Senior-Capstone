@@ -42,14 +42,15 @@ need to work on:
     -business DONE
 
 -update image: workflow(upload image -> get img info -> update prev thing with new image id -> delete old image?)
-    -profile
-    -business
-    -event
+    -profile DONE
+    -business DONE MAKE SURE TO INVALIDATE CACHE AFTER REQUEST IS MADE IN BACKEND
+    -event DONE
     -review
 
 -delete functionality
-    -account DONE
+    -account DONE NEED TO INVALIDATE CACHE
     -saved business
-    -event
-    -business
-    -review
+    -event attendance
+    -event DONE NEED TO INVALIDATE CACHE
+    -business DONE NEED TO INVALIDATE CACHE
+    -review DONE NEED TO INVALIDATE CACHE

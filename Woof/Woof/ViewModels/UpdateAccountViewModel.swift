@@ -17,8 +17,27 @@ class UpdateAccountViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isShowingImagePicker = false
     @ObservedObject var sessionManager = SessionManager.shared
-
+    
     var didSelectImage: ((UIImage?) -> Void)?
+    var imageUploader = ImageUploader()
+
+    
+    func uploadProfileImage(completion: @escaping (Result<Int, Error>) -> Void) {
+        guard let image = newProfileImage else {
+            return
+        }
+        
+        imageUploader.uploadImage(image: image, type: "profile") { result in
+            switch result {
+            case .success(let imgID):
+                completion(.success(imgID))
+            case .failure(let error):
+                print("Error uploading profile image:", error)
+                completion(.failure(error))
+            }
+        }
+    }
+
 
     func updateAccount(completion: @escaping (Bool) -> Void) {
         guard let currentUserID = sessionManager.currentUser?.userID else {
@@ -27,64 +46,56 @@ class UpdateAccountViewModel: ObservableObject {
             return
         }
         
-        // Construct the URL for the update request
-        guard let url = URL(string: "http://localhost:8080/users") else {
-            errorMessage = "Invalid URL"
-            completion(false)
-            return
-        }
-        
-        // Prepare the JSON body
-        var updateData: [String: Any] = [
-            "tablename": "user",
-            "columns_old": ["userid"],
-            "values_old": [currentUserID]
-        ]
-        
-        // Conditionally add username to the JSON body
-        if !newUsername.isEmpty {
-            updateData["columns_new"] = ["username"]
-            updateData["values_new"] = [newUsername]
-        }
-
-        // Conditionally add email to the JSON body
-        if !newEmail.isEmpty {
-            if let columns = updateData["columns_new"] as? [String], let values = updateData["values_new"] as? [String] {
-                updateData["columns_new"] = columns + ["email"]
-                updateData["values_new"] = values + [newEmail]
-            } else {
-                updateData["columns_new"] = ["email"]
-                updateData["values_new"] = [newEmail]
-            }
-        }
-
-        
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: updateData)
-            // Prepare the URL request
-            var request = URLRequest(url: url)
-            request.httpMethod = "PATCH"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = jsonData
-            
-            // Perform the request
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data, error == nil else {
-                    self.errorMessage = "Error: \(error?.localizedDescription ?? "Unknown error")"
+        // Check if a new profile image exists
+        if let newProfileImage = newProfileImage {
+            // Upload the profile image
+            uploadProfileImage { result in
+                switch result {
+                case .success(let imgID):
+                    // Include the imgID in the updateData JSON body
+                    var updateData: [String: Any] = [
+                        "tablename": "user",
+                        "columns_old": ["userID"],
+                        "values_old": [currentUserID],
+                        "columns_new": ["username", "email", "imgID"],
+                        "values_new": [self.newUsername, self.newEmail, imgID]
+                    ]
+                    
+                    // Perform the PATCH request
+                    self.performPatchRequest(with: updateData, userID: currentUserID, completion: completion)
+                case .failure(let error):
+                    print("Error uploading profile image:", error)
                     completion(false)
-                    return
                 }
-                
-                // Parse the response
-                self.fetchUpdatedUserInfo(userID: currentUserID) { success in
-                    completion(success)
-                }
-            }.resume()
-        } catch {
-            errorMessage = "Error encoding JSON data: \(error)"
-            completion(false)
+            }
+        } else {
+            // No new profile image, perform the PATCH request directly
+            var updateData: [String: Any] = [
+                "tablename": "user",
+                "columns_old": ["userID"],
+                "values_old": [currentUserID],
+                "columns_new": [],
+                "values_new": []
+            ]
+            
+            // Conditionally add username to the JSON body
+            if !newUsername.isEmpty {
+                updateData["columns_new"] = (updateData["columns_new"] as? [String] ?? []) + ["username"]
+                updateData["values_new"] = (updateData["values_new"] as? [String] ?? []) + [newUsername]
+            }
+
+            // Conditionally add email to the JSON body
+            if !newEmail.isEmpty {
+                updateData["columns_new"] = (updateData["columns_new"] as? [String] ?? []) + ["email"]
+                updateData["values_new"] = (updateData["values_new"] as? [String] ?? []) + [newEmail]
+            }
+
+            // Perform the PATCH request
+            performPatchRequest(with: updateData, userID: currentUserID, completion: completion)
         }
     }
+
+
 
 
     func fetchUpdatedUserInfo(userID: Int, completion: @escaping (Bool) -> Void) {
@@ -110,6 +121,7 @@ class UpdateAccountViewModel: ObservableObject {
                     if let updatedUser = updatedUsers.first {
                         // Update the session manager's current user
                         self.sessionManager.currentUser = updatedUser
+                        self.sessionManager.fetchProfileImage()
                         completion(true)
                     } else {
                         self.errorMessage = "No user found with the specified ID"
@@ -121,6 +133,41 @@ class UpdateAccountViewModel: ObservableObject {
                 }
             }
         }.resume()
+    }
+    
+    func performPatchRequest(with updateData: [String: Any], userID: Int, completion: @escaping (Bool) -> Void) {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: updateData)
+            // Prepare the URL for the update request
+            guard let url = URL(string: "http://localhost:8080/users") else {
+                errorMessage = "Invalid URL"
+                completion(false)
+                return
+            }
+            
+            // Prepare the URL request
+            var request = URLRequest(url: url)
+            request.httpMethod = "PATCH"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = jsonData
+            
+            // Perform the request
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {
+                    self.errorMessage = "Error: \(error?.localizedDescription ?? "Unknown error")"
+                    completion(false)
+                    return
+                }
+                
+                // Parse the response
+                self.fetchUpdatedUserInfo(userID: userID) { success in
+                    completion(success)
+                }
+            }.resume()
+        } catch {
+            errorMessage = "Error encoding JSON data: \(error)"
+            completion(false)
+        }
     }
 
 

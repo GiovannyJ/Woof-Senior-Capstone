@@ -62,6 +62,9 @@ struct EventFullContextView: View {
                     .font(.headline)
             }
             .disabled(isAttending)
+            if isAttending{
+                UnattendEventButton(event: viewModel.event)
+            }
 
             
             // Display image if available

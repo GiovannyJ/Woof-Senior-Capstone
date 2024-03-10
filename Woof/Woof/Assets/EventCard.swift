@@ -10,6 +10,8 @@ struct EventCard: View {
     let event: Event
     let type: String
     
+    @EnvironmentObject var sessionManager: SessionManager // Injecting SessionManager
+    
     private var buttonColor: Color {
         return type == "disabled" ? .gray : .teal
     }
@@ -46,8 +48,7 @@ struct EventCard: View {
                 Text("Disabled Friendly: \(event.disabledFriendly ? "Yes" : "No")")
                     .font(.subheadline)
                 
-                // Attend Event Button
-                if type != "business" {
+                HStack { // Attend and Unattend Event Buttons
                     Button(action: {
                         attendEvent(event: event)
                         print("Attend Event: \(event.eventName)")
@@ -62,6 +63,10 @@ struct EventCard: View {
                     }
                     .disabled(isDisabled)
                     
+                    if let eventsAttending = sessionManager.eventsAttending,
+                       eventsAttending.contains(where: { $0.eventID == event.eventID }) {
+                        UnattendEventButton(event: event)
+                    }
                 }
             }
             .padding()
@@ -110,11 +115,11 @@ struct EventCard: View {
     }
 }
 
-
 struct EventCard_Preview: PreviewProvider {
     static let testEvent = Event(eventID: 1, attendance_count: 10, businessID: 1, contactInfo: "100-200-2020", dataLocation: "internal", disabledFriendly: true, eventDate: "2024-03-06", eventDescription: "This is a test event with test data and whatnot", eventName: "test event", imgID: nil, leashPolicy: true, location: "1800 Test Street", petSizePref: "small", geolocation: "thisplace")
     
     static var previews: some View {
         EventCard(event: testEvent, type: "disabled")
+            .environmentObject(SessionManager.shared)
     }
 }
