@@ -109,3 +109,9 @@ struct BusinessReviewInfo: Decodable{
     let userinfo: User
     let reviewinfo: Review
 }
+
+//struct Location_MapAPI: Identifiable {
+//    let id = UUID()
+//    let name: String
+//    let coordinate: CLLocationCoordinate2D
+//}

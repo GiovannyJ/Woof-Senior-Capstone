@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-struct Location: Identifiable {
+struct Location_MapAPI: Identifiable {
     let id = UUID()
     let name: String
     let coordinate: CLLocationCoordinate2D
@@ -18,7 +18,7 @@ class MapAPI: ObservableObject {
     public let geocoder = CLGeocoder()
     
     @Published var region: MKCoordinateRegion
-    @Published var locations: [Location] = []
+    @Published var locations: [Location_MapAPI] = []
     
     init() {
         self.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 40.722200, longitude: -73.651110), span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
@@ -46,7 +46,7 @@ class MapAPI: ObservableObject {
                 }
                 
                 // Insert the full address into the locations array
-                self.locations.insert(Location(name: fullAddress, coordinate: userLocation.coordinate), at: 0)
+                self.locations.insert(Location_MapAPI(name: fullAddress, coordinate: userLocation.coordinate), at: 0)
             }
         }
     }
@@ -69,7 +69,7 @@ class MapAPI: ObservableObject {
                 self.region = MKCoordinateRegion(center: coordinates, span: MKCoordinateSpan(latitudeDelta: delta, longitudeDelta: delta))
                 // Removing previous location and adding the new location with the provided address
                 self.locations.removeAll()
-                self.locations.append(Location(name: address, coordinate: coordinates))
+                self.locations.append(Location_MapAPI(name: address, coordinate: coordinates))
             }
         }
     }

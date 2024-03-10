@@ -22,6 +22,9 @@ class SessionManager: ObservableObject {
     @Published var profileImage: UIImage?
     @Published var businessImage: UIImage?
     
+    @Published var locationManager: LocationManager?
+    @Published var isLocating: Bool = false
+    
     static let shared = SessionManager()
     
 //    private init() {

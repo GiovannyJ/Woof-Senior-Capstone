@@ -1,0 +1,11 @@
+Backend:
+    -3rd party API data collection
+    -adjusting API if bugs
+
+Frontend:
+    -design
+    -fix map: implement into appropriate places
+    -fixing logical inconsistencies
+
+Group:
+    -be swag

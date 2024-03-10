@@ -48,7 +48,7 @@ struct LocationRequestViewModel: View {
 
 
 // This struct provides a preview of the LocationRequestViewModel.
-struct LocationRequestView_Previews: PreviewProvider {
+struct LocationRequestViewModel_Previews: PreviewProvider {
     static var previews: some View {
         LocationRequestViewModel() // Shows the LocationRequestView in the preview.
     }

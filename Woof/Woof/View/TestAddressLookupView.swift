@@ -3,55 +3,55 @@ import CoreLocation
 import MapKit
 import Combine
 
-class CompleterDelegate: NSObject, MKLocalSearchCompleterDelegate {
-    var resultsHandler: ([AddressCompletion]) -> Void
-    
-    init(resultsHandler: @escaping ([AddressCompletion]) -> Void) {
-        self.resultsHandler = resultsHandler
-    }
-    
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        var results: [AddressCompletion] = []
-        
-        let group = DispatchGroup()
-        
-        completer.results.prefix(5).forEach { completion in // Limit to first 5 completions
-            group.enter()
-            
-            let searchRequest = MKLocalSearch.Request(completion: completion)
-            let search = MKLocalSearch(request: searchRequest)
-            search.start { response, error in
-                defer {
-                    group.leave()
-                }
-                
-                guard let response = response, let mapItem = response.mapItems.first else { return }
-                
-                let title = completion.title
-                var subtitle = ""
-                
-                // Construct subtitle with address components
-                if let addressDictionary = mapItem.placemark.addressDictionary {
-                    if let addressLines = addressDictionary["FormattedAddressLines"] as? [String] {
-                        subtitle = addressLines.joined(separator: ", ")
-                    }
-                }
-                
-                let addressCompletion = AddressCompletion(title: title, subtitle: subtitle)
-                results.append(addressCompletion)
-            }
-        }
-        
-        group.notify(queue: .main) {
-            self.resultsHandler(results)
-        }
-    }
-}
+//class CompleterDelegate: NSObject, MKLocalSearchCompleterDelegate {
+//    var resultsHandler: ([AddressCompletion]) -> Void
+//    
+//    init(resultsHandler: @escaping ([AddressCompletion]) -> Void) {
+//        self.resultsHandler = resultsHandler
+//    }
+//    
+//    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+//        var results: [AddressCompletion] = []
+//        
+//        let group = DispatchGroup()
+//        
+//        completer.results.prefix(5).forEach { completion in // Limit to first 5 completions
+//            group.enter()
+//            
+//            let searchRequest = MKLocalSearch.Request(completion: completion)
+//            let search = MKLocalSearch(request: searchRequest)
+//            search.start { response, error in
+//                defer {
+//                    group.leave()
+//                }
+//                
+//                guard let response = response, let mapItem = response.mapItems.first else { return }
+//                
+//                let title = completion.title
+//                var subtitle = ""
+//                
+//                // Construct subtitle with address components
+//                if let addressDictionary = mapItem.placemark.addressDictionary {
+//                    if let addressLines = addressDictionary["FormattedAddressLines"] as? [String] {
+//                        subtitle = addressLines.joined(separator: ", ")
+//                    }
+//                }
+//                
+//                let addressCompletion = AddressCompletion(title: title, subtitle: subtitle)
+//                results.append(addressCompletion)
+//            }
+//        }
+//        
+//        group.notify(queue: .main) {
+//            self.resultsHandler(results)
+//        }
+//    }
+//}
 
-struct AddressCompletion: Hashable {
-    var title: String
-    var subtitle: String
-}
+//struct AddressCompletion: Hashable {
+//    var title: String
+//    var subtitle: String
+//}
 
 
 struct TestAddressLookupView: View {
@@ -70,7 +70,7 @@ struct TestAddressLookupView: View {
                 }
                 .onAppear {
                     if let userLocation = locationManager.userLocation {
-                        mapAPI.locations.append(Location(name: "Current Location", coordinate: userLocation.coordinate))
+                        mapAPI.locations.append(Location_MapAPI(name: "Current Location", coordinate: userLocation.coordinate))
                         mapAPI.region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
                     }
                 }
