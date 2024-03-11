@@ -67,7 +67,7 @@ func API(mode string){
 	router.DELETE("businesses", Delete)
 	router.DELETE("reviews", Delete)
 	router.DELETE("events", Delete)
-	router.DELETE("savedbusinesses", Delete)
+	router.DELETE("savedbusinesses", DeleteSavedBusiness)
 	router.DELETE("attendance", DeleteAttendance) //* NEW
 
 	

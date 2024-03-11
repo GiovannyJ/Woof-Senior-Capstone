@@ -1,5 +1,4 @@
 {
-    "tablename": "savedBusinesses",
-    "column": "saveID",
-    "id": 3
+    "userID": 77,
+    "businessID": 2
 }

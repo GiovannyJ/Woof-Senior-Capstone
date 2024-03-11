@@ -996,3 +996,21 @@ func DeleteAttendance(c *gin.Context) {
 		return
 	}
 }
+
+func DeleteSavedBusiness(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+
+	var delete savedBusiness
+
+	if err := c.BindJSON(&delete); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	err := db.DeleteSavedBusinessData(delete)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+}
+

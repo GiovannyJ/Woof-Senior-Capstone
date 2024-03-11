@@ -1008,6 +1008,12 @@ func DeleteAttendanceData(data attendance) error {
 	return nil
 }
 
+func DeleteSavedBusinessData(data savedBusiness) error{
+	delete_query := fmt.Sprintf("DELETE FROM savedBusinesses WHERE userID=%d and businessID=%d", data.UserID, data.BusinessID)
+	execute(delete_query)
+	return nil
+}
+
 //*-------------------------------------------------------AUTH METHODS-------------------------------------------------------
 
 /*
