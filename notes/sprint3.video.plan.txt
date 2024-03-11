@@ -1,22 +1,51 @@
 new features:
 
--update account: pics too
--update event: pics too
--update business: pics too 
+DONE -update account: pics too
+DONE -update event: pics too
+DONE -update business: pics too 
 
-SCRRENSHOT -regular user view/ business user view/registered business view
+DONE SCRRENSHOT -regular user view/ business user view/registered business view
 
--upload profile image
--upload business image
--upload event image
--upload review image
+DONE -upload profile image
+DONE -upload business image
+DONE -upload event image
+DONE -upload review image
 
--load business image/load review image
--load event image
+DONE -load business image/load review image
+DONE -load event image
 
--delete account
--delete event
--delete review
--delete business
+Screenshot:
+DONE -delete account
+DONE -delete event
+DONE -delete review
+DONE -delete business
 
-total gifs: 14 try to make around 10 seconds each on loop
+
+order: 
+slide1:
+    regular_user_view
+    business_user_view
+    business_registered_view
+
+slide2:
+    register_acc_w_img
+
+slide 3:
+    update_account
+
+slide4:
+    events_load_img
+    upload_review_load_busi_review
+
+slide5:
+    upload_update_event_img
+
+slide6:
+    upload_business_img
+    update_business_img
+
+slide7:
+    delete_review
+    delete_event
+    delete_business
+    delete_account

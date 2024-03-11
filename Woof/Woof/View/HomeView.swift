@@ -116,33 +116,34 @@ struct HomeView: View {
                             }
                         }
                     }
-                    NavigationLink(destination: TestAddressLookupView()) {
-                        Text("Test address look up")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    NavigationLink(destination: TestMapView()) {
-                        Text("Test map view")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    NavigationLink(destination: LocationRequestView()) {
-                        Text("Test location request")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
+                    
+//                    NavigationLink(destination: TestAddressLookupView()) {
+//                        Text("Test address look up")
+//                            .fontWeight(.heavy)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                    }
+//                    NavigationLink(destination: TestMapView()) {
+//                        Text("Test map view")
+//                            .fontWeight(.heavy)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                    }
+//                    NavigationLink(destination: LocationRequestView()) {
+//                        Text("Test location request")
+//                            .fontWeight(.heavy)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                    }
                     
                     Spacer()
                 }
