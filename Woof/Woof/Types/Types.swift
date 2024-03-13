@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 struct User: Decodable {
     let userID: Int
@@ -110,8 +111,18 @@ struct BusinessReviewInfo: Decodable{
     let reviewinfo: Review
 }
 
-//struct Location_MapAPI: Identifiable {
-//    let id = UUID()
-//    let name: String
-//    let coordinate: CLLocationCoordinate2D
-//}
+struct Location_MapAPI: Identifiable {
+    let id = UUID()
+    let name: String
+    let coordinate: CLLocationCoordinate2D
+}
+
+struct Location {
+    var name: String
+    var coordinate: CLLocationCoordinate2D
+}
+
+struct AddressCompletion: Hashable {
+    var title: String
+    var subtitle: String
+}
