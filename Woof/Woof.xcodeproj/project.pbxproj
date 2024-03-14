@@ -19,7 +19,7 @@
 		3FD4A42E2B8821B900E92B07 /* BusinessFullContextViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A42D2B8821B900E92B07 /* BusinessFullContextViewModel.swift */; };
 		3FD4A4302B88221500E92B07 /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A42F2B88221500E92B07 /* CreateEventView.swift */; };
 		3FD4A4322B88225500E92B07 /* RegisterBusinessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A4312B88225500E92B07 /* RegisterBusinessView.swift */; };
-		3FD4A4342B8822B900E92B07 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A4332B8822B900E92B07 /* HomeView.swift */; };
+		3FD4A4342B8822B900E92B07 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A4332B8822B900E92B07 /* MapView.swift */; };
 		3FD4A4362B8822FC00E92B07 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A4352B8822FC00E92B07 /* ProfileView.swift */; };
 		3FD4A4382B88234D00E92B07 /* RegisterAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A4372B88234D00E92B07 /* RegisterAccountView.swift */; };
 		3FD4A43A2B88238600E92B07 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4A4392B88238600E92B07 /* SearchBar.swift */; };
@@ -35,18 +35,11 @@
 		3FD97F652B9A357F00A53464 /* DeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F642B9A357F00A53464 /* DeleteButton.swift */; };
 		3FD97F672B9B9AB900A53464 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F662B9B9AB800A53464 /* ImageUploader.swift */; };
 		3FD97F6B2B9E478D00A53464 /* UnattendEventButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F6A2B9E478D00A53464 /* UnattendEventButton.swift */; };
-		3FD97F892B9E55B000A53464 /* MapAssets in Resources */ = {isa = PBXBuildFile; fileRef = 3FD97F882B9E55B000A53464 /* MapAssets */; };
-		3FD97F8B2B9E55BD00A53464 /* LocationRequestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F8A2B9E55BD00A53464 /* LocationRequestViewModel.swift */; };
-		3FD97F8E2B9E562800A53464 /* TestAddressLookupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F8C2B9E562800A53464 /* TestAddressLookupView.swift */; };
-		3FD97F8F2B9E562800A53464 /* TestMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F8D2B9E562800A53464 /* TestMapView.swift */; };
-		3FD97F922B9E566800A53464 /* CompleterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F902B9E566800A53464 /* CompleterDelegate.swift */; };
+		3FD97F8B2B9E55BD00A53464 /* LocationRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F8A2B9E55BD00A53464 /* LocationRequestView.swift */; };
+		3FD97F8E2B9E562800A53464 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F8C2B9E562800A53464 /* ContentView.swift */; };
 		3FD97F932B9E566800A53464 /* Geocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F912B9E566800A53464 /* Geocoding.swift */; };
 		3FD97F962B9E568900A53464 /* AddressFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F942B9E568900A53464 /* AddressFinder.swift */; };
 		3FD97F972B9E568900A53464 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F952B9E568900A53464 /* LocationManager.swift */; };
-		3FD97F9F2B9E572200A53464 /* AddressCompletionAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F9D2B9E572100A53464 /* AddressCompletionAsset.swift */; };
-		3FD97FA42B9E574300A53464 /* AddressSearchAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97FA32B9E574300A53464 /* AddressSearchAsset.swift */; };
-		3FD97FA82B9E575600A53464 /* LocationRequestButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97FA72B9E575500A53464 /* LocationRequestButton.swift */; };
-		3FD97FAA2B9E575700A53464 /* MapAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97FA92B9E575700A53464 /* MapAsset.swift */; };
 		3FE90D572B8829F100FCCF54 /* archive_Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4D2B8829F100FCCF54 /* archive_Register.swift */; };
 		3FE90D582B8829F100FCCF54 /* archive_Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4E2B8829F100FCCF54 /* archive_Home.swift */; };
 		3FE90D592B8829F100FCCF54 /* archive_BusinessReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D4F2B8829F100FCCF54 /* archive_BusinessReviews.swift */; };
@@ -64,6 +57,7 @@
 		3FE90D6A2B883F7F00FCCF54 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D692B883F7F00FCCF54 /* ProfileViewModel.swift */; };
 		3FE90D6C2B8840B600FCCF54 /* LocalEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D6B2B8840B600FCCF54 /* LocalEventsViewModel.swift */; };
 		3FE90D6E2B88412000FCCF54 /* CreateNewEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D6D2B88412000FCCF54 /* CreateNewEventViewModel.swift */; };
+		5BDB24852BA0B29700CD5042 /* AddressFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */; };
 		C03488762B9608EF00D4AD91 /* updateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488752B9608EF00D4AD91 /* updateAccount.swift */; };
 		C03488782B9609D600D4AD91 /* updateBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488772B9609D600D4AD91 /* updateBusiness.swift */; };
 		C034887A2B960B0400D4AD91 /* updateEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488792B960B0400D4AD91 /* updateEvent.swift */; };
@@ -106,7 +100,7 @@
 		3FD4A42D2B8821B900E92B07 /* BusinessFullContextViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessFullContextViewModel.swift; sourceTree = "<group>"; };
 		3FD4A42F2B88221500E92B07 /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
 		3FD4A4312B88225500E92B07 /* RegisterBusinessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterBusinessView.swift; sourceTree = "<group>"; };
-		3FD4A4332B8822B900E92B07 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		3FD4A4332B8822B900E92B07 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		3FD4A4352B8822FC00E92B07 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3FD4A4372B88234D00E92B07 /* RegisterAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterAccountView.swift; sourceTree = "<group>"; };
 		3FD4A4392B88238600E92B07 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -121,18 +115,11 @@
 		3FD97F642B9A357F00A53464 /* DeleteButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteButton.swift; sourceTree = "<group>"; };
 		3FD97F662B9B9AB800A53464 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		3FD97F6A2B9E478D00A53464 /* UnattendEventButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnattendEventButton.swift; sourceTree = "<group>"; };
-		3FD97F882B9E55B000A53464 /* MapAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MapAssets; sourceTree = "<group>"; };
-		3FD97F8A2B9E55BD00A53464 /* LocationRequestViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationRequestViewModel.swift; sourceTree = "<group>"; };
-		3FD97F8C2B9E562800A53464 /* TestAddressLookupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAddressLookupView.swift; sourceTree = "<group>"; };
-		3FD97F8D2B9E562800A53464 /* TestMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestMapView.swift; sourceTree = "<group>"; };
-		3FD97F902B9E566800A53464 /* CompleterDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleterDelegate.swift; sourceTree = "<group>"; };
+		3FD97F8A2B9E55BD00A53464 /* LocationRequestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationRequestView.swift; sourceTree = "<group>"; };
+		3FD97F8C2B9E562800A53464 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3FD97F912B9E566800A53464 /* Geocoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geocoding.swift; sourceTree = "<group>"; };
 		3FD97F942B9E568900A53464 /* AddressFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressFinder.swift; sourceTree = "<group>"; };
 		3FD97F952B9E568900A53464 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		3FD97F9D2B9E572100A53464 /* AddressCompletionAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressCompletionAsset.swift; sourceTree = "<group>"; };
-		3FD97FA32B9E574300A53464 /* AddressSearchAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSearchAsset.swift; sourceTree = "<group>"; };
-		3FD97FA72B9E575500A53464 /* LocationRequestButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRequestButton.swift; sourceTree = "<group>"; };
-		3FD97FA92B9E575700A53464 /* MapAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAsset.swift; sourceTree = "<group>"; };
 		3FE90D4D2B8829F100FCCF54 /* archive_Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_Register.swift; sourceTree = "<group>"; };
 		3FE90D4E2B8829F100FCCF54 /* archive_Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_Home.swift; sourceTree = "<group>"; };
 		3FE90D4F2B8829F100FCCF54 /* archive_BusinessReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = archive_BusinessReviews.swift; sourceTree = "<group>"; };
@@ -150,6 +137,8 @@
 		3FE90D692B883F7F00FCCF54 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		3FE90D6B2B8840B600FCCF54 /* LocalEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalEventsViewModel.swift; sourceTree = "<group>"; };
 		3FE90D6D2B88412000FCCF54 /* CreateNewEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewEventViewModel.swift; sourceTree = "<group>"; };
+		5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressFinderView.swift; sourceTree = "<group>"; };
+		5BDB24862BA0D81400CD5042 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C03488752B9608EF00D4AD91 /* updateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateAccount.swift; sourceTree = "<group>"; };
 		C03488772B9609D600D4AD91 /* updateBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateBusiness.swift; sourceTree = "<group>"; };
 		C03488792B960B0400D4AD91 /* updateEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateEvent.swift; sourceTree = "<group>"; };
@@ -193,7 +182,6 @@
 			isa = PBXGroup;
 			children = (
 				3FD97F9A2B9E571100A53464 /* MapAsset */,
-				3FD97F882B9E55B000A53464 /* MapAssets */,
 				3FD97F642B9A357F00A53464 /* DeleteButton.swift */,
 				3FD4A4272B8820C300E92B07 /* EventCard.swift */,
 				3FD4A4292B88214900E92B07 /* ReviewCard.swift */,
@@ -216,10 +204,6 @@
 		3FBB50FC2B87D1F500F5175C /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				3FD97F942B9E568900A53464 /* AddressFinder.swift */,
-				3FD97F952B9E568900A53464 /* LocationManager.swift */,
-				3FD97F902B9E566800A53464 /* CompleterDelegate.swift */,
-				3FD97F912B9E566800A53464 /* Geocoding.swift */,
 				3F514F972B70A25B00C1DEE7 /* SessionManager.swift */,
 				3FD97F662B9B9AB800A53464 /* ImageUploader.swift */,
 			);
@@ -229,7 +213,6 @@
 		3FD4A41E2B881FC000E92B07 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				3FD97F8A2B9E55BD00A53464 /* LocationRequestViewModel.swift */,
 				3FD97F602B99480E00A53464 /* UpdateEventViewModel.swift */,
 				3FBF9E0F2B749A03000D584B /* uploads */,
 				3FD4A42D2B8821B900E92B07 /* BusinessFullContextViewModel.swift */,
@@ -250,14 +233,15 @@
 		3FD4A4222B88206A00E92B07 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				3FD97F8C2B9E562800A53464 /* TestAddressLookupView.swift */,
-				3FD97F8D2B9E562800A53464 /* TestMapView.swift */,
+				3FD4A4332B8822B900E92B07 /* MapView.swift */,
+				3FD97F8A2B9E55BD00A53464 /* LocationRequestView.swift */,
+				3FD97F8C2B9E562800A53464 /* ContentView.swift */,
+				5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */,
 				3FD4A4232B88206E00E92B07 /* EventFullContextView.swift */,
 				3FD4A4252B88208100E92B07 /* LocalEventsView.swift */,
 				3FD4A42B2B88217C00E92B07 /* BusinessFullContext.swift */,
 				3FD4A42F2B88221500E92B07 /* CreateEventView.swift */,
 				3FD4A4312B88225500E92B07 /* RegisterBusinessView.swift */,
-				3FD4A4332B8822B900E92B07 /* HomeView.swift */,
 				3FD4A4352B8822FC00E92B07 /* ProfileView.swift */,
 				C03488752B9608EF00D4AD91 /* updateAccount.swift */,
 				C03488772B9609D600D4AD91 /* updateBusiness.swift */,
@@ -291,10 +275,9 @@
 		3FD97F9A2B9E571100A53464 /* MapAsset */ = {
 			isa = PBXGroup;
 			children = (
-				3FD97F9D2B9E572100A53464 /* AddressCompletionAsset.swift */,
-				3FD97FA32B9E574300A53464 /* AddressSearchAsset.swift */,
-				3FD97FA72B9E575500A53464 /* LocationRequestButton.swift */,
-				3FD97FA92B9E575700A53464 /* MapAsset.swift */,
+				3FD97F942B9E568900A53464 /* AddressFinder.swift */,
+				3FD97F912B9E566800A53464 /* Geocoding.swift */,
+				3FD97F952B9E568900A53464 /* LocationManager.swift */,
 			);
 			path = MapAsset;
 			sourceTree = "<group>";
@@ -322,6 +305,7 @@
 		C0F297822B4851C40096E053 /* Woof */ = {
 			isa = PBXGroup;
 			children = (
+				5BDB24862BA0D81400CD5042 /* Info.plist */,
 				3FD4A4422B88294200E92B07 /* archive */,
 				3FD4A4222B88206A00E92B07 /* View */,
 				3FD4A41E2B881FC000E92B07 /* ViewModels */,
@@ -471,7 +455,6 @@
 			files = (
 				3FBF9E102B749A03000D584B /* uploads in Resources */,
 				C0F2978B2B4851C70096E053 /* Preview Assets.xcassets in Resources */,
-				3FD97F892B9E55B000A53464 /* MapAssets in Resources */,
 				C0F297882B4851C70096E053 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -502,7 +485,6 @@
 				3FE90D5C2B8829F100FCCF54 /* archive_Profile.swift in Sources */,
 				3FD97F5C2B993CA600A53464 /* UpdateBusinessViewModel.swift in Sources */,
 				3FD97F5E2B99444000A53464 /* UpdateEventsListView.swift in Sources */,
-				3FD97FAA2B9E575700A53464 /* MapAsset.swift in Sources */,
 				3FD97F6B2B9E478D00A53464 /* UnattendEventButton.swift in Sources */,
 				3FD97F5A2B9617F400A53464 /* ImagePicker.swift in Sources */,
 				3FD4A4402B8823F500E92B07 /* LoginView.swift in Sources */,
@@ -522,7 +504,6 @@
 				3FCE1E402B7339B200C9E182 /* Types.swift in Sources */,
 				3FE90D5E2B8829F100FCCF54 /* archive_Search.swift in Sources */,
 				3FE90D5B2B8829F100FCCF54 /* archive_LocalEvents.swift in Sources */,
-				3FD97F922B9E566800A53464 /* CompleterDelegate.swift in Sources */,
 				3FD4A4362B8822FC00E92B07 /* ProfileView.swift in Sources */,
 				3FE90D582B8829F100FCCF54 /* archive_Home.swift in Sources */,
 				3FD4A4242B88206E00E92B07 /* EventFullContextView.swift in Sources */,
@@ -532,27 +513,24 @@
 				3FE90D622B882A7900FCCF54 /* RegisterBusinessViewModel.swift in Sources */,
 				3FD4A42C2B88217C00E92B07 /* BusinessFullContext.swift in Sources */,
 				3FD4A4382B88234D00E92B07 /* RegisterAccountView.swift in Sources */,
-				3FD97FA82B9E575600A53464 /* LocationRequestButton.swift in Sources */,
 				3FD97F652B9A357F00A53464 /* DeleteButton.swift in Sources */,
 				3F514F982B70A25B00C1DEE7 /* SessionManager.swift in Sources */,
 				C0F297842B4851C40096E053 /* WoofApp.swift in Sources */,
-				3FD97F8B2B9E55BD00A53464 /* LocationRequestViewModel.swift in Sources */,
+				3FD97F8B2B9E55BD00A53464 /* LocationRequestView.swift in Sources */,
 				3FE90D642B88305E00FCCF54 /* RegisterAccountViewModel.swift in Sources */,
 				3FE90D602B8829F100FCCF54 /* archive_login.swift in Sources */,
 				3FD4A4282B8820C300E92B07 /* EventCard.swift in Sources */,
 				3FD4A4262B88208100E92B07 /* LocalEventsView.swift in Sources */,
 				3FD4A4322B88225500E92B07 /* RegisterBusinessView.swift in Sources */,
-				3FD97F8F2B9E562800A53464 /* TestMapView.swift in Sources */,
-				3FD97F9F2B9E572200A53464 /* AddressCompletionAsset.swift in Sources */,
 				C034887A2B960B0400D4AD91 /* updateEvent.swift in Sources */,
-				3FD4A4342B8822B900E92B07 /* HomeView.swift in Sources */,
+				3FD4A4342B8822B900E92B07 /* MapView.swift in Sources */,
+				5BDB24852BA0B29700CD5042 /* AddressFinderView.swift in Sources */,
 				3FD4A42E2B8821B900E92B07 /* BusinessFullContextViewModel.swift in Sources */,
 				3FD97F972B9E568900A53464 /* LocationManager.swift in Sources */,
 				3FD97F582B96179B00A53464 /* UpdateAccountViewModel.swift in Sources */,
-				3FD97F8E2B9E562800A53464 /* TestAddressLookupView.swift in Sources */,
+				3FD97F8E2B9E562800A53464 /* ContentView.swift in Sources */,
 				3FD4A42A2B88214900E92B07 /* ReviewCard.swift in Sources */,
 				3FD97F932B9E566800A53464 /* Geocoding.swift in Sources */,
-				3FD97FA42B9E574300A53464 /* AddressSearchAsset.swift in Sources */,
 				3FE90D6C2B8840B600FCCF54 /* LocalEventsViewModel.swift in Sources */,
 				3FD4A43C2B8823AC00E92B07 /* BusinessButton.swift in Sources */,
 				3FE90D6A2B883F7F00FCCF54 /* ProfileViewModel.swift in Sources */,
@@ -721,6 +699,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Woof/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Woof/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow access to your location.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -749,6 +729,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Woof/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Woof/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow access to your location.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
