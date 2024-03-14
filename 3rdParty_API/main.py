@@ -8,5 +8,5 @@ if __name__ == '__main__':
         'categories': 'restaurants,bars,businesses,hotel,parks',  # Specify the category of businesses you want to search for
         'limit': 10  # Limit the number of results
     }
-    scrape = YelpScraper("businesses", params)
+    scrape = YelpScraper("events", params)
     scrape.getData()

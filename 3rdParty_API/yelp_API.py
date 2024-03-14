@@ -8,7 +8,11 @@ import models
 class YelpScraper:
     def __init__(self, endpoint, params):
         self.API_KEY = 'BPMNX6-KSFj6M8Yw4BFTGD48QlWenlvwnms89H60vasoEIIhNZ2lqpMjpnnElRZUtBqPV4tgQgwtrYMIY8W0ZYo830fMhmTZbhjymNyp_-EpeE08FG5zmeE7_4HCZXYx'
-        self.ENDPOINT = f"https://api.yelp.com/v3/{endpoint}/search"
+        self.ENDPOINT = ""
+        if endpoint == "business":
+            self.ENDPOINT = f"https://api.yelp.com/v3/{endpoint}/search"
+        elif endpoint == "events":
+            self.ENDPOINT = f"https://api.yelp.com/v3/{endpoint}"
         self.headers = {'Authorization': f'Bearer {self.API_KEY}'}
         self.params = params
         self.data = ""
@@ -26,7 +30,7 @@ class YelpScraper:
             print(data)
             self.data = data
         else:
-            print(f"Error: {response.status_code}")
+            print(f"Error: {response.status_code} {response}")
     
     """
     method to clean the data to our liking
