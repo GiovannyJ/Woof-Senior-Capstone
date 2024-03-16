@@ -1,0 +1,59 @@
+register account:
+    -successful registration does not go back to login page
+
+profile 
+    -pfp not centered
+
+search businesses:
+    -filters and queries not implemented
+    -business button needs to look better
+
+business full context:
+    -when saving business -> does not refresh and show that business is saved
+        refresh session manager
+        refresh page
+    -when leaving a review -> does not refresh to show comment
+    -when deleting review -> does not refresh
+    -if user owns business -> should not be able to save it
+
+events list:
+    -when hitting attend event -> screen goes blank
+    -when deleting attending event -> screen goes blank and does not delete from user saved
+        this is a cache issue as well as session manager
+
+ event full context:
+    -when hitting attend event -> screen goes blank and picture disappears
+    -change style
+
+update profile:
+    -when updating password -> no check to see if old password was correct 
+        make pop up
+    -dont back out when update happens
+
+register business
+    -doesnt back out when business is created
+        make pop up
+    -switch logic so business img session manager update comes after it is uploaded 
+    -no option for dog size preference
+    -should not appear if user owns business already
+
+update events list:
+    -should show message when there are no events to update
+    -should not have attend event button
+
+update business:
+    -business image not synced   
+    -labels for all columns
+    -business image should be rectangle 
+
+create event:
+    -when event is created -> should pop up w message and go back to home view
+
+update event:
+    -should have pop up when event is update and go back to home view
+    -when deleting should sync
+        session manager front end issue 
+
+general:
+    -should add all sizes to pet size preference
+    -should label all columns 
