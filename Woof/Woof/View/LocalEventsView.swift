@@ -22,7 +22,7 @@ struct LocalEventsView: View {
             ScrollView {
                 // MAPVIEW
                 ForEach(viewModel.events, id: \.eventID) { event in
-                    EventCard(event: event, type: eventType(for: event))
+                    EventCardView(viewModel: EventCardViewModel(event: event, isAttending: self.isAttending(for: event), type: self.eventType(for: event)))
                         .padding(.vertical, 8)
                 }
             }
@@ -43,7 +43,15 @@ struct LocalEventsView: View {
             return "local"
         }
     }
+    
+    private func isAttending(for event: Event) -> Bool {
+        guard let eventsAttending = sessionManager.eventsAttending else {
+            return false
+        }
+        return eventsAttending.contains(where: { $0.eventID == event.eventID })
+    }
 }
+
 
 struct LocalEvents_Previews: PreviewProvider {
     static var previews: some View {

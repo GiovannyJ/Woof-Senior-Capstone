@@ -10,6 +10,7 @@ import SwiftUI
 struct ReviewCard: View {
     let review: Review
     @State private var reviewImageData: Data?
+    var onDelete: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -27,7 +28,13 @@ struct ReviewCard: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 200, height: 200)
             }
-            DeleteButton(type: "Review", id: review.reviewID)
+            Button(action: deleteReview) {
+                Text("Delete Review")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.red)
+                    .cornerRadius(8)
+            }
         }
         .padding()
         .background(Color.teal.opacity(0.1))
@@ -80,6 +87,46 @@ struct ReviewCard: View {
             }
         }.resume()
     }
+    
+    private func deleteReview() {
+        let urlString = "http://localhost:8080/reviews"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Create the request body
+        let requestBody: [String: Any] = [
+            "tablename": "reviews",
+            "column": "reviewID",
+            "id": review.reviewID
+        ]
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+        } catch {
+            print("Error encoding request body: \(error)")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
+                print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            if (200...299).contains(httpResponse.statusCode) {
+                print(" deleted successfully")
+            } else {
+                print("Failed to delete")
+            }
+            onDelete()
+        }.resume()
+    }
 }
 
 struct ReviewCard_Previews: PreviewProvider {
@@ -88,6 +135,6 @@ struct ReviewCard_Previews: PreviewProvider {
     static let testReview = Review(reviewID: 1, userID: 1,businessID: 1, rating: 5, comment: "test comment", dateCreated: "1/1/2024", dataLocation: "internal", imgID: img)
     
     static var previews: some View {
-        ReviewCard(review: testReview)
+        ReviewCard(review: testReview, onDelete: {})
     }
 }

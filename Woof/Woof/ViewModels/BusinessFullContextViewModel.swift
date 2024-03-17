@@ -15,6 +15,7 @@ class BusinessReviewsViewModel: ObservableObject {
     
     @Published var newReviewImage: UIImage?
     @Published var isShowingImagePicker = false
+    @Published var isSaved: Bool = false
     
     var didSelectImage: ((UIImage?) -> Void)?
     var imageUploader = ImageUploader()
@@ -26,8 +27,7 @@ class BusinessReviewsViewModel: ObservableObject {
     
     init(business: Business) {
         self.business = business
-//        fetchBusinessImage()
-//        fetchReviews()
+        checkIfBusinessIsSaved()
     }
     
     func fetchBusinessImage() {
@@ -148,10 +148,8 @@ class BusinessReviewsViewModel: ObservableObject {
                        do {
                            let reviews = try JSONDecoder().decode([Review].self, from: responseData)
                            if let reviewsFirst = reviews.first {
-                               // You can now access the first event object
-                               print("First Review ID: \(reviewsFirst.reviewID)")
                                self.uploadReviewImage(reviewID: reviewsFirst.reviewID)
-                               
+                               self.reviews.append(reviewsFirst)
                            }
                        } catch {
                            print("Error decoding event data:", error)
@@ -276,6 +274,11 @@ class BusinessReviewsViewModel: ObservableObject {
                 if httpResponse.statusCode == 201 {
                     print("Business saved successfully")
                     // Show a success popup
+                    SessionManager.shared.fetchSavedBusinesses()
+                    DispatchQueue.main.async {
+                        self.isSaved = true
+                    }
+                    
                 }else if httpResponse.statusCode == 400{
                     print("Business already saved")
                 } else {
@@ -285,4 +288,63 @@ class BusinessReviewsViewModel: ObservableObject {
             }
         }.resume()
     }
+    
+    func deleteSavedBusiness(){    
+        let urlString = "http://localhost:8080/savedbusinesses"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+                // Create the request body
+        if let userID = SessionManager.shared.userID{
+            let requestBody: [String: Int] = [
+                "userID": userID,
+                "businessID": business.businessID
+            ]
+            
+            
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+            } catch {
+                print("Error encoding request body: \(error)")
+                return
+            }
+            
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
+                    print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                    return
+                }
+                
+                if (200...299).contains(httpResponse.statusCode) {
+                    print(" deleted successfully")
+                    SessionManager.shared.fetchSavedBusinesses()
+                    DispatchQueue.main.async {
+                        self.isSaved = false
+                    }
+                } else {
+                    print("Failed to delete")
+                }
+            }.resume()
+        }
+    }
+    
+    func toggleSaveBusiness() {
+        if isSaved {
+            deleteSavedBusiness()
+        } else {
+            saveBusiness()
+        }
+    }
+    
+    func checkIfBusinessIsSaved() {
+            if let savedBusinesses = SessionManager.shared.savedBusinesses {
+                isSaved = savedBusinesses.contains(where: { $0.businessinfo.businessID == business.businessID })
+            }
+        }
 }

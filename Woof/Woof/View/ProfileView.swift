@@ -9,31 +9,28 @@ import SwiftUI
 
 struct ProfileView: View {
     @ObservedObject var viewModel = ProfileViewModel()
-    @ObservedObject  var sessionManager = SessionManager.shared
-
+    @ObservedObject var sessionManager = SessionManager.shared
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            if let profileImage = SessionManager.shared.profileImage {
-                Image(uiImage: profileImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
+        ScrollView {
+            VStack(alignment: .center) {
+                if let profileImage = sessionManager.profileImage {
+                    Image(uiImage: profileImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.black, lineWidth: 2)) // Draw black outline
+                        .padding()
+                } else {
+                    ProgressView() // Show loading indicator while fetching image
+                        .padding()
+                }
+                Text("User Profile")
+                    .font(.largeTitle)
+                    .foregroundColor(.orange)
                     .padding()
-            } else {
-                ProgressView() // Show loading indicator while fetching image
-                    .padding()
-            }
-            Text("User Profile")
-                .font(.largeTitle)
-                .foregroundColor(.orange)
-                .padding()
-            
-            
-            
-            
-            // Display user information, history, saved businesses, and reviews
-            ScrollView {
+                
                 Section(header: Text("User Information")) {
                     Text("Username: \(SessionManager.shared.currentUser?.username ?? "Guest")")
                     Text("Email: \(SessionManager.shared.currentUser?.email ?? "Guest")")
@@ -53,13 +50,13 @@ struct ProfileView: View {
                         }
                     }
                 }
-
+                
                 Section(header: Text("Saved Businesses")) {
                     if let businesses = SessionManager.shared.savedBusinesses {
                         if businesses.isEmpty {
                             Text("No saved businesses.")
                         } else {
-                            ForEach(businesses, id: \.businessinfo.businessID) { savedBusiness in
+                            ForEach(businesses, id: \.businessinfo.businessName) { savedBusiness in
                                 NavigationLink(destination: BusinessFullContext(business: savedBusiness.businessinfo)) {
                                     Text(savedBusiness.businessinfo.businessName)
                                         .padding()
@@ -78,8 +75,8 @@ struct ProfileView: View {
                         if events.isEmpty {
                             Text("Not attending any events.")
                         } else {
-                            ForEach(events, id: \.eventID) { event in // Use \.eventID directly for id
-                                NavigationLink(destination: EventFullContextView(event: event)) {
+                            ForEach(events, id: \.eventID) { event in
+                                NavigationLink(destination: EventFullContextView(viewModel: EventFullContextViewModel(event: event))) {
                                     Text(event.eventName)
                                         .padding()
                                         .background(Color.purple)
@@ -92,18 +89,18 @@ struct ProfileView: View {
                         Text("Not attending any events.").foregroundColor(.gray)
                     }
                 }
-
             }
         }
         .padding()
         .navigationTitle("Profile")
         .onAppear {
-//            viewModel.fetchSavedBusinesses()
-//            viewModel.fetchProfileImage()
-//            SessionManager.shared.fetchEventsAttending()
+            //            viewModel.fetchSavedBusinesses()
+            //            viewModel.fetchProfileImage()
+            //            SessionManager.shared.fetchEventsAttending()
         }
     }
 }
+
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {

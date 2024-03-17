@@ -1,28 +1,35 @@
+- = not done
+++ = done
+
+total count: 17 items to fix
+
 register account:
-    -successful registration does not go back to login page
+    ++successful registration does not go back to login page
 
 profile 
-    -pfp not centered
+    ++pfp not centered
 
 search businesses:
-    -filters and queries not implemented
+    ++filters and queries not implemented
     -business button needs to look better
 
 business full context:
-    -when saving business -> does not refresh and show that business is saved
-        refresh session manager
-        refresh page
-    -when leaving a review -> does not refresh to show comment
-    -when deleting review -> does not refresh
-    -if user owns business -> should not be able to save it
+    ++when deleting review -> does not refresh
+    ++when saving business -> does not refresh and show that business is saved
+    ++when unsaving business -> does not refresh
+    ++when leaving a review -> does not refresh to show comment
+    ++if user owns business -> should not be able to save it
 
 events list:
     -when hitting attend event -> screen goes blank
     -when deleting attending event -> screen goes blank and does not delete from user saved
         this is a cache issue as well as session manager
+    ++FIXED BY REMOVING BUTTON LOL
 
  event full context:
-    -when hitting attend event -> screen goes blank and picture disappears
+    ++when hitting attend event -> screen goes blank
+    ++picture disappears when attending event
+    -button toggle weird logic -> on first toggle goes back to being orignal state (not updating properly)
     -change style
 
 update profile:

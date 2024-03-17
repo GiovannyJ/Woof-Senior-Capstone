@@ -9,7 +9,6 @@ class RegisterAccountViewModel: ObservableObject {
     var email: String = ""
     
     var showAlert = false
-    @Published var isRegistered = false
     @Published var alertTitle: String = ""
     @Published var alertMessage: String = ""
     @Published var newProfileImage: UIImage?
@@ -64,7 +63,6 @@ class RegisterAccountViewModel: ObservableObject {
             if let httpResponse = response as? HTTPURLResponse {
                 switch httpResponse.statusCode {
                 case 201:
-                    self.isRegistered = true
                     self.showAlert(title: "Success", message: "Registration successful!")
                     self.uploadProfileImage()
                 case 400:

@@ -10,9 +10,122 @@ import SwiftUI
 class EventFullContextViewModel: ObservableObject {
     @Published var event: Event
     @Published var imageData: Data?
-
+    @Published var isAttending: Bool = false
+    
     init(event: Event) {
         self.event = event
+        self.fetchEventImage()
+    }
+    
+    func toggleAttendance() {
+        isAttending.toggle() // Toggle the isAttending flag
+        if isAttending {
+            attendEvent()
+        } else {
+            unattendEvent()
+        }
+        self.fetchEventImage()
+    }
+    
+    private func attendEvent() {
+        let url = URL(string: "http://localhost:8080/events/attendance")!
+        let userID = SessionManager.shared.currentUser?.userID
+        let body: [String: Any] = [
+            "userID": userID ?? 0,
+            "eventID": event.eventID,
+        ]
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
+            print("Error encoding data")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Error attending event: \(error)")
+                    return
+                }
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    switch httpResponse.statusCode {
+                    case 201:
+                        // Successful response
+                        print("Event Attending!")
+                        DispatchQueue.main.async {
+                            SessionManager.shared.fetchEventsAttending()
+                            self.fetchEventImage()
+                        }
+                    case 400:
+                        // Error response
+                        print("User is already attending event")
+                    case 500:
+                        // Handle 500 error
+                        print("Error: \(httpResponse.statusCode)")
+                    default:
+                        // Handle other status codes
+                        print("Unexpected error occurred")
+                    }
+                }
+            }.resume()
+    }
+    
+    private func unattendEvent() {
+        let urlString = "http://localhost:8080/attendance"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Create the request body
+        var requestBody: [String: Int] = [:]
+        if let userID = SessionManager.shared.currentUser?.userID {
+            requestBody = [
+                "userID": userID,
+                "eventID": event.eventID,
+            ]
+        } else {
+            print("no userID")
+            // Handle the case where userID is not available
+            return
+        }
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+        } catch {
+            print("Error encoding request body: \(error)")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error unattending event: \(error)")
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                switch httpResponse.statusCode {
+                case 200...299:
+                    // Successful response
+                    print("Event unattended successfully")
+                    DispatchQueue.main.async {
+                        SessionManager.shared.fetchEventsAttending()
+                        self.fetchEventImage()
+                    }
+                default:
+                    // Handle other status codes
+                    print("Failed to unattend event")
+                }
+            }
+        }.resume()
     }
 
     func fetchEventImage() {

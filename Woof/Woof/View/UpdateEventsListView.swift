@@ -20,7 +20,7 @@ struct UpdateEventsListView: View {
             ScrollView {
                 //MAPVIEW
                 ForEach(viewModel.events, id: \.eventID) { event in
-                    EventCard(event: event, type: "business")
+                    EventCardView(viewModel: EventCardViewModel(event: event, isAttending: true, type: "business"))
                         .padding(.vertical, 8)
                 }
             }

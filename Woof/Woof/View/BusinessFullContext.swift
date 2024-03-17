@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ReviewsView: View {
-    let reviews: [Review]
-
+    @Binding var reviews: [Review] // Use a binding to keep the reviews array in sync with the parent view
+    
     var body: some View {
         Section(header: Text("Reviews")
             .font(.title2)
@@ -18,7 +18,10 @@ struct ReviewsView: View {
         ) {
             if !reviews.isEmpty {
                 ForEach(reviews) { review in
-                    ReviewCard(review: review)
+                    ReviewCard(review: review, onDelete: {
+                        // Remove the deleted review from the reviews array
+                        reviews.removeAll(where: { $0.reviewID == review.reviewID })
+                    })
                 }
             } else {
                 Text("No reviews yet")
@@ -92,31 +95,42 @@ struct BusinessFullContext: View {
                     }
                 }
                 
-                if let business = SessionManager.shared.ownedBusiness,
-                   SessionManager.shared.savedBusinesses?.contains(where: { $0.businessinfo.businessID == business.businessID }) == true {
+                if viewModel.business.businessID == SessionManager.shared.ownedBusiness?.businessID {
+                    // User owns the business, don't show the save button
                     Button(action: {
-                                        
-                                    }) {
-                                        Text("Unsave Business")
-                                            .foregroundColor(.red)
-                                            .padding()
-                                            .frame(maxWidth: .infinity)
-                                            .background(Color.gray.opacity(0.1))
-                                            .cornerRadius(8)
-                                            .fontWeight(.heavy)
-                                    }
-                                    .padding()
-                } else {
-                    Button(action: {
-                        viewModel.saveBusiness()
+                        // Handle action if needed
                     }) {
-                        Text("Save Business")
-                            .foregroundColor(.teal)
+                        Text("Your Business")
+                            .foregroundColor(.orange)
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color.teal.opacity(0.1))
+                            .background(Color.gray.opacity(0.1))
                             .cornerRadius(8)
                             .fontWeight(.heavy)
+                    }
+                    .padding()
+                } else {
+                    // Business is saved, show the unsave button
+                    Button(action: {
+                        viewModel.toggleSaveBusiness()
+                    }) {
+                        if viewModel.isSaved {
+                            Text("Unsave Business")
+                                .foregroundColor(.red)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(8)
+                                .fontWeight(.heavy)
+                        } else {
+                            Text("Save Business")
+                                .foregroundColor(.teal)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(8)
+                                .fontWeight(.heavy)
+                        }
                     }
                     .padding()
                 }
@@ -184,16 +198,15 @@ struct BusinessFullContext: View {
                         .fontWeight(.heavy)
                 }
                 // Reviews section
-                ReviewsView(reviews: reviews)
+                ReviewsView(reviews: $reviews)
             }
             .padding()
         }
         .onReceive(viewModel.$reviews) { newReviews in
-            // Update the reviews when the view model's reviews change
             self.reviews = newReviews
+//            viewModel.fetchReviews()
         }.onAppear(){
             viewModel.fetchReviews()
-//            viewModel.fetchBusinessImage()
         }
     }
 }

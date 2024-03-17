@@ -6,120 +6,91 @@
 //
 import SwiftUI
 
-struct EventCard: View {
-    let event: Event
-    let type: String
-    
-    @EnvironmentObject var sessionManager: SessionManager // Injecting SessionManager
-    
-    private var buttonColor: Color {
-        return type == "disabled" ? .gray : .teal
-    }
-    
-    private var isDisabled: Bool {
-        return type == "disabled"
-    }
+struct EventCardView: View {
+    @ObservedObject var viewModel: EventCardViewModel
+    @State private var isNavigationActive = false
     
     var body: some View {
-        NavigationLink(destination: type == "business" ? AnyView(UpdateEventView(event: event)) : AnyView(EventFullContextView(event: event))) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(event.eventName)
-                    .font(.headline)
-                Text(event.eventDescription)
-                    .font(.subheadline)
-                Text("Date: \(event.eventDate)") // Format the date
-                Text("Location: \(event.location)")
-                Text("Contact: \(event.contactInfo)")
-                // Additional event details can be displayed here
-                
-                // Example: Display attendance count
-                Text("Attendance Count: \(event.attendance_count)")
-                    .font(.subheadline)
-                
-                // Example: Display pet-related preferences
-                Text("Pet Size Preference: \(event.petSizePref)")
-                    .font(.subheadline)
-                
-                // Example: Display if leash policy is enforced
-                Text("Leash Policy: \(event.leashPolicy ? "Enforced" : "Not Enforced")")
-                    .font(.subheadline)
-                
-                // Example: Display if disabled-friendly
-                Text("Disabled Friendly: \(event.disabledFriendly ? "Yes" : "No")")
-                    .font(.subheadline)
-                
-                HStack { // Attend and Unattend Event Buttons
-                    Button(action: {
-                        attendEvent(event: event)
-                        print("Attend Event: \(event.eventName)")
-                    }) {
-                        Text("Attend Event")
-                            .foregroundColor(.white)
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 16)
-                            .background(buttonColor)
-                            .cornerRadius(8)
-                            .font(.headline)
-                    }
-                    .disabled(isDisabled)
+        VStack(alignment: .leading, spacing: 8) {
+            Button(action: {
+                self.isNavigationActive = true
+            }) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(viewModel.event.eventName)
+                        .font(.headline)
+                    Text(viewModel.event.eventDescription)
+                        .font(.subheadline)
+                    Text("Date: \(viewModel.event.eventDate)") // Format the date
+                    Text("Location: \(viewModel.event.location)")
+                    Text("Contact: \(viewModel.event.contactInfo)")
+                    // Additional event details can be displayed here
                     
-                    if let eventsAttending = sessionManager.eventsAttending,
-                       eventsAttending.contains(where: { $0.eventID == event.eventID }) {
-                        UnattendEventButton(event: event)
-                    }
+                    // Example: Display attendance count
+                    Text("Attendance Count: \(viewModel.event.attendance_count)")
+                        .font(.subheadline)
+                    
+                    // Example: Display pet-related preferences
+                    Text("Pet Size Preference: \(viewModel.event.petSizePref)")
+                        .font(.subheadline)
+                    
+                    // Example: Display if leash policy is enforced
+                    Text("Leash Policy: \(viewModel.event.leashPolicy ? "Enforced" : "Not Enforced")")
+                        .font(.subheadline)
+                    
+                    // Example: Display if disabled-friendly
+                    Text("Disabled Friendly: \(viewModel.event.disabledFriendly ? "Yes" : "No")")
+                        .font(.subheadline)
+                    
+                    Text("View Event")
+                        .foregroundColor(.teal)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.5))
+                        .cornerRadius(8)
+                        .fontWeight(.heavy)
                 }
+                .padding()
+                .background(Color.teal.opacity(0.2))
+                .cornerRadius(8)
             }
-            .padding()
-            .background(Color.teal.opacity(0.2))
-            .cornerRadius(8)
+            .background(
+                NavigationLink(destination:
+                    destinationView(),
+                    isActive: $isNavigationActive) {
+                        EmptyView()
+                }
+            )
         }
     }
     
-    private func attendEvent(event: Event) {
-        let url = URL(string: "http://localhost:8080/events/attendance")!
-        let userID = SessionManager.shared.currentUser?.userID
-        let body: [String: Any] = [
-            "userID": userID ?? 0,
-            "eventID": event.eventID,
-        ]
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
-            print("Error encoding data")
-            return
+    private func destinationView() -> some View {
+        if viewModel.type == "business" {
+            return AnyView(UpdateEventView(event: viewModel.event))
+        } else {
+            return AnyView(EventFullContextView(viewModel: EventFullContextViewModel(event: viewModel.event)))
         }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let httpResponse = response as? HTTPURLResponse {
-                switch httpResponse.statusCode {
-                case 201:
-                    // Successful response
-                    print("Event Attending!")
-                    SessionManager.shared.fetchEventsAttending()
-                case 400:
-                    //MAKE POPUP HERE LATER
-                    print("User is already attending event")
-                case 500:
-                    // Handle 500 error
-                    print("Error: \(httpResponse.statusCode)")
-                default:
-                    // Handle other status codes
-                    print("Unexpected error occurred")
-                }
-            }
-        }.resume()
     }
 }
 
-struct EventCard_Preview: PreviewProvider {
-    static let testEvent = Event(eventID: 1, attendance_count: 10, businessID: 1, contactInfo: "100-200-2020", dataLocation: "internal", disabledFriendly: true, eventDate: "2024-03-06", eventDescription: "This is a test event with test data and whatnot", eventName: "test event", imgID: nil, leashPolicy: true, location: "1800 Test Street", petSizePref: "small", geolocation: "thisplace")
-    
+
+
+struct EventCardView_Previews: PreviewProvider {
     static var previews: some View {
-        EventCard(event: testEvent, type: "disabled")
-            .environmentObject(SessionManager.shared)
+        let testEvent = Event(eventID: 1,
+                              attendance_count: 10,
+                              businessID: 1,
+                              contactInfo: "test@example.com",
+                              dataLocation: "internal",
+                              disabledFriendly: true,
+                              eventDate: "2024-01-09",
+                              eventDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                              eventName: "Test Event",
+                              imgID: nil,
+                              leashPolicy: true,
+                              location: "Test Location",
+                              petSizePref: "Medium",
+                              geolocation: "here")
+        let viewModel = EventCardViewModel(event: testEvent, isAttending: true, type: "local")
+        return EventCardView(viewModel: viewModel)
     }
 }

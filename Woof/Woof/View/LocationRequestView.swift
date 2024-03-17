@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct LocationRequestView: View {
+//    @ObservedObject var locationManager = LocationManager.shared
+    
     var body: some View {
         ZStack {
             Color(.systemBlue).ignoresSafeArea()
             
             VStack {
                 Spacer()
-                
                 
                 Image(systemName: "paperplane.circle.fill")
                     .resizable()
@@ -23,7 +24,7 @@ struct LocationRequestView: View {
                     .padding(.bottom, 32)
                 
                 Text("Would you like to explore places nearby?")
-                    .font(.system(size:28, weight: . semibold))
+                    .font(.system(size:28, weight: .semibold))
                     .multilineTextAlignment(.center)
                     .padding()
                 
@@ -62,6 +63,11 @@ struct LocationRequestView: View {
             }
             .foregroundColor(.white)
         }
+        .onReceive(LocationManager.shared.$authorizationStatus) { status in
+            if status == .authorizedWhenInUse || status == .authorizedAlways {
+                LocationManager.shared.startUpdatingLocation()
+            }
+        }
     }
 }
 
@@ -70,3 +76,4 @@ struct LocationRequestView_Previews: PreviewProvider {
         LocationRequestView()
     }
 }
+

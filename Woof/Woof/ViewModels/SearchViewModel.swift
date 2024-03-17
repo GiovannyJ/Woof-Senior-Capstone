@@ -12,7 +12,7 @@ class SearchViewModel: ObservableObject {
     @Published var businesses: [Business] = []
     @Published var isEmpty: Bool = false
 
-    func performSearch(keyword: String) {
+    func performSearch(keyword: String, filter: String) {
         // Define the URL
         guard var urlComponents = URLComponents(string: "http://localhost:8080/businesses") else {
             print("Invalid URL")
@@ -21,7 +21,12 @@ class SearchViewModel: ObservableObject {
 
         // Add query parameters
         var queryItems: [URLQueryItem] = []
-        queryItems.append(URLQueryItem(name: "businessName", value: keyword))
+        if keyword != ""{
+            queryItems.append(URLQueryItem(name: "businessName", value: keyword))
+        }
+        if filter != "All"{
+            queryItems.append(URLQueryItem(name: "businessType", value: filter))
+        }
         urlComponents.queryItems = queryItems
 
         guard let url = urlComponents.url else {
@@ -34,6 +39,7 @@ class SearchViewModel: ObservableObject {
             guard let data = data else {
                 print("No data")
                 self.isEmpty = true
+                self.businesses = []
                 return
             }
 
@@ -46,6 +52,10 @@ class SearchViewModel: ObservableObject {
                 }
             } catch {
                 print("Error decoding JSON: \(error)")
+                DispatchQueue.main.async {
+                    self.isEmpty = true
+                    self.businesses = []
+                }
             }
         }.resume()
     }

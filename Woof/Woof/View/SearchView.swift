@@ -15,7 +15,7 @@ struct SearchView: View {
     @ObservedObject private var viewModel = SearchViewModel()
 
     // Array for business types
-    let businessTypes = ["All", "Hotel", "Restaurant", "Daycare", "Park", "Other"]
+    let businessTypes = ["All", "Arts & Entertainment", "Active Life", "Hotels & Travel", "Local Flavor", "Restaurants", "Shopping", "Other"]
 
     var body: some View {
         NavigationView {
@@ -40,13 +40,9 @@ struct SearchView: View {
                     .background(Color.teal.opacity(0.2))
                     .cornerRadius(8)
 
-                    // Filters
-                    Toggle("Hotels", isOn: $filterByHotel)
-                    Toggle("Restaurants", isOn: $filterByRestaurant)
-
                     // Search button
                     Button("Search") {
-                        viewModel.performSearch(keyword: searchKeyword)
+                        viewModel.performSearch(keyword: searchKeyword, filter: selectedBusinessType)
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
@@ -73,11 +69,9 @@ struct SearchView: View {
                         }
                         .padding(.top, 16)
                     }
-                    Spacer()
                 }
                 .padding()
             }
-            .navigationTitle("Search")
         }
         .sheet(isPresented: .constant(false)) {
             EmptyView()

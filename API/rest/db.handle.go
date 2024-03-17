@@ -995,6 +995,7 @@ func DeleteAttendance(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getuserattendance")
 }
 
 func DeleteSavedBusiness(c *gin.Context) {
@@ -1012,5 +1013,6 @@ func DeleteSavedBusiness(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
+	invalidateCache("getsavedbusinesses")
 }
 

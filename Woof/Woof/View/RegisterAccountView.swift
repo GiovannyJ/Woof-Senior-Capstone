@@ -13,6 +13,8 @@ struct RegisterAccountView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
     @StateObject var viewModel = RegisterAccountViewModel()
     @State private var isAlertShown = false
+    @Environment(\.presentationMode) var presentationMode
+
 
     var body: some View {
         NavigationStack {
@@ -99,15 +101,14 @@ struct RegisterAccountView: View {
                 .navigationTitle("Register")
                 .alert(isPresented: $viewModel.showAlert) {
                     Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
+                        if viewModel.alertTitle == "Success"{
+                            presentationMode.wrappedValue.dismiss()
+                        }
                     })
                 }
             }
         }.padding(.horizontal)
         .padding()
-        .navigationDestination(
-            isPresented: $viewModel.isRegistered) {
-                LoginView()
-            }
     }
 }
 
