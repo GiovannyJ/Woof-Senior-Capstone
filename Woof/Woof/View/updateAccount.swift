@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UpdateAccountView: View {
     @ObservedObject private var viewModel: UpdateAccountViewModel
+    @State private var isAlertShown = false
     
     // Initialize the view model with the current user's username and email
     init() {
@@ -19,7 +20,6 @@ struct UpdateAccountView: View {
         }
     }
     
-    @Environment(\.presentationMode) private var presentationMode
     
     var body: some View {
         ScrollView{
@@ -36,6 +36,7 @@ struct UpdateAccountView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 100, height: 100)
                         .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.black, lineWidth: 2)) // Draw black outline
                         .padding()
                 }
                 
@@ -107,13 +108,11 @@ struct UpdateAccountView: View {
                         .fontWeight(Font.Weight.heavy)
                 }
                 
-                
-                
-                if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
-                }
+//                if let errorMessage = viewModel.errorMessage {
+//                    Text(errorMessage)
+//                        .foregroundColor(.red)
+//                        .padding()
+//                }
                 Button(action: {
                     updatePassword()
                 }) {
@@ -124,39 +123,31 @@ struct UpdateAccountView: View {
                         .cornerRadius(8)
                 }
                 .padding()
-                
-                Button(action: {
-                    deleteAccount()
-                }) {
-                    Text("Delete Account")
-                        .padding()
-                        .background(Color.red.opacity(0.8))
-                        .fontWeight(.heavy)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                        .frame(maxWidth: .infinity)               }
-                .padding()    }
-
-            .padding()
-            .navigationTitle("Update Account")
-        }
+                if let userID = SessionManager.shared.userID{
+                    DeleteButton(type: "Account", id: userID)
+                }
+            }
+                    .padding()
+                    .navigationTitle("Update Account")
+                    .alert(isPresented: $viewModel.showAlert) {
+                        Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
+                        })
+                    }
+            }
     }
     func updateAccount() {
         viewModel.updateAccount { isSuccess in
-            if isSuccess {
-                presentationMode.wrappedValue.dismiss()
-            }
+//            if isSuccess {
+//                presentationMode.wrappedValue.dismiss()
+//            }
         }
     }
     func updatePassword() {
         viewModel.updatePassword {
-            presentationMode.wrappedValue.dismiss()
+//            presentationMode.wrappedValue.dismiss()
         }
     }
 }
-func deleteAccount() {
-    //no function rn
-    }
 
 struct UpdateAccountView_Previews: PreviewProvider {
     static var previews: some View {

@@ -16,6 +16,11 @@ class UpdateAccountViewModel: ObservableObject {
     @Published var newProfileImage: UIImage?
     @Published var errorMessage: String?
     @Published var isShowingImagePicker = false
+    
+    var showAlert = false
+    @Published var alertTitle: String = ""
+    @Published var alertMessage: String = ""
+    
     @ObservedObject var sessionManager = SessionManager.shared
     
     var didSelectImage: ((UIImage?) -> Void)?
@@ -141,7 +146,9 @@ class UpdateAccountViewModel: ObservableObject {
             // Prepare the URL for the update request
             guard let url = URL(string: "http://localhost:8080/users") else {
                 errorMessage = "Invalid URL"
-                completion(false)
+                DispatchQueue.main.async {
+                    completion(false)
+                }
                 return
             }
             
@@ -153,22 +160,45 @@ class UpdateAccountViewModel: ObservableObject {
             
             // Perform the request
             URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data, error == nil else {
-                    self.errorMessage = "Error: \(error?.localizedDescription ?? "Unknown error")"
-                    completion(false)
+                guard let httpResponse = response as? HTTPURLResponse, let data = data, error == nil else {
+                    let errorMessage = "Error: \(error?.localizedDescription ?? "Unknown error")"
+                    DispatchQueue.main.async {
+                        self.errorMessage = errorMessage
+                        completion(false)
+                    }
                     return
                 }
                 
-                // Parse the response
-                self.fetchUpdatedUserInfo(userID: userID) { success in
-                    completion(success)
+                switch httpResponse.statusCode {
+                case 200...299:
+                    // Success
+                    DispatchQueue.main.async {
+                        self.showAlert(title: "Success", message: "Profile updated successfully")
+                    }
+                    self.fetchUpdatedUserInfo(userID: userID) { success in
+                        DispatchQueue.main.async {
+                            completion(success)
+                        }
+                    }
+                default:
+                    // Failure
+                    let errorMessage = "Error: \(httpResponse.statusCode)"
+                    DispatchQueue.main.async {
+                        self.errorMessage = errorMessage
+                        self.showAlert(title: "Failed", message: "Profile update failed")
+                        completion(false)
+                    }
                 }
             }.resume()
         } catch {
-            errorMessage = "Error encoding JSON data: \(error)"
-            completion(false)
+            let errorMessage = "Error encoding JSON data: \(error)"
+            DispatchQueue.main.async {
+                self.errorMessage = errorMessage
+                completion(false)
+            }
         }
     }
+
 
 
     func updatePassword(completion: @escaping () -> Void) {
@@ -209,9 +239,11 @@ class UpdateAccountViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     // Password updated successfully
                     self.errorMessage = "Password updated successfully"
+                    self.showAlert(title: "Success", message: "Password updated successfully")
                 } else {
                     // Password update failed
                     self.errorMessage = "Password update failed"
+                    self.showAlert(title: "Failed", message: "Password update failed")
                 }
                 
                 DispatchQueue.main.async {
@@ -229,8 +261,6 @@ class UpdateAccountViewModel: ObservableObject {
     }
 
 
-
-
     func selectProfilePicture() {
         isShowingImagePicker = true
     }
@@ -239,5 +269,13 @@ class UpdateAccountViewModel: ObservableObject {
         newProfileImage = image
         isShowingImagePicker = false
         didSelectImage?(image)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            self.alertTitle = title
+            self.alertMessage = message
+            self.showAlert = true
+        }
     }
 }

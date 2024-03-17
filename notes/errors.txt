@@ -1,7 +1,7 @@
 - = not done
 ++ = done
 
-total count: 17 items to fix
+total count: 14 items to fix
 
 register account:
     ++successful registration does not go back to login page
@@ -29,13 +29,14 @@ events list:
  event full context:
     ++when hitting attend event -> screen goes blank
     ++picture disappears when attending event
-    -button toggle weird logic -> on first toggle goes back to being orignal state (not updating properly)
+    ++button toggle weird logic -> on first toggle goes back to being orignal state (not updating properly)
     -change style
 
 update profile:
-    -when updating password -> no check to see if old password was correct 
+    ++when updating password -> no check to see if old password was correct 
         make pop up
-    -dont back out when update happens
+    ++dont back out when update happens
+    ++delete button functionality -> go back to login view
 
 register business
     -doesnt back out when business is created

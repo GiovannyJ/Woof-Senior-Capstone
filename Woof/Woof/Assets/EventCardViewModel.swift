@@ -18,6 +18,4 @@ class EventCardViewModel: ObservableObject {
         self.isAttending = isAttending
         self.type = type
     }
-    
-    
 }

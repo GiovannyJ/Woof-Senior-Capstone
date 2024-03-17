@@ -10,11 +10,12 @@ import SwiftUI
 class EventFullContextViewModel: ObservableObject {
     @Published var event: Event
     @Published var imageData: Data?
-    @Published var isAttending: Bool = false
+    @Published var isAttending: Bool
     
     init(event: Event) {
         self.event = event
-        self.fetchEventImage()
+        self.isAttending = SessionManager.shared.eventsAttending?.contains { $0.eventID == event.eventID } ?? false
+//        self.fetchEventImage()
     }
     
     func toggleAttendance() {
@@ -24,7 +25,7 @@ class EventFullContextViewModel: ObservableObject {
         } else {
             unattendEvent()
         }
-        self.fetchEventImage()
+//        self.fetchEventImage()
     }
     
     private func attendEvent() {
@@ -169,4 +170,3 @@ class EventFullContextViewModel: ObservableObject {
         }.resume()
     }
 }
-

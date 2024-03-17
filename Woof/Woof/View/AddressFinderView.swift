@@ -71,7 +71,7 @@ struct AddressFinderView: View {
     
     var body: some View {
         VStack {
-            if let userLocation = locationManager.userLocation {
+            if locationManager.userLocation != nil {
                 Map(coordinateRegion: $mapAPI.region, annotationItems: mapAPI.locations) { location in
                     MapMarker(coordinate: location.coordinate, tint: .red)
                 }

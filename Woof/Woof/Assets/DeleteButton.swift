@@ -24,27 +24,34 @@ struct DeleteButton: View {
         let endpoint: String
         let table: String
         let column: String
+        var navigationDestination: AnyView?
+
         switch type {
         case "Account":
-            endpoint = "user"
+            endpoint = "users"
             table = "user"
             column = "userID"
+            navigationDestination = AnyView(LoginView())
         case "Business":
             endpoint = "businesses"
             table = "businesses"
             column = "businessID"
+            navigationDestination = AnyView(HomeView())
         case "Event":
             endpoint = "events"
             table = "events"
             column = "eventID"
+            navigationDestination = AnyView(HomeView())
         case "Review":
             endpoint = "reviews"
             table = "reviews"
             column = "reviewID"
+            navigationDestination = AnyView(HomeView())
         case "SavedBusiness":
             endpoint = "savedBusinesses"
             table = "savedBusiness"
             column = "saveID"
+            navigationDestination = AnyView(HomeView())
         default:
             fatalError("Invalid type")
         }
@@ -81,12 +88,24 @@ struct DeleteButton: View {
             
             if (200...299).contains(httpResponse.statusCode) {
                 print("\(type) deleted successfully")
+                DispatchQueue.main.async {
+                    if let destination = navigationDestination {
+                        // Navigate to the appropriate view
+                        // You need to handle navigation in your SwiftUI hierarchy
+                        // Here, I'm assuming you're using NavigationView
+                        // You might need to adjust this part based on your navigation setup
+                        // For simplicity, I'm presenting the destination view directly
+                        if let window = UIApplication.shared.windows.first {
+                            window.rootViewController = UIHostingController(rootView: destination)
+                            window.makeKeyAndVisible()
+                        }
+                    }
+                }
             } else {
                 print("Failed to delete \(type)")
             }
         }.resume()
     }
-
 }
 
 struct DeleteButton_Previews: PreviewProvider {

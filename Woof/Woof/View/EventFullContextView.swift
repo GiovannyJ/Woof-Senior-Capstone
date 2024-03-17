@@ -10,6 +10,9 @@ import SwiftUI
 struct EventFullContextView: View {
     @ObservedObject var viewModel: EventFullContextViewModel
     @ObservedObject var sessionManager = SessionManager.shared
+    
+    // Variable to store the image data
+    @State private var eventImage: UIImage?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -40,8 +43,7 @@ struct EventFullContextView: View {
                 .font(.subheadline)
 
             // Display image if available
-            if let imageData = viewModel.imageData,
-               let uiImage = UIImage(data: imageData) {
+            if let uiImage = eventImage {
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -67,8 +69,15 @@ struct EventFullContextView: View {
             viewModel.fetchEventImage()
             viewModel.isAttending = sessionManager.eventsAttending?.contains { $0.eventID == viewModel.event.eventID } ?? false
         }
+        // Set the eventImage when imageData is updated
+        .onReceive(viewModel.$imageData) { imageData in
+            if let data = imageData, let uiImage = UIImage(data: data) {
+                self.eventImage = uiImage
+            }
+        }
     }
 }
+
 
 struct EventFullContextView_Previews: PreviewProvider {
     static var previews: some View {
