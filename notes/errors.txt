@@ -1,67 +1,74 @@
 - = not done
 ++ = done
+** = big error
 
-total count: 14 items to fix
+total count: 4 minor items to fix, 1 major item
 
-register account:
-    ++successful registration does not go back to login page
 
-profile 
-    ++pfp not centered
+COMPLETELY FIXED:
+    register account:
+        ++successful registration does not go back to login page
 
-search businesses:
-    ++filters and queries not implemented
-    -business button needs to look better
+    profile 
+        ++pfp not centered
 
-business full context:
-    ++when deleting review -> does not refresh
-    ++when saving business -> does not refresh and show that business is saved
-    ++when unsaving business -> does not refresh
-    ++when leaving a review -> does not refresh to show comment
-    ++if user owns business -> should not be able to save it
+    business full context:
+        ++when deleting review -> does not refresh
+        ++when saving business -> does not refresh and show that business is saved
+        ++when unsaving business -> does not refresh
+        ++when leaving a review -> does not refresh to show comment
+        ++if user owns business -> should not be able to save it
 
-events list:
-    -when hitting attend event -> screen goes blank
-    -when deleting attending event -> screen goes blank and does not delete from user saved
-        this is a cache issue as well as session manager
-    ++FIXED BY REMOVING BUTTON LOL
+    events list:
+        ++when hitting attend event -> screen goes blank
+        ++when deleting attending event -> screen goes blank and does not delete from user saved
+            this is a cache issue as well as session manager
+        ++FIXED BY REMOVING BUTTON LOL
+    
+    update profile:
+        ++when updating password -> no check to see if old password was correct 
+            make pop up
+        ++dont back out when update happens
+        ++delete button functionality -> go back to login view
 
- event full context:
-    ++when hitting attend event -> screen goes blank
-    ++picture disappears when attending event
-    ++button toggle weird logic -> on first toggle goes back to being orignal state (not updating properly)
-    -change style
+    update events list:
+        ++should show message when there are no events to update
+        ++should not have attend event button
 
-update profile:
-    ++when updating password -> no check to see if old password was correct 
-        make pop up
-    ++dont back out when update happens
-    ++delete button functionality -> go back to login view
+    create event:
+        ++when event is created -> should pop up w message and go back to home view
+        ++when event is created -> should reset everything on the page
 
-register business
-    -doesnt back out when business is created
-        make pop up
-    -switch logic so business img session manager update comes after it is uploaded 
-    -no option for dog size preference
-    -should not appear if user owns business already
+    update business:
+        ++business image not synced   
+        ++labels for all columns
+        ++make bool for leash policy and disabled pet friendly
+        ++business image should be rectangle 
+        ++delete business functionality
 
-update events list:
-    -should show message when there are no events to update
-    -should not have attend event button
+    register business
+        ++doesnt back out when business is created
+            make pop up
+        ++switch logic so business img session manager update comes after it is uploaded 
+        ++should not appear if user owns business already
 
-update business:
-    -business image not synced   
-    -labels for all columns
-    -business image should be rectangle 
+SMALL ISSUES:
+    search businesses:
+        ++filters and queries not implemented
+        -business button needs to look better
 
-create event:
-    -when event is created -> should pop up w message and go back to home view
+    event full context:
+        ++when hitting attend event -> screen goes blank
+        ++picture disappears when attending event
+        ++button toggle weird logic -> on first toggle goes back to being original state (not updating properly)
+        -change style
 
-update event:
-    -should have pop up when event is update and go back to home view
-    -when deleting should sync
+    general:
+        -should add all sizes to pet size preference
+        -should label all columns 
+
+MAJOR ISSUE:
+    update event:
+        ++should have pop up when event is updated
+        **when deleting should sync
         session manager front end issue 
-
-general:
-    -should add all sizes to pet size preference
-    -should label all columns 

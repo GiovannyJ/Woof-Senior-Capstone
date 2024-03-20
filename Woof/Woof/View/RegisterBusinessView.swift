@@ -10,6 +10,11 @@ import SwiftUI
 struct RegisterBusinessView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
     @ObservedObject var viewModel: RegisterBusinessViewModel
+    @State private var isAlertShown = false
+    @State private var navigateToHome = false
+    @Environment(\.presentationMode) var presentationMode
+    
+    let businessTypes = ["All", "Arts & Entertainment", "Active Life", "Hotels & Travel", "Local Flavor", "Restaurants", "Shopping", "Other"]
     
     init(){
         viewModel = RegisterBusinessViewModel()
@@ -17,52 +22,75 @@ struct RegisterBusinessView: View {
     
     
     var body: some View {
-        VStack {
-            Form {
-                Section(header: Text("Business Details")
-                    .foregroundColor(.teal)
-                    .font(.title)
-                    .padding(.vertical)
-                    .fontWeight(.bold)) {
-                        TextField("Business Name", text: $viewModel.businessName)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        Picker("Business Type", selection: $viewModel.businessType) {
-                            Text("Arts & Entertainment").tag("Arts & Entertainment")
-                                .foregroundColor(.gray)
-                            Text("Active Life").tag("Active Life")
-                                .foregroundColor(.gray)
-                            Text("Hotels & Travel").tag("Hotels & Travel")
-                            Text("Local Flavor").tag("Local Flavor")
-                            Text("Restaurants").tag("Restaurants")
-                            Text("Shopping").tag("Shopping")
-                            Text("Other").tag("Other")
+            VStack {
+                Form {
+                    Section(header: Text("Business Details")
+                        .foregroundColor(.teal)
+                        .font(.title)
+                        .padding(.vertical)
+                        .fontWeight(.bold)) {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("Business Name")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                TextField("Business Name", text: $viewModel.businessName)
+                                    .padding()
+                                    .background(Color.teal.opacity(0.2))
+                                    .cornerRadius(8)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("Business Type")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                Picker("Business Type", selection: $viewModel.businessType) {
+                                    ForEach(businessTypes, id: \.self) {
+                                        Text($0)
+                                    }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                .padding()
+                                .background(Color.teal.opacity(0.2))
+                                .cornerRadius(8)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("Location")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                TextField("Location", text: $viewModel.location)
+                                    .padding()
+                                    .background(Color.teal.opacity(0.2))
+                                    .cornerRadius(8)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("Contact")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                TextField("Contact", text: $viewModel.contact)
+                                    .padding()
+                                    .background(Color.teal.opacity(0.2))
+                                    .cornerRadius(8)
+                            }
                         }
-                        .pickerStyle(MenuPickerStyle())
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                        TextField("Location", text: $viewModel.location)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        TextField("Contact", text: $viewModel.contact)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                    }
-                    .cornerRadius(4)
-                    .padding(.vertical, 5)
+                        .cornerRadius(4)
+                        .padding(.vertical, 5)
                 
                 Section(header: Text("Additional Information").foregroundColor(.teal)
                     .font(.headline)
                     .padding(.vertical)
                     .fontWeight(.medium)) {
-                        TextField("Description", text: $viewModel.description)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Description")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            TextField("Description", text: $viewModel.description)
+                                .padding()
+                                .background(Color.teal.opacity(0.2))
+                                .cornerRadius(8)
+                        }
+                        
                         Picker("Leash Policy", selection: $viewModel.leashPolicy){
                             Text("Yes").tag(true)
                             Text("No").tag(false)
@@ -134,6 +162,11 @@ struct RegisterBusinessView: View {
                 .foregroundColor(.red)
         }
         .padding()
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
+                presentationMode.wrappedValue.dismiss() 
+            })
+        }
     }
 }
 

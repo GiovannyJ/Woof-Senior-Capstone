@@ -18,7 +18,6 @@ struct LocalEventsView: View {
                 .foregroundColor(.orange)
                 .padding()
 
-            // Display a list of events created and promoted by businesses
             ScrollView {
                 // MAPVIEW
                 ForEach(viewModel.events, id: \.eventID) { event in

@@ -74,7 +74,7 @@ struct HomeView: View {
                         }
                     
                     // Buttons for business user
-                    if sessionManager.currentUser?.accountType == "business" {
+                    if sessionManager.currentUser?.accountType == "business" && !sessionManager.isBusinessOwner {
                         NavigationLink(destination: RegisterBusinessView()) {
                             Text("Register Your Business")
                                 .fontWeight(.heavy)
@@ -84,7 +84,7 @@ struct HomeView: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                         }
-                        if sessionManager.isBusinessOwner{
+                    }else if sessionManager.isBusinessOwner{
                             NavigationLink(destination: CreateEventView()) {
                                 Text("Create an Event")
                                     .fontWeight(.heavy)
@@ -118,35 +118,35 @@ struct HomeView: View {
                         }
                     }
                     
-                    NavigationLink(destination: 
-                        AddressFinderView()) {
-                        Text("Test address look up")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    NavigationLink(destination: 
-                        MapView()) {
-                        Text("Test map view")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    NavigationLink(destination: LocationRequestView()) {
-                        Text("Do this first")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
+//                    NavigationLink(destination: 
+//                        AddressFinderView()) {
+//                        Text("Test address look up")
+//                            .fontWeight(.heavy)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                    }
+//                    NavigationLink(destination: 
+//                        MapView()) {
+//                        Text("Test map view")
+//                            .fontWeight(.heavy)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                    }
+//                    NavigationLink(destination: LocationRequestView()) {
+//                        Text("Do this first")
+//                            .fontWeight(.heavy)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                    }
                     
                     Spacer()
                 }
@@ -155,7 +155,7 @@ struct HomeView: View {
             .navigationTitle("Home")
         }
     }
-}
+
 
 
 struct HomeView_Previews: PreviewProvider {

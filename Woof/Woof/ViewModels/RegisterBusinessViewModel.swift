@@ -15,13 +15,16 @@ class RegisterBusinessViewModel: ObservableObject{
     @Published  var contact: String = ""
     @Published  var description: String = ""
     @Published  var events: String = ""
-    @Published  var petSizePref: String = "small" // Default value
+    @Published  var petSizePref: String = "small"
     @Published  var leashPolicy: Bool = true
     @Published  var disabledFriendly: Bool = false
-    @Published var registrationStatus: String = ""
+    @Published  var registrationStatus: String = ""
     
     @Published var newBusinessImage: UIImage?
     @Published var isShowingImagePicker = false
+    var showAlert = false
+    @Published var alertTitle: String = ""
+    @Published var alertMessage: String = ""
     
     var didSelectImage: ((UIImage?) -> Void)?
     var imageUploader = ImageUploader()
@@ -43,9 +46,7 @@ class RegisterBusinessViewModel: ObservableObject{
             "disabledFriendly": disabledFriendly,
             "dataLocation": "internal",
         ]
-        print(businessData)
         
-        // JSON data
         guard let jsonData = try? JSONSerialization.data(withJSONObject: businessData) else {
             print("Error converting data to JSON")
             return
@@ -66,23 +67,21 @@ class RegisterBusinessViewModel: ObservableObject{
             if let httpResponse = response as? HTTPURLResponse {
                 switch httpResponse.statusCode {
                 case 201:
-                    // Successful response
-                    print("Business Registered!")
-                    // Update SessionManager on the main thread
+                    self.uploadBusinessImage()
                     SessionManager.shared.checkUserBusinessOwner()
-                    self.uploadProfileImage()
+                    self.showAlert(title: "Business Registered", message: "Congratulations your business has been registered with Woof")
                 case 500:
-                    // Handle 500 error
                     print("Error: \(httpResponse.statusCode)")
+                    self.showAlert(title: "Error", message: "Error registering business")
                 default:
-                    // Handle other status codes
                     print("Unexpected error occurred")
+                    self.showAlert(title: "Error", message: "Error registering business")
                 }
             }
         }.resume()
     }
     
-    func uploadProfileImage() {
+    func uploadBusinessImage() {
         guard let image = newBusinessImage else {
             return
         }
@@ -97,12 +96,10 @@ class RegisterBusinessViewModel: ObservableObject{
     }
 
     private func updateBusinessWithImageID(_ imgID: Int) {
-        // Define the URL for updating the user's profile
         guard let updateUserURL = URL(string: "http://localhost:8080/businesses") else {
             return
         }
         
-        // Prepare the request body
         let requestBody: [String: Any] = [
             "tablename": "businesses",
             "columns_old": ["businessID"],
@@ -111,23 +108,18 @@ class RegisterBusinessViewModel: ObservableObject{
             "values_new": [imgID]
         ]
         
-        // Create the request
         var request = URLRequest(url: updateUserURL)
         request.httpMethod = "PATCH"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        // Convert the request body to JSON data
         guard let requestBodyData = try? JSONSerialization.data(withJSONObject: requestBody) else {
             return
         }
         
-        // Attach the request body to the request
         request.httpBody = requestBodyData
         
-        // Perform the request
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                // Handle network errors
                 print("Error updating profile with image ID: \(error.localizedDescription)")
                 return
             }
@@ -135,12 +127,14 @@ class RegisterBusinessViewModel: ObservableObject{
             if let httpResponse = response as? HTTPURLResponse {
                 if (200...299).contains(httpResponse.statusCode) {
                     print("Profile updated successfully with image ID \(imgID)")
+                    SessionManager.shared.checkUserBusinessOwner()
                 } else {
                     print("Failed to update profile with image ID \(imgID): HTTP status code \(httpResponse.statusCode)")
                 }
             }
         }.resume()
     }
+    
     
     func selectBusinessPicture() {
         isShowingImagePicker = true
@@ -150,6 +144,14 @@ class RegisterBusinessViewModel: ObservableObject{
         newBusinessImage = image
         isShowingImagePicker = false
         didSelectImage?(image)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            self.alertTitle = title
+            self.alertMessage = message
+            self.showAlert = true
+        }
     }
 }
 

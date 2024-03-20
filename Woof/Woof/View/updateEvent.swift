@@ -83,7 +83,13 @@ struct UpdateEventView: View {
                 
                 
                 
-                DeleteButton(type: "Event", id: viewModel.event.eventID)
+                Button(action: viewModel.deleteEvent) {
+                    Text("Delete Event")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.red)
+                        .cornerRadius(8)
+                }
                     .frame(maxWidth: .infinity)
                 
                 // Submit the event update
@@ -107,6 +113,13 @@ struct UpdateEventView: View {
         .background(Color.orange.opacity(0.2))
         .onAppear(){
             viewModel.fetchEventImage()
+        }
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
+                if viewModel.alertTitle == "Event Deleted"{
+                    presentationMode.wrappedValue.dismiss()
+                }
+            })
         }
     }
 }

@@ -21,6 +21,10 @@ class CreateEventViewModel: ObservableObject {
     @Published var newProfileImage: UIImage?
     @Published var isShowingImagePicker = false
     
+    var showAlert = false
+    @Published var alertTitle: String = ""
+    @Published var alertMessage: String = ""
+    
     
     var didSelectImage: ((UIImage?) -> Void)?
     var imageUploader = ImageUploader()
@@ -70,22 +74,38 @@ class CreateEventViewModel: ObservableObject {
                                print("First Event ID: \(firstEvent.eventID)")
                                self.uploadEventImage(eventID: firstEvent.eventID)
                                completion(true)
+                               DispatchQueue.main.async {
+                                   self.showAlert(title: "Event Created", message: "Event Created Successfully")
+                                   self.eventName = ""
+                                   self.eventDescription  = ""
+                                   self.eventDate = Date()
+                                   self.location = ""
+                                   self.contactInfo  = ""
+                                   self.petSizePref  = "small"
+                                   self.leashPolicy  = false
+                                   self.disabledFriendly  = false
+                                   self.newProfileImage = nil
+                               }
                            }
                        } catch {
                            print("Error decoding event data:", error)
+                           self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
                            completion(false)
                        }
                    } else {
                        print("No data received")
+                       self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
                        completion(false)
                    }
                case 500:
                    // Handle 500 error
                    print("Error: \(httpResponse.statusCode)")
+                    self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
                    completion(false)
                default:
                    // Handle other status codes
                    print("Unexpected error occurred")
+                    self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
                    completion(false)
                }
            }
@@ -161,5 +181,13 @@ class CreateEventViewModel: ObservableObject {
         newProfileImage = image
         isShowingImagePicker = false
         didSelectImage?(image)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            self.alertTitle = title
+            self.alertMessage = message
+            self.showAlert = true
+        }
     }
 }

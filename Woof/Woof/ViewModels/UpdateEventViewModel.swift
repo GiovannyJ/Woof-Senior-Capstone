@@ -17,6 +17,10 @@ class UpdateEventViewModel: ObservableObject {
     @Published var newEventImage: UIImage?
     @Published var isShowingImagePicker = false
     
+    var showAlert = false
+    @Published var alertTitle: String = ""
+    @Published var alertMessage: String = ""
+    
     init(event: Event) {
         self.event = event
     }
@@ -143,6 +147,7 @@ class UpdateEventViewModel: ObservableObject {
             if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
                 // Event updated successfully, fetch the updated event
                 self.getUpdatedEvent(eventID: self.event.eventID)
+                self.showAlert(title: "Event updated", message: "Event updated successfully")
             } else {
                 print("Error: Failed to update event")
             }
@@ -176,6 +181,49 @@ class UpdateEventViewModel: ObservableObject {
         }.resume()
     }
     
+    func deleteEvent() {
+        let urlString = "http://localhost:8080/events"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Create the request body
+        let requestBody: [String: Any] = [
+            "tablename": "events",
+            "column": "eventID",
+            "id": event.eventID
+        ]
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+        } catch {
+            print("Error encoding request body: \(error)")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
+                print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            if (200...299).contains(httpResponse.statusCode) {
+                print("Event deleted successfully")
+                // Show alert and dismiss view
+                self.showAlert(title: "Event Deleted", message: "Event deleted successfully")
+            } else {
+                print("Failed to delete event")
+            }
+        }.resume()
+    }
+    
+    
+    
     func selectEventPicture() {
         isShowingImagePicker = true
     }
@@ -184,5 +232,13 @@ class UpdateEventViewModel: ObservableObject {
         newEventImage = image
         isShowingImagePicker = false
         didSelectImage?(image)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            self.alertTitle = title
+            self.alertMessage = message
+            self.showAlert = true
+        }
     }
 }

@@ -11,6 +11,7 @@ struct UpdateBusinessView: View {
     @ObservedObject var viewModel: UpdateBusinessViewModel
     @ObservedObject private var sessionManager = SessionManager.shared
     @Environment(\.presentationMode) private var presentationMode
+    @State private var isAlertShown = false
     
     init() {
         self.viewModel = UpdateBusinessViewModel()
@@ -25,29 +26,49 @@ struct UpdateBusinessView: View {
                     .font(.title)
                     .padding(.vertical)
                     .fontWeight(.regular)) {
-                        TextField("Business Name", text: $viewModel.businessName)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        Picker("Business Type", selection: $viewModel.businessType) {
-                            ForEach(viewModel.businessTypes, id: \.self) { type in
-                                Text(type)
-                                    .tag(type)
-                                    .foregroundColor(.gray)
-                            }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Business Name")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            TextField("Business Name", text: $viewModel.businessName)
+                                .padding()
+                                .background(Color.teal.opacity(0.2))
+                                .cornerRadius(8)
                         }
-                        .pickerStyle(MenuPickerStyle())
-                        .padding()
-                        .background(Color.teal.opacity(0.2))
-                        .cornerRadius(8)
-                        TextField("Location", text: $viewModel.location)
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Business Type")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Picker("Business Type", selection: $viewModel.businessType) {
+                                ForEach(viewModel.businessTypes, id: \.self) { type in
+                                    Text(type)
+                                        .tag(type)
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
                             .padding()
                             .background(Color.teal.opacity(0.2))
                             .cornerRadius(8)
-                        TextField("Contact", text: $viewModel.contact)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Location")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            TextField("Location", text: $viewModel.location)
+                                .padding()
+                                .background(Color.teal.opacity(0.2))
+                                .cornerRadius(8)
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Contact")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            TextField("Contact", text: $viewModel.contact)
+                                .padding()
+                                .background(Color.teal.opacity(0.2))
+                                .cornerRadius(8)
+                        }
                     }
                     .cornerRadius(4)
                     .padding(.vertical, 5)
@@ -56,33 +77,36 @@ struct UpdateBusinessView: View {
                     .font(.headline)
                     .padding(.vertical)
                     .fontWeight(.medium)) {
-                        TextField("Description", text: $viewModel.description)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        TextField("Leash Policy", text: $viewModel.leashPolicy)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        TextField("Disabled Pet Friendly", text: $viewModel.disabledFriendly)
-                            .padding()
-                            .background(Color.teal.opacity(0.2))
-                            .cornerRadius(8)
-                        Picker("Pet Size Preference", selection: $viewModel.petSizePreference) {
-                            ForEach(viewModel.petSizePreferences, id: \.self) { size in
-                                Text(size)
-                                    .tag(size)
-                            }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Description")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            TextField("Description", text: $viewModel.description)
+                                .padding()
+                                .background(Color.teal.opacity(0.2))
+                                .cornerRadius(8)
                         }
-                        .pickerStyle(SegmentedPickerStyle())
+                        Toggle("Leash Policy", isOn: $viewModel.leashPolicy)
+                        Toggle("Disabled Friendly", isOn: $viewModel.disabledFriendly)
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Pet Size Preference")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Picker("Pet Size Preference", selection: $viewModel.petSizePreference) {
+                                ForEach(viewModel.petSizePreferences, id: \.self) { size in
+                                    Text(size)
+                                        .tag(size)
+                                }
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                        }
                         
                         if let businessImage = SessionManager.shared.businessImage {
                             Image(uiImage: businessImage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                                .padding()
+                                .frame(width: 200, height: 200)
                         }
                         Button(action: {
                             viewModel.selectBusinessPicture()
@@ -106,23 +130,23 @@ struct UpdateBusinessView: View {
                             ImagePicker(image: $viewModel.newBusinessImage, isPresented: $viewModel.isShowingImagePicker, didSelectImage: viewModel.imagePickerDidSelectImage)
                         }
                         
-                        
-                        
                         //delete business button
-                        if let businessID = SessionManager.shared.ownedBusiness?.businessID{
-                            DeleteButton(type: "Business", id: businessID)
+                        Button(action: viewModel.deleteBusiness) {
+                            Text("Delete Event")
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.red)
+                                .cornerRadius(8)
                         }
+                            .frame(maxWidth: .infinity)
                         
                     }
                     .cornerRadius(10)
                     .padding(.vertical, 5)
             }
             
-            
-            
-            
             Button(action: {
-                updateBusiness()
+                viewModel.updateBusiness()
             }) {
                 Text("Update Business")
                     .foregroundColor(.white)
@@ -135,30 +159,17 @@ struct UpdateBusinessView: View {
             .padding(.vertical)
             .buttonStyle(PlainButtonStyle())
             
-            Text(viewModel.updateStatus)
-                .padding()
-                .foregroundColor(.red)
         }
         .padding()
         .background(Color.white.opacity(0.2))
-        .onAppear {
-            sessionManager.fetchBusinessImage()
-        }
-    }
-        func updateBusiness() {
-            viewModel.updateBusiness() { isSuccess in
-                if isSuccess {
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
+                if viewModel.alertTitle == "Business Deleted"{
                     presentationMode.wrappedValue.dismiss()
                 }
-            }
+            })
         }
     }
-
-
-
-
-private func deleteBusiness(){
-    //nothing lol
 }
 
 struct UpdateBusinessView_Previews: PreviewProvider {

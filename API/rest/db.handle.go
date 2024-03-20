@@ -891,7 +891,7 @@ func Update(c *gin.Context) {
 	switch update.TableName {
 	case "user":
 		invalidateCache("getusers")
-	case "business":
+	case "businesses":
 		invalidateCache("getbusinesses")
 		invalidateCache("getbusinessreviews")
 		invalidateCache("getbusinessevents")
@@ -963,7 +963,7 @@ func Delete(c *gin.Context) {
 	switch delete.TableName {
 	case "user":
 		invalidateCache("getusers")
-	case "business":
+	case "businesses":
 		invalidateCache("getbusinesses")
 		invalidateCache("getbusinessreviews")
 		invalidateCache("getbusinessevents")
@@ -971,8 +971,8 @@ func Delete(c *gin.Context) {
 		invalidateCache("getreviews")
 		invalidateCache("getbusinessreviews")
 	case "events":
-		invalidateCache("getevents")
 		invalidateCache("getbusinessevents")
+		invalidateCache("getevents")
 	}
 }
 

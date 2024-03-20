@@ -9,6 +9,7 @@ import SwiftUI
 struct DeleteButton: View {
     let type: String
     let id: Int
+    @Environment(\.presentationMode) var presentationMode // Environment variable to dismiss the current view
 
     var body: some View {
         Button(action: deleteFromAPI) {
@@ -41,7 +42,8 @@ struct DeleteButton: View {
             endpoint = "events"
             table = "events"
             column = "eventID"
-            navigationDestination = AnyView(HomeView())
+            // Dismiss the current view when deleting an event
+            presentationMode.wrappedValue.dismiss()
         case "Review":
             endpoint = "reviews"
             table = "reviews"
@@ -90,11 +92,6 @@ struct DeleteButton: View {
                 print("\(type) deleted successfully")
                 DispatchQueue.main.async {
                     if let destination = navigationDestination {
-                        // Navigate to the appropriate view
-                        // You need to handle navigation in your SwiftUI hierarchy
-                        // Here, I'm assuming you're using NavigationView
-                        // You might need to adjust this part based on your navigation setup
-                        // For simplicity, I'm presenting the destination view directly
                         if let window = UIApplication.shared.windows.first {
                             window.rootViewController = UIHostingController(rootView: destination)
                             window.makeKeyAndVisible()
@@ -113,3 +110,4 @@ struct DeleteButton_Previews: PreviewProvider {
         DeleteButton(type: "Account", id: 1)
     }
 }
+

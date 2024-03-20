@@ -14,8 +14,8 @@ class UpdateBusinessViewModel: ObservableObject {
     @Published var location: String = ""
     @Published var contact: String = ""
     @Published var description: String = ""
-    @Published var leashPolicy: String = ""
-    @Published var disabledFriendly: String = ""
+    @Published var leashPolicy: Bool = false
+    @Published var disabledFriendly: Bool = false
     @Published var petSizePreference: String = "Small pets"
     @Published var updateStatus: String = ""
     
@@ -24,8 +24,12 @@ class UpdateBusinessViewModel: ObservableObject {
     @Published var newBusinessImage: UIImage?
     @Published var isShowingImagePicker = false
     
+    var showAlert = false
+    @Published var alertTitle: String = ""
+    @Published var alertMessage: String = ""
     
-    let businessTypes = ["Arts & Entertainment", "Active Life", "Hotels & Travel", "Local Flavor", "Restaurants", "Shopping", "Other"]
+    
+    let businessTypes = ["All", "Arts & Entertainment", "Active Life", "Hotels & Travel", "Local Flavor", "Restaurants", "Shopping", "Other"]
     let petSizePreferences = ["Small pets", "Medium pets", "Large pets"]
     
     
@@ -37,8 +41,8 @@ class UpdateBusinessViewModel: ObservableObject {
             self.location = ownedBusiness.location
             self.contact = ownedBusiness.contact
             self.description = ownedBusiness.description
-            self.leashPolicy = ownedBusiness.leashPolicy ? "Yes" : "No"
-            self.disabledFriendly = ownedBusiness.disabledFriendly ? "Yes" : "No"
+            self.leashPolicy = ownedBusiness.leashPolicy
+            self.disabledFriendly = ownedBusiness.disabledFriendly
             self.petSizePreference = self.convertPetSizePref(ownedBusiness.petSizePref)
         }
     }
@@ -52,6 +56,8 @@ class UpdateBusinessViewModel: ObservableObject {
             switch result {
             case .success(let imgID):
                 completion(.success(imgID))
+                self.fetchNewBusinessImage(imgID: imgID)
+                
             case .failure(let error):
                 print("Error uploading profile image:", error)
                 completion(.failure(error))
@@ -59,7 +65,7 @@ class UpdateBusinessViewModel: ObservableObject {
         }
     }
     
-    func updateBusiness(completion: @escaping (Bool) -> Void) {
+    func updateBusiness() {
         guard let ownedBusiness = SessionManager.shared.ownedBusiness else {
             self.updateStatus = "Error: No owned business found"
             return
@@ -93,21 +99,19 @@ class UpdateBusinessViewModel: ObservableObject {
                             self.location,
                             self.contact,
                             self.description,
-                            self.leashPolicy.lowercased() == "yes" ? 1 : 0, // Convert to 1 or 0
-                            self.disabledFriendly.lowercased() == "yes" ? 1 : 0,
+                            self.leashPolicy ? 1 : 0, // Convert to 1 or 0
+                            self.disabledFriendly ? 1 : 0, // Convert to 1 or 0
                             self.petSizePreference.lowercased().replacingOccurrences(of: " pets", with: ""), // Convert back to backend format
                             imgID // Include imgID in values_new
                         ]
                     ]
-                    print(requestBody)
                     
                     // Perform the PATCH request
-                    self.performPatchRequest(with: requestBody, completion: completion)
+                    self.performPatchRequest(with: requestBody)
                     
                 case .failure(let error):
                     print("Error uploading business image:", error)
                     self.updateStatus = "Error: \(error.localizedDescription)"
-                    completion(false)
                 }
             }
         } else {
@@ -132,55 +136,57 @@ class UpdateBusinessViewModel: ObservableObject {
                     self.location,
                     self.contact,
                     self.description,
-                    self.leashPolicy.lowercased() == "yes" ? 1 : 0, // Convert to 1 or 0
-                    self.disabledFriendly.lowercased() == "yes" ? 1 : 0,
+                    self.leashPolicy ? 1 : 0, // Convert to 1 or 0
+                    self.disabledFriendly ? 1 : 0, // Convert to 1 or 0
                     self.petSizePreference.lowercased().replacingOccurrences(of: " pets", with: ""), // Convert back to backend format
                 ]
             ]
-            
-            // Perform the PATCH request
-            self.performPatchRequest(with: requestBody, completion: completion)
+        
+        // Perform the PATCH request
+        self.performPatchRequest(with: requestBody)
         }
     }
 
     
-    func performPatchRequest(with body: [String: Any], completion: @escaping (Bool) -> Void) {
+    func performPatchRequest(with body: [String: Any]) {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
-            self.updateStatus = "Error: Failed to serialize JSON"
-            completion(false)
+            updateStatus = "Error: Failed to serialize JSON"
             return
         }
         
-        var request = URLRequest(url: URL(string: "http://localhost:8080/businesses")!)
+        guard let url = URL(string: "http://localhost:8080/businesses") else {
+            updateStatus = "Error: Invalid URL"
+            return
+        }
+
+        var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
+
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let self = self else { return }
+
+            guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
                 DispatchQueue.main.async {
                     self.updateStatus = "Error: \(error?.localizedDescription ?? "Unknown error")"
-                    completion(false)
                 }
                 return
             }
-            
-            // Handle response as needed
-            // You can update UI or perform additional actions here
-            // For simplicity, just print the response data
-            if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
+
+            if (200...299).contains(httpResponse.statusCode) {
                 DispatchQueue.main.async {
                     self.updateStatus = "Business updated successfully"
                     self.getUpdatedBusiness()
-                    completion(true)
                 }
             } else {
                 DispatchQueue.main.async {
                     self.updateStatus = "Error: Failed to update business"
-                    completion(false)
                 }
             }
-        }.resume()
+        }
+
+        task.resume()
     }
 
     func getUpdatedBusiness() {
@@ -189,7 +195,7 @@ class UpdateBusinessViewModel: ObservableObject {
             return
         }
         
-        let urlString = "http://localhost:8080/businesses?id=\(ownedBusiness.businessID)"
+        let urlString = "http://localhost:8080/businesses?businessID=\(ownedBusiness.businessID)"
         
         guard let url = URL(string: urlString) else {
             self.updateStatus = "Error: Invalid URL"
@@ -204,18 +210,128 @@ class UpdateBusinessViewModel: ObservableObject {
                 return
             }
             
-            // Decode the response data into Business object
-            if let updatedBusiness = try? JSONDecoder().decode(Business.self, from: data) {
+            // Decode the response data into an array of Business objects
+            if let businesses = try? JSONDecoder().decode([Business].self, from: data) {
+                // Check if at least one business object is decoded
+                guard let updatedBusiness = businesses.first else {
+                    DispatchQueue.main.async {
+                        self.updateStatus = "Error: No business data found"
+                    }
+                    return
+                }
+                
                 DispatchQueue.main.async {
-                    // Update the owned business with the updated business data
+                    // Update the owned business with the first decoded business object
                     SessionManager.shared.ownedBusiness = updatedBusiness
-                    SessionManager.shared.fetchBusinessImage()
+                    
+                    // Extract the new image ID from the updated business data
+                    if let imgID = updatedBusiness.imgID?.Int64 {
+                        // Fetch the new business image using the new image ID
+                        self.fetchNewBusinessImage(imgID: imgID)
+                    }
+                    
                     self.updateStatus = "Owned business updated successfully"
+                    self.showAlert(title: "Business Updated", message: "Business updated successfully")
                 }
             } else {
                 DispatchQueue.main.async {
                     self.updateStatus = "Error: Failed to decode business data"
+                    print("didnt work")
                 }
+            }
+        }.resume()
+    }
+
+
+
+    
+    func fetchNewBusinessImage(imgID: Int) {
+        guard let url = URL(string: "http://localhost:8080/imageInfo?id=\(imgID)") else {
+            print("Invalid URL")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                if let error = error {
+                    print("Error fetching image data:", error.localizedDescription)
+                } else {
+                    print("No data received for business image")
+                }
+                return
+            }
+
+            do {
+                let imageInfo = try JSONDecoder().decode([ImageInfo].self, from: data)
+                if let info = imageInfo.first {
+                    let fileURL = URL(fileURLWithPath: #file)
+                    let directoryURL = fileURL.deletingLastPathComponent().deletingLastPathComponent()
+
+                    // Constructing the file URL
+                    let uploadsUrl = directoryURL.appendingPathComponent("ViewModels/uploads")
+                    let imageUrl = uploadsUrl.appendingPathComponent(info.imgType).appendingPathComponent(info.imgName)
+
+                    let imageData = try Data(contentsOf: imageUrl)
+                    if let uiImage = UIImage(data: imageData) {
+                        DispatchQueue.main.async {
+                            // Update SessionManager's businessImage
+                            SessionManager.shared.businessImage = uiImage
+                        }
+                    }
+                }
+            } catch {
+                print("Error decoding image info JSON:", error)
+            }
+        }.resume()
+    }
+    
+    func deleteBusiness() {
+        let urlString = "http://localhost:8080/businesses"
+        guard let ownedBusiness = SessionManager.shared.ownedBusiness else {
+            self.updateStatus = "Error: No owned business found"
+            return
+        }
+        
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Create the request body
+        let requestBody: [String: Any] = [
+            "tablename": "businesses",
+            "column": "businessID",
+            "id": ownedBusiness.businessID
+        ]
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+        } catch {
+            print("Error encoding request body: \(error)")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
+                print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            if (200...299).contains(httpResponse.statusCode) {
+                print("Businesses deleted successfully")
+                // Show alert and dismiss view
+                DispatchQueue.main.async {
+                    SessionManager.shared.ownedBusiness = nil
+                    SessionManager.shared.isBusinessOwner = false
+                    SessionManager.shared.businessImage = nil
+                }
+                self.showAlert(title: "Business Deleted", message: "Business Deleted Successfully")
+            } else {
+                print("Failed to delete business")
             }
         }.resume()
     }
@@ -241,5 +357,13 @@ class UpdateBusinessViewModel: ObservableObject {
         newBusinessImage = image
         isShowingImagePicker = false
         didSelectImage?(image)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            self.alertTitle = title
+            self.alertMessage = message
+            self.showAlert = true
+        }
     }
 }

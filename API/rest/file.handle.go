@@ -24,6 +24,13 @@ POST - METHOD:
 	FILE MUST BE IN BODY OF REQUEST AS FORM DATA: file=file.png, type=FILETYPE
 */
 func UploadFile(c *gin.Context) {
+	invalidateCache("getImgInfo")
+	invalidateCache("getevents")
+	invalidateCache("getreviews")
+	invalidateCache("getusers")
+	invalidateCache("getbusinesses")
+	invalidateCache("getbusinessreviews")
+	invalidateCache("getbusinessevents")
 	c.Header("Access-Control-Allow-Origin", "*")
 
 	// Parse multipart form for file upload

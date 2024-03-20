@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CreateEventView: View {
     @ObservedObject private var viewModel = CreateEventViewModel()
+    @State private var isAlertShown = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationView {
@@ -84,6 +86,11 @@ struct CreateEventView: View {
             }
         }
             .navigationTitle("Create Event")
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
+                    presentationMode.wrappedValue.dismiss()
+                })
+            }
         }
     }
 

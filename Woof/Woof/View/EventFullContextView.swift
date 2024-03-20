@@ -11,12 +11,10 @@ struct EventFullContextView: View {
     @ObservedObject var viewModel: EventFullContextViewModel
     @ObservedObject var sessionManager = SessionManager.shared
     
-    // Variable to store the image data
     @State private var eventImage: UIImage?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Display event details
             Text(viewModel.event.eventName)
                 .font(.headline)
             Text(viewModel.event.eventDescription)
@@ -24,25 +22,19 @@ struct EventFullContextView: View {
             Text("Date: \(viewModel.event.eventDate)")
             Text("Location: \(viewModel.event.location)")
             Text("Contact: \(viewModel.event.contactInfo)")
-            // Additional event details can be displayed here
 
-            // Example: Display attendance count
             Text("Attendance Count: \(viewModel.event.attendance_count)")
                 .font(.subheadline)
 
-            // Example: Display pet-related preferences
             Text("Pet Size Preference: \(viewModel.event.petSizePref)")
                 .font(.subheadline)
 
-            // Example: Display if leash policy is enforced
             Text("Leash Policy: \(viewModel.event.leashPolicy ? "Enforced" : "Not Enforced")")
                 .font(.subheadline)
 
-            // Example: Display if disabled-friendly
             Text("Disabled Friendly: \(viewModel.event.disabledFriendly ? "Yes" : "No")")
                 .font(.subheadline)
 
-            // Display image if available
             if let uiImage = eventImage {
                 Image(uiImage: uiImage)
                     .resizable()
@@ -69,7 +61,7 @@ struct EventFullContextView: View {
             viewModel.fetchEventImage()
             viewModel.isAttending = sessionManager.eventsAttending?.contains { $0.eventID == viewModel.event.eventID } ?? false
         }
-        // Set the eventImage when imageData is updated
+        
         .onReceive(viewModel.$imageData) { imageData in
             if let data = imageData, let uiImage = UIImage(data: data) {
                 self.eventImage = uiImage
@@ -96,7 +88,6 @@ struct EventFullContextView_Previews: PreviewProvider {
                               petSizePref: "Medium",
                               geolocation: "here")
 
-        // Create an instance of EventFullContextView
         EventFullContextView(viewModel: EventFullContextViewModel(event: testEvent))
     }
 }

@@ -27,10 +27,6 @@ class SessionManager: ObservableObject {
     
     static let shared = SessionManager()
     
-//    private init() {
-//        checkUserBusinessOwner()
-//        fetchEventsAttending()
-//    }
     
     func getUserID() -> Int? {
         return userID
@@ -42,7 +38,6 @@ class SessionManager: ObservableObject {
             return
         }
 
-        // Add query parameters
         if let userID = userID {
             urlComponents.queryItems = [URLQueryItem(name: "ownerUserID", value: String(userID))]
         } else {
@@ -55,7 +50,6 @@ class SessionManager: ObservableObject {
             return
         }
 
-        // Perform the request
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
                 print("No data")
@@ -63,18 +57,15 @@ class SessionManager: ObservableObject {
             }
 
             do {
-                // Parse JSON response into an array of Business objects
                 let decodedResponse = try JSONDecoder().decode([Business].self, from: data)
                 if let business = decodedResponse.first {
                     DispatchQueue.main.async {
-                        // User owns a business
                         self.ownedBusiness = business
                         self.isBusinessOwner = true
                         self.userBusinessID = business.businessID
                         self.fetchBusinessImage()
                     }
                 } else {
-                    // User doesn't own a business
                     DispatchQueue.main.async {
                         self.ownedBusiness = nil
                         self.isBusinessOwner = false
@@ -128,7 +119,6 @@ class SessionManager: ObservableObject {
     }
     
     func fetchSavedBusinesses() {
-        // Ensure user ID exists
         guard let currentUserID = currentUser?.userID else {
             print("User ID not found")
             return
@@ -142,7 +132,6 @@ class SessionManager: ObservableObject {
             if let httpResponse = response as? HTTPURLResponse {
                 switch httpResponse.statusCode {
                 case 200:
-                    // Successful response
                     do {
                         let decodedData = try JSONDecoder().decode([SavedBusinessResponse].self, from: data!)
                         DispatchQueue.main.async {
@@ -155,7 +144,6 @@ class SessionManager: ObservableObject {
                         }
                     }
                 case 500:
-                    // Handle 500 error
                     do {
                         let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data!)
                         DispatchQueue.main.async {
@@ -168,7 +156,6 @@ class SessionManager: ObservableObject {
                         }
                     }
                 default:
-                    // Handle other status codes
                     DispatchQueue.main.async {
                         self.errorMessage = "Unexpected error occurred"
                     }
@@ -203,9 +190,7 @@ class SessionManager: ObservableObject {
                     let fileURL = URL(fileURLWithPath: #file)
                     let directoryURL = fileURL.deletingLastPathComponent().deletingLastPathComponent()
 
-                    // Constructing the file URL
                     let uploadsUrl = directoryURL.appendingPathComponent("ViewModels/uploads")
-//                    let uploadsUrl = URL(fileURLWithPath: "/Woof-Senior-Capstone/Woof/Woof/ViewModels/uploads")
                     let imageUrl = uploadsUrl.appendingPathComponent(info.imgType).appendingPathComponent(info.imgName)
 
                     let imageData = try Data(contentsOf: imageUrl)
@@ -247,9 +232,7 @@ class SessionManager: ObservableObject {
                     let fileURL = URL(fileURLWithPath: #file)
                     let directoryURL = fileURL.deletingLastPathComponent().deletingLastPathComponent()
 
-                    // Constructing the file URL
                     let uploadsUrl = directoryURL.appendingPathComponent("ViewModels/uploads")
-//                    let uploadsUrl = URL(fileURLWithPath: "/Woof-Senior-Capstone/Woof/Woof/ViewModels/uploads")
                     let imageUrl = uploadsUrl.appendingPathComponent(info.imgType).appendingPathComponent(info.imgName)
 
                     let imageData = try Data(contentsOf: imageUrl)
