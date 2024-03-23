@@ -6,18 +6,27 @@ shape data in an ordered way
 from dataclasses import dataclass
 
 @dataclass
-class business():
-    businessName : str
+class Business:
+    businessName: str
     businessType: str
-    ownerUserID: int #DEFAULT TO 0 figure out problem later
     location: str
     contact: str
     description: str
-    petSizePref: str #CAN ONLY BE small, medium, large (maybe update to include any -> backend)
-    leashPolicy: bool #i think this is 0 or 1
-    disabledFriendly: bool #i thnk this is 0 or 1
-    dataLocation: str #Default to foreign
-    imgID: int #Default to 0
+    petSizePref: str
+    leashPolicy: bool
+    disabledFriendly: bool
+    geolocation: str
+    ownerUserID: int = 2
+    dataLocation: str = "foreign"
+    imgID: int = 0
+
+
+@dataclass
+class Account:
+    userName: str
+    email: str
+    password: str = "p"
+    accountType: str = "business"
 
 @dataclass
 class event():
@@ -29,13 +38,13 @@ class event():
     petSizePref: str #CAN ONLY BE small, medium, large (maybe update to include any -> backend)
     leashPolicy: bool #i think this is 0 or 1
     disabledFriendly: bool #i thnk this is 0 or 1
-    datalocation: str #Default to foreign
-    imgID: int #Default to 0
+    datalocation: str = "foreign" #Default to foreign
+    imgID: int = 0
 
 @dataclass
 class review():
     currentuserID: int #default to 0
     rating: int
     comment: str
-    datalocation: str #Default to foreign
-    imgID: int #Default to 0
+    datalocation: str = "foreign"#Default to foreign
+    imgID: int = 0 #Default to 0

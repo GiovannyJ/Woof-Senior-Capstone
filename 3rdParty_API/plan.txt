@@ -1,0 +1,8 @@
+call yelp API
+business -> get all info -> create account using business name as username
+-> call account info of business name -> create business using account id
+
+
+event -> look at business name -> look at events -> using business id and event info create event
+
+review -> look at business name -> create review avg using new endpoint
