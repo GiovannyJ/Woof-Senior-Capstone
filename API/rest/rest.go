@@ -47,6 +47,7 @@ func API(mode string){
 	router.POST("events/businesses/:businessid", NewEvent)
 	router.POST("events/attendance", NewAttendance) //*NEW
 	router.POST("login", Login)
+	router.POST("imageInfo", NewImgInfo)
 	
 
 	/*

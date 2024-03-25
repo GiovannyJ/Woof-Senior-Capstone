@@ -110,8 +110,12 @@ These are endpoints to send data to the database. In the request body you must s
   - this also updates the attendance_count column in the database
   - checks for if user already is RSVP for the event as to not overpopulate it artificially
 
-  + [http://localhost:8080/uploads](#)
++ [http://localhost:8080/uploads](#)
   - upload a new image to the database, images are stored locally (maybe store on server later)
+
++ [http://localhost:8080/imageInfo](#)
+  - upload image info directly
+  - used for images that arent stored on database but rather links
   
 
 [Sample JSON Body for Requests](json_templates/POST_REQUESTS)

@@ -413,50 +413,6 @@ func GetBusinessEvents(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, results)
 }
 
-/*
-*TESTED WORKING
-gets all img info from database
-can query by: id, size, imgName, imgType, order(ASC/DESC)
-*/
-func GetImgInfo(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")
-	var query = make(map[string]interface{})
-
-	queryParams := map[string]string{
-		"id":      c.Query("id"),
-		"size":    c.Query("size"),
-		"imgName": c.Query("imgName"),
-		"imgType": c.Query("imgType"),
-		"order":   c.Query("order"),
-	}
-
-	for key, value := range queryParams {
-		if len(value) > 0 {
-			query[key] = value
-		}
-	}
-
-	cacheKey := generateCacheKey(queryParams, "getImgInfo")
-
-	if data, err := getCacheData(cacheKey); err == nil {
-		c.IndentedJSON(http.StatusOK, data)
-		return
-	}
-
-	results, err := db.ImgInfo_GET(query)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
-		return
-	}
-
-	serializedData, err := json.Marshal(results)
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to serialize data"})
-		return
-	}
-	setCache(cacheKey, serializedData)
-	c.IndentedJSON(http.StatusOK, results)
-}
 
 /*
 *TESTED WORKING

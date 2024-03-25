@@ -3,7 +3,8 @@ This package will hold our dataclasses basically structs used to
 shape data in an ordered way
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime
 
 @dataclass
 class Business:
@@ -26,25 +27,36 @@ class Account:
     userName: str
     email: str
     password: str = "p"
-    accountType: str = "business"
+    accountType: str = "foreign business"
 
 @dataclass
-class event():
+class Event():
+    businessID: int
     eventName: str
     eventDescription: str
     eventDate: str
     location: str
     contactInfo: str
     petSizePref: str #CAN ONLY BE small, medium, large (maybe update to include any -> backend)
-    leashPolicy: bool #i think this is 0 or 1
-    disabledFriendly: bool #i thnk this is 0 or 1
+    leashPolicy: bool 
+    disabledFriendly: bool 
+    geolocation: str
     datalocation: str = "foreign" #Default to foreign
     imgID: int = 0
 
 @dataclass
-class review():
-    currentuserID: int #default to 0
+class Review():
     rating: int
     comment: str
+    businessID: int
+    currentuserID: int = 0 #default to 0
     datalocation: str = "foreign"#Default to foreign
     imgID: int = 0 #Default to 0
+
+@dataclass
+class ImageInfo():
+    imgName: str
+    size: int = 0
+    imgData: str = " "
+    imgType: str = "business" 
+    dateCreated: str = field(default_factory=lambda: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
