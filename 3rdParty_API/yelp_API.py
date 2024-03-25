@@ -39,7 +39,7 @@ class YelpScraper:
                 self.data = response.json().get(self.datatype, [])
                 return self.cleanData()
             else:
-                print(f"Error: {response.status_code} {response.text}")
+                print(f"[-] Error collecting data: {response.status_code} {response.text}")
                 # return []
 
     
@@ -88,6 +88,8 @@ class YelpScraper:
                 )
                 
                 businessID = api.sendBusiness(businessObj=business)
+                api.updateBusiness(businessID=businessID, column="imgID", newValue=imgID)
+
 
                 cleaned_data.append(businessID)
 

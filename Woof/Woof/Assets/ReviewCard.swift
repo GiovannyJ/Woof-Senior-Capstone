@@ -12,6 +12,7 @@ struct ReviewCard: View {
     @State private var reviewImageData: Data?
     var onDelete: () -> Void
     
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             if let username = review.username {
@@ -37,14 +38,14 @@ struct ReviewCard: View {
             }
         }
         .padding()
-        .background(Color.teal.opacity(0.1))
+        .background(review.dataLocation == "foreign" ? Color.red.opacity(0.1) : Color.teal.opacity(0.1))
         .cornerRadius(8)
         .onAppear {
-            fetchBusinessImage()
+            fetchReviewImage()
         }
     }
     
-    func fetchBusinessImage() {
+    func fetchReviewImage() {
         guard let imgID = self.review.imgID?.Int64 else {
             print("Image ID not found")
             return

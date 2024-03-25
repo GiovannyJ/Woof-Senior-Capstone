@@ -27,9 +27,10 @@ class WoofAPI:
         response = requests.post(url, json=data)
         
         if response.status_code == 201:
+            print(f"[+] upload business {businessObj.businessName} successful")
             return response.json()[0]["businessID"]
         else:
-            print(f"Error: {response.status_code} {response.text}")
+            print(f"[-] Error uploading {businessObj.businessName}: {response.status_code} {response.text}")
             return None
 
     def sendReview(self, reviewObj):
@@ -43,9 +44,10 @@ class WoofAPI:
         response = requests.post(url, json=data)
         
         if response.status_code == 201:
+            print(f"[+] review for business:{reviewObj.businessID} uploaded successfully")
             return response.json()[0]["reviewID"]
         else:
-            print(f"Error: {response.status_code} {response.text}")
+            print(f"[-] Error uploading review for business:{reviewObj.businessID}: {response.status_code} {response.text}")
             return None
 
     def sendEvent(self, eventObj):
@@ -66,9 +68,10 @@ class WoofAPI:
         response = requests.post(url, json=data)
         
         if response.status_code == 201:
+            print(f"[+] event {eventObj.eventName} upload successful")
             return response.json()[0]["eventID"]
         else:
-            print(f"Error: {response.status_code} {response.text}")
+            print(f"[-] Error uploading event {eventObj.eventName}: {response.status_code} {response.text}")
             return None
 
     def sendImg(self, imgObj):
@@ -84,10 +87,11 @@ class WoofAPI:
         response = requests.post(url, json=data)
         
         if response.status_code == 201:
+            print("[+] image upload successful")
             return response.json()[0]["imgID"]
         else:
             
-            print(f"Error: {response.status_code} {response.text}")
+            print(f"[-] Error uploading image: {response.status_code} {response.text}")
             return None
 
     #SEND ACCOUNT TO API AND RETURN ACCOUNT ID
@@ -104,11 +108,10 @@ class WoofAPI:
         response = requests.post(url, json=data)
         
         if response.status_code == 201:
-            # If the request is successful, return the account ID
+            print(f"[+] Account for {accObj.userName} upload successful")
             return response.json()[0]["userID"]
         else:
-            # If the request fails, print the error message and return None
-            print(f"Error: {response.status_code} {response.text}")
+            print(f"[-] Error uploading account {accObj.userName}: {response.status_code} {response.text}")
             return None
     
     #RETURNS ACCOUNT IF FULL CONTEXT PARSE WITH ["PROPERTY"]
@@ -142,11 +145,11 @@ class WoofAPI:
             response = requests.patch(url, json=data)
             
             if response.status_code == 200:
-                print("Business updated successfully.")
+                print(f"[+] Business {businessID} updated successfully.")
             else:
-                print("Failed to update business. Status code:", response.status_code)
+                print("[-] Failed to update business. Status code:", response.status_code)
         except requests.exceptions.RequestException as e:
-            print("Error:", e)
+            print("[-] Error:", e)
 
     def __updateAccount(self, accountID, column, newValue):
         url = self.url + "users"
@@ -162,11 +165,11 @@ class WoofAPI:
             response = requests.patch(url, json=data)
             
             if response.status_code == 200:
-                print("Account updated successfully.")
+                print(f"[+] Account {accountID} updated successfully.")
             else:
-                print("Failed to update account. Status code:", response.status_code)
+                print(f"[-] Failed to update account {accountID}. Status code:", response.status_code)
         except requests.exceptions.RequestException as e:
-            print("Error:", e)
+            print(f"[-] Error:", e)
 
     def send_defaults(self):
         gio = models.Account(
@@ -205,7 +208,5 @@ class WoofAPI:
             accountID = self.sendAccount(accObj=i)
             if i.userName == "Yelp Reviewer":
                 self.__updateAccount(accountID=accountID, column="userID", newValue=0)
-                print(f"{i.userName} value updated id to 0")
-            print(f"account {i.userName} sent")
         
 
