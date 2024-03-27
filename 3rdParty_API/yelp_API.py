@@ -89,6 +89,7 @@ class YelpScraper:
                 
                 businessID = api.sendBusiness(businessObj=business)
                 api.updateBusiness(businessID=businessID, column="imgID", newValue=imgID)
+                
 
 
                 cleaned_data.append(businessID)

@@ -78,7 +78,6 @@ class BusinessReviewsViewModel: ObservableObject {
                                 print("Unable to create image from data")
                             }
                         }
-                        task.resume()
                     }else{
                         let fileURL = URL(fileURLWithPath: #file)
                         let directoryURL = fileURL.deletingLastPathComponent()
@@ -176,8 +175,10 @@ class BusinessReviewsViewModel: ObservableObject {
                        do {
                            let reviews = try JSONDecoder().decode([Review].self, from: responseData)
                            if let reviewsFirst = reviews.first {
-                               self.uploadReviewImage(reviewID: reviewsFirst.reviewID)
-                               self.reviews.append(reviewsFirst)
+                               DispatchQueue.main.async {
+                                   self.uploadReviewImage(reviewID: reviewsFirst.reviewID)
+                                   self.reviews.append(reviewsFirst)
+                               }
                            }
                        } catch {
                            print("Error decoding event data:", error)

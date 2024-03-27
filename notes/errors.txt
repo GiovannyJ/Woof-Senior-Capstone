@@ -53,6 +53,10 @@ COMPLETELY FIXED:
         ++should not appear if user owns business already
 
 SMALL ISSUES:
+    business full context:
+        -if user comments twice the most recent one is not pulled
+        -when user makes comment is shows up as guest
+        
     search businesses:
         ++filters and queries not implemented
         -business button needs to look better
