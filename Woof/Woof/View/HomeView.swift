@@ -1,13 +1,4 @@
-//
-//  HomeView.swift
-//  Woof
-//
-//  Created by Giovanny Joseph on 2/22/24.
-//
-
 import SwiftUI
-import MapKit
-import CoreLocation
 
 struct HomeView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
@@ -16,151 +7,101 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .center, spacing: 24) {
                     Text("Welcome Back \(sessionManager.currentUser?.username ?? "Guest")!")
-                        .font(.subheadline)
+                        .font(.title2)
                         .fontWeight(.bold)
                         .padding(.leading)
+                        .foregroundColor(.orange.opacity(0.8))
                     
                     Text("Discover Pet-Friendly Businesses and Events.")
                         .font(.largeTitle)
                         .foregroundColor(.orange)
                         .padding()
-
-                    Text("Features:")
-                        .font(.callout)
+                    
+                    Text("Explore")
+                        .font(.title2)
                         .fontWeight(.bold)
                         .padding(.leading)
-
+                        .foregroundColor(.orange.opacity(0.8))
+                    
+                    Spacer()
+                    
                     NavigationLink(destination: ProfileView()) {
-                        Text("Profile")
-                            .font(.subheadline)
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                        FunButton(title: "Profile", icon: "person.circle.fill")
                     }
-
+                    .buttonStyle(ExploreButtonStyle())
+                    
                     NavigationLink(destination: SearchView()) {
-                        Text("Search Businesses")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                        FunButton(title: "Search Businesses", icon: "magnifyingglass")
                     }
-
+                    .buttonStyle(ExploreButtonStyle())
+                    
                     NavigationLink(destination: LocalEventsView()) {
-                        Text("Local Events")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.teal)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                        FunButton(title: "Local Events", icon: "location.fill")
                     }
-                    
-                        NavigationLink(destination: UpdateAccountView()) {
-                            Text("Update Profile")
-                                .fontWeight(.heavy)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.red)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                    
-                    // Buttons for business user
-                    if sessionManager.currentUser?.accountType == "business" && !sessionManager.isBusinessOwner {
-                        NavigationLink(destination: RegisterBusinessView()) {
-                            Text("Register Your Business")
-                                .fontWeight(.heavy)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.teal)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                    }else if sessionManager.isBusinessOwner{
-                            NavigationLink(destination: CreateEventView()) {
-                                Text("Create an Event")
-                                    .fontWeight(.heavy)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.teal)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                            }
-                            
-                            
-                            NavigationLink(destination: UpdateEventsListView()) {
-                                Text("Update Your Events")
-                                    .fontWeight(.heavy)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.red)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                            }
-                            
-                            NavigationLink(destination: UpdateBusinessView()) {
-                                Text("Update Your Business")
-                                    .fontWeight(.heavy)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.red)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                            }
-                        }
-                    }
-                    
-//                    NavigationLink(destination: 
-//                        AddressFinderView()) {
-//                        Text("Test address look up")
-//                            .fontWeight(.heavy)
-//                            .padding()
-//                            .frame(maxWidth: .infinity)
-//                            .background(Color.red)
-//                            .foregroundColor(.white)
-//                            .cornerRadius(10)
-//                    }
-//                    NavigationLink(destination: 
-//                        MapView()) {
-//                        Text("Test map view")
-//                            .fontWeight(.heavy)
-//                            .padding()
-//                            .frame(maxWidth: .infinity)
-//                            .background(Color.red)
-//                            .foregroundColor(.white)
-//                            .cornerRadius(10)
-//                    }
-//                    NavigationLink(destination: LocationRequestView()) {
-//                        Text("Do this first")
-//                            .fontWeight(.heavy)
-//                            .padding()
-//                            .frame(maxWidth: .infinity)
-//                            .background(Color.red)
-//                            .foregroundColor(.white)
-//                            .cornerRadius(10)
-//                    }
+                    .buttonStyle(ExploreButtonStyle())
                     
                     Spacer()
                 }
                 .padding()
+                .overlay(
+                    NavigationLink(destination: UpdateAccountView()){
+                        Image(systemName: "person.crop.circle.fill.badge.plus")
+                            .resizable()
+                            .frame(width: 24, height: 24)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(Color.red)
+                            .clipShape(Circle())
+                            .padding([.top, .trailing], 16)
+                    },
+                    alignment: .topTrailing
+                )
             }
             .navigationTitle("Home")
         }
     }
+}
 
+struct FunButton: View {
+    var title: String
+    var icon: String
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 64))
+                .foregroundColor(.white)
+            
+            Text(title)
+                .foregroundColor(.primary)
+                .font(.headline)
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color("ButtonColor"))
+        )
+        .padding(.horizontal, 20)
+    }
+}
 
+struct ExploreButtonStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .padding(.vertical, 16)
+            .padding(.horizontal, 24)
+            .background(Color.teal.opacity(0.8))
+            .foregroundColor(.white)
+            .cornerRadius(20)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1)
+    }
+}
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
     }
 }
-

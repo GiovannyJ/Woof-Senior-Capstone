@@ -50,23 +50,31 @@ struct BusinessFullContext: View {
             VStack(alignment: .leading, spacing: 16) {
                 // Business information section
                 Section(header: Text("Business Information")
-                    .font(.title)
+                    .font(.title2)
                     .foregroundColor(.teal)
-                    .fontWeight(.heavy)
+                    .fontWeight(.semibold)
                     .padding(.bottom, 5)
                 ) {
                     // Display business information
                     Text("\(viewModel.business.businessName)")
                         .font(.title)
                         .foregroundColor(.orange)
-                    Text("Type: \(viewModel.business.businessType)")
+                    Text("Business Type:")
+                        .fontWeight(.bold)
+                    Text("\(viewModel.business.businessType)")
                         .font(.title2)
-                    Text("Location: \(viewModel.business.location)")
+                    Text("Location:")
+                        .fontWeight(.bold)
+                    Text("\(viewModel.business.location)")
                         .font(.title2)
-                    Text("Contact: \(viewModel.business.contact)")
+                    Text("Contact:")
+                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    Text("\(viewModel.business.contact)")
                         .font(.title2)
                     if let rating = viewModel.business.rating {
-                        Text("Rating: \(rating)")
+                        Text("Rating:")
+                            .fontWeight(.bold)
+                        Text("\(rating)")
                             .font(.title2)
                     }
                     
@@ -119,17 +127,19 @@ struct BusinessFullContext: View {
                                 .foregroundColor(.red)
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color.gray.opacity(0.1))
+                                .background(Color.orange.opacity(0.1))
                                 .cornerRadius(8)
                                 .fontWeight(.heavy)
                         } else {
                             Text("Save Business")
-                                .foregroundColor(.teal)
+                                .foregroundColor(.orange.opacity(0.6))
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color.gray.opacity(0.1))
+                                .background(Color.orange.opacity(0.1))
+                                .font(.subheadline)
+                                .fontDesign(.rounded)
                                 .cornerRadius(8)
-                                .fontWeight(.heavy)
+                                .fontWeight(.bold)
                         }
                     }
                     .padding()
