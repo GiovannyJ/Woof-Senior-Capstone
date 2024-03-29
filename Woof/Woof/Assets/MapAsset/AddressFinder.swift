@@ -8,11 +8,6 @@
 import Foundation
 import MapKit
 
-//struct Location: Identifiable {
-//    let id = UUID()
-//    let name: String
-//    let coordinate: CLLocationCoordinate2D
-//}
 
 class MapAPI: ObservableObject {
     private let geocoder = CLGeocoder()
