@@ -1,6 +1,6 @@
 //
 //
-//  TestMapView.swift
+//  MapView.swift
 //  LocationRequest
 //
 //  Created by Martin on 2/24/24.
@@ -64,19 +64,19 @@ struct MapView: View {
                     .padding()
                 }
             }
-            // Set navigation title and toolbar items
-            .navigationTitle("Current Location")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    // Navigate to address finder view when tapped
-                    NavigationLink(destination: AddressFinderView()) {
-                        Image(systemName: "chevron.right.circle.fill")
-                    }
+//            // Set navigation title and toolbar items
+//            .navigationTitle("Current Location")
+//            .toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    // Navigate to address finder view when tapped
+//                    NavigationLink(destination: AddressFinderView()) {
+//                        Image(systemName: "chevron.right.circle.fill")
+//                    }
                 }
             }
         }
-    }
-}
+
+
 
 // Map view represented by a UIView
 struct MapViewUI: UIViewRepresentable {

@@ -57,6 +57,7 @@
 		3FE90D6A2B883F7F00FCCF54 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D692B883F7F00FCCF54 /* ProfileViewModel.swift */; };
 		3FE90D6C2B8840B600FCCF54 /* LocalEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D6B2B8840B600FCCF54 /* LocalEventsViewModel.swift */; };
 		3FE90D6E2B88412000FCCF54 /* CreateNewEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D6D2B88412000FCCF54 /* CreateNewEventViewModel.swift */; };
+		5B5F29302BB616F90053D978 /* MapHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F292F2BB616F90053D978 /* MapHomeView.swift */; };
 		5BDB24852BA0B29700CD5042 /* AddressFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */; };
 		C03488762B9608EF00D4AD91 /* updateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488752B9608EF00D4AD91 /* updateAccount.swift */; };
 		C03488782B9609D600D4AD91 /* updateBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488772B9609D600D4AD91 /* updateBusiness.swift */; };
@@ -137,6 +138,7 @@
 		3FE90D692B883F7F00FCCF54 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		3FE90D6B2B8840B600FCCF54 /* LocalEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalEventsViewModel.swift; sourceTree = "<group>"; };
 		3FE90D6D2B88412000FCCF54 /* CreateNewEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewEventViewModel.swift; sourceTree = "<group>"; };
+		5B5F292F2BB616F90053D978 /* MapHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHomeView.swift; sourceTree = "<group>"; };
 		5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressFinderView.swift; sourceTree = "<group>"; };
 		5BDB24862BA0D81400CD5042 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C03488752B9608EF00D4AD91 /* updateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateAccount.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 			isa = PBXGroup;
 			children = (
 				3FD4A4332B8822B900E92B07 /* HomeView.swift */,
+				5B5F292F2BB616F90053D978 /* MapHomeView.swift */,
 				3FD97F8A2B9E55BD00A53464 /* LocationRequestView.swift */,
 				3FD97F8C2B9E562800A53464 /* MapView.swift */,
 				5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */,
@@ -504,6 +507,7 @@
 				3FE90D5E2B8829F100FCCF54 /* archive_Search.swift in Sources */,
 				3FE90D5B2B8829F100FCCF54 /* archive_LocalEvents.swift in Sources */,
 				3FD4A4362B8822FC00E92B07 /* ProfileView.swift in Sources */,
+				5B5F29302BB616F90053D978 /* MapHomeView.swift in Sources */,
 				3FE90D582B8829F100FCCF54 /* archive_Home.swift in Sources */,
 				3FD4A4242B88206E00E92B07 /* EventFullContextView.swift in Sources */,
 				3FD97F962B9E568900A53464 /* AddressFinder.swift in Sources */,

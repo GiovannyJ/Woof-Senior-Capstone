@@ -55,12 +55,6 @@ class CompleterDelegate: NSObject, MKLocalSearchCompleterDelegate {
     }
 }
 
-//struct AddressCompletion: Hashable {
-//    var title: String
-//    var subtitle: String
-//}
-
-
 struct AddressFinderView: View {
     @ObservedObject var locationManager = LocationManager.shared
     @StateObject private var mapAPI = MapAPI()
@@ -97,14 +91,14 @@ struct AddressFinderView: View {
 
             List(searchResults, id: \.self) { completion in
                 VStack(alignment: .leading) {
-                    Text(completion.subtitle)
+                    Text(completion.title)
                         .foregroundColor(.blue)
                     Text(completion.subtitle)
                         .font(.caption)
                 }
                 .onTapGesture {
                     text = "\(completion.subtitle)"
-                    mapAPI.getLocation(address: completion.title, delta: 0.05)
+                    mapAPI.getLocation(address: completion.subtitle, delta: 0.05)
                     searchResults.removeAll()
                 }
             }
