@@ -17,6 +17,7 @@ class UpdateBusinessViewModel: ObservableObject {
     @Published var leashPolicy: Bool = false
     @Published var disabledFriendly: Bool = false
     @Published var petSizePreference: String = "Small pets"
+    private var geolocation: String = ""
     @Published var updateStatus: String = ""
     
     var didSelectImage: ((UIImage?) -> Void)?
@@ -44,6 +45,7 @@ class UpdateBusinessViewModel: ObservableObject {
             self.leashPolicy = ownedBusiness.leashPolicy
             self.disabledFriendly = ownedBusiness.disabledFriendly
             self.petSizePreference = self.convertPetSizePref(ownedBusiness.petSizePref)
+            self.geolocation = ownedBusiness.geolocation
         }
     }
     
@@ -77,8 +79,61 @@ class UpdateBusinessViewModel: ObservableObject {
             uploadBusinessImage { result in
                 switch result {
                 case .success(let imgID):
-                    // Include the imgID in the updateData JSON body
-                    var requestBody: [String: Any] = [
+                    // Perform forward geocoding to get the geolocation
+                    ForwardGeocoding(address: self.location) { result in
+                        switch result {
+                        case .success(let geolocation):
+                            // Include the geolocation and imgID in the updateData JSON body
+                            let requestBody: [String: Any] = [
+                                "tablename": "businesses",
+                                "columns_old": ["businessID"],
+                                "values_old": [ownedBusiness.businessID],
+                                "columns_new": [
+                                    "businessName",
+                                    "businessType",
+                                    "location",
+                                    "contact",
+                                    "description",
+                                    "leashPolicy",
+                                    "disabledFriendly",
+                                    "petSizePref",
+                                    "imgID", // Include imgID in columns_new
+                                    "geolocation" // Include geolocation in columns_new
+                                ],
+                                "values_new": [
+                                    self.businessName,
+                                    self.businessType,
+                                    self.location,
+                                    self.contact,
+                                    self.description,
+                                    self.leashPolicy ? 1 : 0, // Convert to 1 or 0
+                                    self.disabledFriendly ? 1 : 0, // Convert to 1 or 0
+                                    self.petSizePreference.lowercased().replacingOccurrences(of: " pets", with: ""), // Convert back to backend format
+                                    imgID, // Include imgID in values_new
+                                    geolocation // Include geolocation in values_new
+                                ]
+                            ]
+                            
+                            // Perform the PATCH request
+                            self.performPatchRequest(with: requestBody)
+                            
+                        case .failure(let error):
+                            print("Error performing forward geocoding:", error.localizedDescription)
+                            self.updateStatus = "Error: \(error.localizedDescription)"
+                        }
+                    }
+                    
+                case .failure(let error):
+                    print("Error uploading business image:", error)
+                    self.updateStatus = "Error: \(error.localizedDescription)"
+                }
+            }
+        } else {
+            // No new business image, perform the PATCH request directly
+            ForwardGeocoding(address: self.location) { result in
+                switch result {
+                case .success(let geolocation):
+                    let requestBody: [String: Any] = [
                         "tablename": "businesses",
                         "columns_old": ["businessID"],
                         "values_old": [ownedBusiness.businessID],
@@ -91,7 +146,7 @@ class UpdateBusinessViewModel: ObservableObject {
                             "leashPolicy",
                             "disabledFriendly",
                             "petSizePref",
-                            "imgID" // Include imgID in columns_new
+                            "geolocation"
                         ],
                         "values_new": [
                             self.businessName,
@@ -102,7 +157,7 @@ class UpdateBusinessViewModel: ObservableObject {
                             self.leashPolicy ? 1 : 0, // Convert to 1 or 0
                             self.disabledFriendly ? 1 : 0, // Convert to 1 or 0
                             self.petSizePreference.lowercased().replacingOccurrences(of: " pets", with: ""), // Convert back to backend format
-                            imgID // Include imgID in values_new
+                            geolocation
                         ]
                     ]
                     
@@ -110,42 +165,14 @@ class UpdateBusinessViewModel: ObservableObject {
                     self.performPatchRequest(with: requestBody)
                     
                 case .failure(let error):
-                    print("Error uploading business image:", error)
+                    print("Error performing forward geocoding:", error.localizedDescription)
                     self.updateStatus = "Error: \(error.localizedDescription)"
                 }
             }
-        } else {
-            // No new business image, perform the PATCH request directly
-            let requestBody: [String: Any] = [
-                "tablename": "businesses",
-                "columns_old": ["businessID"],
-                "values_old": [ownedBusiness.businessID],
-                "columns_new": [
-                    "businessName",
-                    "businessType",
-                    "location",
-                    "contact",
-                    "description",
-                    "leashPolicy",
-                    "disabledFriendly",
-                    "petSizePref"
-                ],
-                "values_new": [
-                    self.businessName,
-                    self.businessType,
-                    self.location,
-                    self.contact,
-                    self.description,
-                    self.leashPolicy ? 1 : 0, // Convert to 1 or 0
-                    self.disabledFriendly ? 1 : 0, // Convert to 1 or 0
-                    self.petSizePreference.lowercased().replacingOccurrences(of: " pets", with: ""), // Convert back to backend format
-                ]
-            ]
-        
-        // Perform the PATCH request
-        self.performPatchRequest(with: requestBody)
         }
     }
+
+
 
     
     func performPatchRequest(with body: [String: Any]) {

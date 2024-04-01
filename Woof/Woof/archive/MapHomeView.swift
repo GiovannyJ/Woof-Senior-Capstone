@@ -21,7 +21,7 @@ struct newView: UIViewRepresentable {
 struct MapHomeView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
     @ObservedObject private var locationManager = LocationManager.shared
-    @StateObject private var mapAPI = MapAPI()
+//    @StateObject private var mapAPI = MapAPI()
     
     var body: some View {
         NavigationView {
@@ -131,16 +131,16 @@ struct MapHomeView: View {
                     }
                 }
                     
-                    NavigationLink(destination:
-                                    AddressFinderView()) {
-                        Text("Test address look up")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
+//                    NavigationLink(destination:
+//                                    AddressFinderView()) {
+//                        Text("Test address look up")
+//                            .fontWeight(.heavy)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                    }
 //                    NavigationLink(destination:
 //                                    MapView()) {
 //                        Text("Test map view")

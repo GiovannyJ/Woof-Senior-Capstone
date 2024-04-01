@@ -28,8 +28,18 @@ struct UpdateEventView: View {
             // input event details
             Form {
                 Section(header: Text("Event Information")){
-                    TextField("Event Name", text: $viewModel.event.eventName)
-                    TextField("Event Description", text: $viewModel.event.eventDescription)
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Event Name")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        TextField("Event Name", text: $viewModel.event.eventName)
+                    }
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Event Description")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        TextField("Event Description", text: $viewModel.event.eventDescription)
+                    }
                     
                     // DatePicker with custom binding to convert between String and Date
                     DatePicker("Event Date", selection: $eventDate, displayedComponents: .date)
@@ -37,18 +47,46 @@ struct UpdateEventView: View {
                             viewModel.event.eventDate = value.iso8601
                         })
                     
-                    TextField("Location", text: $viewModel.event.location)
-                    TextField("Contact Information", text: $viewModel.event.contactInfo)
-                    
-                    Toggle("Leash Policy", isOn: $viewModel.event.leashPolicy)
-                    Toggle("Disabled Friendly", isOn: $viewModel.event.disabledFriendly)
-                    
-                    Picker("Pet Size Preference", selection: $viewModel.event.petSizePref) {
-                        Text("Small Pets").tag("small")
-                        Text("Medium Pets").tag("medium")
-                        Text("Large Pets").tag("large")
+//                    TextField("Location", text: $viewModel.event.location)
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Event Location")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        AddressAutocompleteTextField(text: $viewModel.event.location)
                     }
-                    .pickerStyle(SegmentedPickerStyle())
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Contact Information")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        TextField("Contact Information", text: $viewModel.event.contactInfo)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 5) {
+//                        Text("Leash Policy")
+//                            .font(.caption)
+//                            .foregroundColor(.gray)
+                        Toggle("Leash Policy", isOn: $viewModel.event.leashPolicy)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 5) {
+//                        Text("Leash Policy")
+//                            .font(.caption)
+//                            .foregroundColor(.gray)
+                        Toggle("Disabled Friendly", isOn: $viewModel.event.disabledFriendly)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Leash Policy")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        Picker("Pet Size Preference", selection: $viewModel.event.petSizePref) {
+                            Text("Small Pets").tag("small")
+                            Text("Medium Pets").tag("medium")
+                            Text("Large Pets").tag("large")
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                    }
+                   
                     
                     if let imageData = viewModel.imageData,
                        let uiImage = UIImage(data: imageData) {

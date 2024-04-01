@@ -55,7 +55,7 @@ struct UpdateBusinessView: View {
                             Text("Location")
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                            TextField("Location", text: $viewModel.location)
+                            AddressAutocompleteTextField(text: $viewModel.location)
                                 .padding()
                                 .background(Color.teal.opacity(0.2))
                                 .cornerRadius(8)

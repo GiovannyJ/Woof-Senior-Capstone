@@ -14,46 +14,46 @@ import MapKit
 struct MapViewModel: View {
     // Observed object to manage location updates
     @ObservedObject public var locationManager = LocationManager.shared
-//    @State private var useUserLocation = true
     var centerCoordinate: CLLocationCoordinate2D?
+    @State var annotations: [CustomAnnotation] = []
     
     var body: some View {
         NavigationView {
             Group {
                 if let centerCoordinate = centerCoordinate {
                     // Display map view centered at the specified location
-                    MapViewUI(centerCoordinate: centerCoordinate)
+                    MapViewUI(centerCoordinate: centerCoordinate, annotations: annotations)
                 } else if let userLocation = LocationManager.shared.userLocation {
-//                    if let userLocation = LocationManager.shared.userLocation {
-                        // Display map view centered at user's location
-                       MapViewUI(centerCoordinate: userLocation.coordinate)
-                            .onAppear {
-                                // Get address from coordinates and add annotation to map
-                                getAddressFromCoordinates(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude) { address in
-                                    if let address = address {
-                                        MapViewUI.mapView.addAnnotation(CustomAnnotation(coordinate: userLocation.coordinate, title: address))
-                                    }
+                    // Display map view centered at user's location
+                    MapViewUI(centerCoordinate: userLocation.coordinate, annotations: annotations)
+                        .onAppear {
+                            // Get address from coordinates and add annotation to map
+                            getAddressFromCoordinates(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude) { address in
+                                if let address = address {
+                                    MapViewUI.mapView.addAnnotation(CustomAnnotation(coordinate: userLocation.coordinate, title: address))
                                 }
                             }
-                    } else {
-                        Button {
-                            LocationManager.shared.requestLocation()
-                        } label: {
-                            Text("Allow location")
-                                .padding()
-                                .font(.headline)
-                                .foregroundColor(Color(.systemBlue))
                         }
-                        .frame(width: UIScreen.main.bounds.width)
-                        .padding(.horizontal, -32)
-                        .background(Color.white)
-                        .clipShape(Capsule())
-                        .padding()
+                } else {
+                    // Button to request location permission
+                    Button {
+                        LocationManager.shared.requestLocation()
+                    } label: {
+                        Text("Allow location")
+                            .padding()
+                            .font(.headline)
+                            .foregroundColor(Color(.systemBlue))
                     }
+                    .frame(width: UIScreen.main.bounds.width)
+                    .padding(.horizontal, -32)
+                    .background(Color.white)
+                    .clipShape(Capsule())
+                    .padding()
                 }
             }
         }
     }
+}
 
 
 struct MapViewUI: UIViewRepresentable {
@@ -62,6 +62,7 @@ struct MapViewUI: UIViewRepresentable {
 
     // Center coordinate of the map
     let centerCoordinate: CLLocationCoordinate2D
+    let annotations: [CustomAnnotation]?
 
     // Create the UIView representing the map
     func makeUIView(context: Context) -> MKMapView {
@@ -76,16 +77,23 @@ struct MapViewUI: UIViewRepresentable {
         let region = MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
         // Set the region for the map view
         mapView.setRegion(region, animated: true)
+        
+        // Remove all existing annotations
+        mapView.removeAnnotations(mapView.annotations)
+        
+        // Add annotations if available
+        if let annotations = annotations {
+            mapView.addAnnotations(annotations)
+        }
     }
     
-    // Function to add annotation to the map view
-    func addAnnotationToMap(coordinate: CLLocationCoordinate2D, title: String) {
-        // Create a custom annotation object
-        let annotation = CustomAnnotation(coordinate: coordinate, title: title)
-        // Add the annotation to the map view
-        MapViewUI.mapView.addAnnotation(annotation)
+    // Method to remove all annotations from the map
+    static func removeAllAnnotations() {
+        Self.mapView.removeAnnotations(Self.mapView.annotations)
     }
 }
+
+
 
 class CustomAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D

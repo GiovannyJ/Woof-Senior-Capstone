@@ -13,11 +13,8 @@ struct LocalEventsMapView: View {
     @ObservedObject var viewModel = LocalEventsViewModel()
     @ObservedObject var sessionManager = SessionManager.shared
 
-    @State private var annotations: [CustomAnnotation] = []
     var defaultCoords = CLLocationCoordinate2D(latitude: 40.7045471, longitude: -73.6687173)
-    init(){
-        viewModel.fetchEvents(type: "local")
-    }
+   
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -26,7 +23,7 @@ struct LocalEventsMapView: View {
                 .foregroundColor(.orange)
                 .padding()
             
-            MapViewUI(centerCoordinate: defaultCoords)
+            MapViewUI(centerCoordinate: defaultCoords, annotations: viewModel.annotations)
                 .frame(height: 500)
                 .cornerRadius(8)
                 .padding(.top, 10)
@@ -34,21 +31,10 @@ struct LocalEventsMapView: View {
         }
         .padding()
         .onAppear {
-
-            updateAnnotations()
+            viewModel.fetchEvents(type: "local")
+//            viewModel.updateAnnotations()
         }
         .navigationTitle("Local Events")
-    }
-    
-    private func updateAnnotations() {
-        annotations.removeAll()
-        for event in viewModel.events {
-            if let coordinates = ParseCoordinates(from: event.geolocation) {
-                let annotation = CustomAnnotation(coordinate: coordinates, title: event.eventName + "\n" + event.location)
-                annotations.append(annotation)
-                MapViewUI.mapView.addAnnotation(annotation)
-            }
-        }
     }
 }
 

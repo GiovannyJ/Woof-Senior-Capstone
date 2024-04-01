@@ -90,15 +90,13 @@ struct BusinessFullContext: View {
                     
                     // Display map with the location
                     
-                    MapViewModel(centerCoordinate: ParseCoordinates(from: viewModel.business.geolocation))
-                        .frame(height: 200)
-                        .cornerRadius(8)
-                        .padding(.top, 10)
-                        .onAppear {
-                            if let coordinates = ParseCoordinates(from: viewModel.business.geolocation) {
-                                MapViewUI.mapView.addAnnotation(CustomAnnotation(coordinate: coordinates, title: viewModel.business.businessName + "\n" + viewModel.business.location))
-                            }
-                        }
+                    if let coordinates = ParseCoordinates(from: viewModel.business.geolocation) {
+                        let annotation = CustomAnnotation(coordinate: coordinates, title: viewModel.business.businessName + "\n" + viewModel.business.location)
+                        MapViewModel(centerCoordinate: coordinates, annotations: [annotation])
+                            .frame(height: 200)
+                            .cornerRadius(8)
+                            .padding(.top, 10)
+                    }
                 }
                 
                 // Display business image
