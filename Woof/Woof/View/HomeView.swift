@@ -11,7 +11,7 @@ struct HomeView: View {
                     Text("Welcome Back \(sessionManager.currentUser?.username ?? "Guest")!")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .padding(.leading)
+                       // .padding(.leading)
                         .foregroundColor(.orange.opacity(0.8))
                     
                     Text("Discover Pet-Friendly Businesses and Events.")
@@ -19,11 +19,11 @@ struct HomeView: View {
                         .foregroundColor(.orange)
                         .padding()
                     
-                    Text("Explore")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .padding(.leading)
-                        .foregroundColor(.orange.opacity(0.8))
+                  //  Text("Explore")
+                   //     .font(.title2)
+                    //    .fontWeight(.semibold)
+                     //   .padding(.leading)
+                      //  .foregroundColor(.teal.opacity(0.8))
                     
                     Spacer()
                     
@@ -52,7 +52,7 @@ struct HomeView: View {
                             .frame(width: 24, height: 24)
                             .padding()
                             .foregroundColor(.white)
-                            .background(Color.red)
+                            .background(Color.red.opacity(0.8))
                             .clipShape(Circle())
                             .padding([.top, .trailing], 16)
                     },
@@ -60,6 +60,7 @@ struct HomeView: View {
                 )
             }
             .navigationTitle("Home")
+            .fontWeight(.light)
         }
     }
 }
@@ -93,7 +94,7 @@ struct ExploreButtonStyle: ButtonStyle {
         configuration.label
             .padding(.vertical, 16)
             .padding(.horizontal, 24)
-            .background(Color.teal.opacity(0.8))
+            .background(Color.teal.opacity(0.7))
             .foregroundColor(.white)
             .cornerRadius(20)
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
