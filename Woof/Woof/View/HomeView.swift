@@ -12,8 +12,6 @@ import CoreLocation
 struct HomeView: View {
     @ObservedObject private var sessionManager = SessionManager.shared
     @ObservedObject private var locationManager = LocationManager.shared
-    @StateObject private var mapAPI = MapAPI()
-    
     
     var body: some View {
         NavigationView {
@@ -64,6 +62,15 @@ struct HomeView: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                         }
+                    NavigationLink(destination: LocalEventsMapView()) {
+                        Text("Local Events MAP")
+                            .fontWeight(.heavy)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.teal)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
                         
                         NavigationLink(destination: UpdateAccountView()) {
                             Text("Update Profile")
@@ -120,16 +127,16 @@ struct HomeView: View {
                         }
                     }
                     
-                    NavigationLink(destination:
-                                    AddressFinderView()) {
-                        Text("Test address look up")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
+//                    NavigationLink(destination:
+//                                    AddressFinderView()) {
+//                        Text("Test address look up")
+//                            .fontWeight(.heavy)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                    }
 //                    NavigationLink(destination:
 //                                    MapView()) {
 //                        Text("Test map view")
@@ -149,15 +156,15 @@ struct HomeView: View {
 //                            .foregroundColor(.white)
 //                            .cornerRadius(10)
 //                    }
-                    NavigationLink(destination: MapHomeView()) {
-                        Text("Home View With Map")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                }
+//                    NavigationLink(destination: MapHomeView()) {
+//                        Text("Home View With Map")
+//                            .fontWeight(.heavy)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                }
                     
                     Spacer()
                 }

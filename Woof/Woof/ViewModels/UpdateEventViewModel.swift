@@ -88,7 +88,7 @@ class UpdateEventViewModel: ObservableObject {
         let disabledFriendlyValue = event.disabledFriendly ? 1 : 0
         
         // Check if a new event image exists
-        if let newEventImage = newEventImage {
+        if newEventImage != nil {
             // Upload the new event image
             uploadEventImage { result in
                 switch result {

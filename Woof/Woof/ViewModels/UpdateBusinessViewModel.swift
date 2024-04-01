@@ -72,7 +72,7 @@ class UpdateBusinessViewModel: ObservableObject {
         }
         
         // Check if a new business image exists
-        if let newBusinessImage = newBusinessImage {
+        if newBusinessImage != nil {
             // Upload the new business image
             uploadBusinessImage { result in
                 switch result {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct SearchView: View {
     @State private var searchKeyword: String = ""
@@ -75,6 +76,10 @@ struct SearchView: View {
         }
         .sheet(isPresented: .constant(false)) {
             EmptyView()
+        }
+        .onAppear{
+            LocationManager.shared.stopUpdatingLocation()
+
         }
     }
 }

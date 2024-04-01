@@ -27,7 +27,7 @@ struct MapHomeView: View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    MapView()
+                    MapViewModel()
                         .frame(height: 200) // Adjust height as needed
                     
                     Text("Welcome Back \(sessionManager.currentUser?.username ?? "Guest")!")
@@ -166,6 +166,9 @@ struct MapHomeView: View {
                 .padding()
             }
             .navigationTitle("Home")
+            .onAppear{
+                locationManager.startUpdatingLocation()
+            }
         }
     }
 

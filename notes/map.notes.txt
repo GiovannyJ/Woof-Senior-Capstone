@@ -1,0 +1,35 @@
+Reason why map wasnt working on local machine:
+    -emulator did not have location selected
+    -solution: emulator -> features -> location -> select 1
+
+Issue with map view updating
+    - when map is in view it needs to constantly update users location (LocationManager.shared.startUpdatingLocation())
+    - when map is not in view you need to top this (LocationManager.shared.stopUpdatingLocation())
+        - ex in searchView this is done because the constant updating interferes with the view model state
+          so the var storing the businesses that are searched disappear
+    - need to find more places to do this
+
+
+Making pins for businesses on map view:
+    - using address
+    - using geolocation given by the yelp API: ISSUE WAS THERE WAS A SPACE LMAO
+        - geolocation should be parsed as 123,123 but it was 2123, 12313 the space is what broke the parsing
+        - this was fixed in the backend so now in the database it is stored without a space between
+
+Fixes:
+    -map view now works
+    -annotations for maps
+    -businesses have pins of their location
+    -geolocation fix
+    -map view is modular (custom view if input vs default user = center)
+
+
+Future endeavors:
+    -clickable pins for each event (clickable that lead to eventFull context)
+        - need to make algo that looks at users current location and shows them events within x radius
+    -auto complete for user location on: (to ensure that proper geolocation and address are stored in database)
+        -business creation
+        -event creation
+        -business update
+        -event update
+    

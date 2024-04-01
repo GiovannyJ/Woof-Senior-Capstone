@@ -1,0 +1,54 @@
+progress:
+    - over break we fixed completely:
+        -register account page
+        -profile page
+        -events list page
+        -update profile page
+        -update events page
+        -create events page
+        -update business page
+        -register business page
+    -still have some small issues 
+        -business full context (is user has more than 1 comment it is not pulling correctly)
+    -major issue
+        -update event page (when deleting event it doesn't sync with the frontend not sure why API database side is fine tho)
+
+    -most pages are revamped aesthetically
+    -Big feature map was added (swag):
+        -map added to business full context
+        -map being worked on for
+            -events list to revamp events page
+
+    -3rd party API:
+        -pull yelp data sorts it and sends it to database
+        -currently 30 businesses are in database can get more (script scales pretty well im just too lazy to add them all lol)
+        -39 failures and 79 successful (~65% success rate) (this is bc some of the text from yelp breaks the SQL)
+        -working on making the script more accurate to account for these as well as reducing the number of categories
+        -A GREAT FEATURE OF THE YELP API IS THAT IT HAS GEOLOCATION YIPPIE
+
+
+Things we didn't complete:
+    -all map features: very complicated and we are kind of spread thin between working on functionality of the rest of the app vs 1 feature
+    - README.md (lol forgot ab this)
+
+plans for next spring:
+    -complete map feature
+        -event pins on map that will take user to event full context
+        -auto complete for addresses (business & event creation/update)
+    -more accurate Yelp API calls
+        -gather more diverse data
+        -clean data to our liking better
+    -finalize frontend designs
+    -double triple quadruple check for logical errors
+    -README file 
+
+
+Things we learned:
+    -working as a team
+    -communication
+    -delegating tasks
+    -planning code before we write
+
+Things that went wrong:
+    -overestimating time
+    -little research before diving into some things 

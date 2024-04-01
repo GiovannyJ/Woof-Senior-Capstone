@@ -36,80 +36,96 @@ class CreateEventViewModel: ObservableObject {
         let formattedDate = dateFormatter.string(from: eventDate)
         
         let businessID = SessionManager.shared.userBusinessID
-        let url = URL(string: "http://localhost:8080/events/businesses/\(businessID ?? 0)")!
-        let body: [String: Any] = [
-            "eventName": eventName,
-            "eventDescription": eventDescription,
-            "eventDate": formattedDate,
-            "location": location,
-            "contactInfo": contactInfo,
-            "petSizePref": petSizePref,
-            "leashPolicy": leashPolicy,
-            "disabledFriendly": disabledFriendly,
-            "datalocation": "internal"
-        ]
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
-            print("Error encoding data")
+        guard let businessURL = URL(string: "http://localhost:8080/events/businesses/\(businessID ?? 0)") else {
+            print("Invalid URL")
             completion(false)
             return
         }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let httpResponse = response as? HTTPURLResponse {
-                switch httpResponse.statusCode {
-                case 201:
-                    // Successful response
-                    print("Event Created!")
-                    if let responseData = data {
-                       do {
-                           let events = try JSONDecoder().decode([Event].self, from: responseData)
-                           if let firstEvent = events.first {
-                               // You can now access the first event object
-                               print("First Event ID: \(firstEvent.eventID)")
-                               self.uploadEventImage(eventID: firstEvent.eventID)
-                               completion(true)
-                               DispatchQueue.main.async {
-                                   self.showAlert(title: "Event Created", message: "Event Created Successfully")
-                                   self.eventName = ""
-                                   self.eventDescription  = ""
-                                   self.eventDate = Date()
-                                   self.location = ""
-                                   self.contactInfo  = ""
-                                   self.petSizePref  = "small"
-                                   self.leashPolicy  = false
-                                   self.disabledFriendly  = false
-                                   self.newProfileImage = nil
-                               }
-                           }
-                       } catch {
-                           print("Error decoding event data:", error)
-                           self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
-                           completion(false)
-                       }
-                   } else {
-                       print("No data received")
-                       self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
-                       completion(false)
-                   }
-               case 500:
-                   // Handle 500 error
-                   print("Error: \(httpResponse.statusCode)")
-                    self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
-                   completion(false)
-               default:
-                   // Handle other status codes
-                   print("Unexpected error occurred")
-                    self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
-                   completion(false)
-               }
-           }
-       }.resume()
+        ForwardGeocoding(address: location) { result in
+            switch result {
+            case .success(let geolocation):
+                // Use the obtained geolocation
+                let body: [String: Any] = [
+                    "eventName": self.eventName,
+                    "eventDescription": self.eventDescription,
+                    "eventDate": formattedDate,
+                    "location": self.location,
+                    "contactInfo": self.contactInfo,
+                    "petSizePref": self.petSizePref,
+                    "leashPolicy": self.leashPolicy,
+                    "disabledFriendly": self.disabledFriendly,
+                    "geolocation": geolocation,
+                    "datalocation": "internal"
+                ]
+                
+                guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
+                    print("Error encoding data")
+                    completion(false)
+                    return
+                }
+                
+                var request = URLRequest(url: businessURL)
+                request.httpMethod = "POST"
+                request.httpBody = jsonData
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                
+                URLSession.shared.dataTask(with: request) { data, response, error in
+                    if let httpResponse = response as? HTTPURLResponse {
+                        switch httpResponse.statusCode {
+                        case 201:
+                            // Successful response
+                            print("Event Created!")
+                            if let responseData = data {
+                                do {
+                                    let events = try JSONDecoder().decode([Event].self, from: responseData)
+                                    if let firstEvent = events.first {
+                                        // You can now access the first event object
+                                        print("First Event ID: \(firstEvent.eventID)")
+                                        self.uploadEventImage(eventID: firstEvent.eventID)
+                                        completion(true)
+                                        DispatchQueue.main.async {
+                                            self.showAlert(title: "Event Created", message: "Event Created Successfully")
+                                            self.eventName = ""
+                                            self.eventDescription  = ""
+                                            self.eventDate = Date()
+                                            self.location = ""
+                                            self.contactInfo  = ""
+                                            self.petSizePref  = "small"
+                                            self.leashPolicy  = false
+                                            self.disabledFriendly  = false
+                                            self.newProfileImage = nil
+                                        }
+                                    }
+                                } catch {
+                                    print("Error decoding event data:", error)
+                                    self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
+                                    completion(false)
+                                }
+                            } else {
+                                print("No data received")
+                                self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
+                                completion(false)
+                            }
+                        case 500:
+                            // Handle 500 error
+                            print("Error: \(httpResponse.statusCode)")
+                            self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
+                            completion(false)
+                        default:
+                            // Handle other status codes
+                            print("Unexpected error occurred")
+                            self.showAlert(title: "Event Failed to create", message: "Event Creation Failed")
+                            completion(false)
+                        }
+                    }
+                }.resume()
+                
+            case .failure(let error):
+                print("Failed to get geolocation:", error)
+                completion(false)
+            }
+        }
     }
     
     func uploadEventImage(eventID: Int) {

@@ -2,14 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    
+    <!-- Location usage descriptions -->
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need your location to provide you with nearby places.</string>
+    <string>We need your location to provide personalized content and services while you're using the app.</string>
+    
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>We need your location to provide you with nearby places.</string>
+    <string>We need your location to provide personalized content and services, even when the app is in the background.</string>
 </dict>
 </plist>
+

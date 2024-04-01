@@ -7,6 +7,7 @@
 
 import Combine
 import CoreLocation
+import MapKit
 
 class LocationManager: NSObject, ObservableObject {
     private let manager = CLLocationManager()
@@ -21,17 +22,21 @@ class LocationManager: NSObject, ObservableObject {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.startUpdatingLocation()
     }
 
     func requestLocation() {
         print("Running Request")
-        manager.requestWhenInUseAuthorization()
+        self.manager.requestWhenInUseAuthorization()
     }
     
     func startUpdatingLocation() {
         print("Starting location updates")
-        manager.startUpdatingLocation()
+        self.manager.startUpdatingLocation()
+    }
+    
+    func stopUpdatingLocation() {
+        print("Stopping location updates")
+        self.manager.stopUpdatingLocation()
     }
 }
 
@@ -42,9 +47,11 @@ extension LocationManager: CLLocationManagerDelegate {
         
         switch status {
         case .authorizedWhenInUse, .authorizedAlways:
-            startUpdatingLocation()
+            print("Location authorization granted.")
+        case .notDetermined:
+            requestLocation()
         default:
-            break
+            print("Location authorization denied.")
         }
     }
     
@@ -53,6 +60,6 @@ extension LocationManager: CLLocationManagerDelegate {
         self.userLocation = location
         
         // Print the user's location when tracking is enabled
-        print("User location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+        // print("User location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
     }
 }
