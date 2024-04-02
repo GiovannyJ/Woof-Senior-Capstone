@@ -80,7 +80,7 @@ class YelpScraper:
                     contact=item.get('phone', ''),
                     description=', '.join([category['title'] for category in item['categories']]),  # Combine all category titles as description
                     ownerUserID=accountID,
-                    geolocation=f"{item['coordinates']['latitude']}, {item['coordinates']['longitude']}",
+                    geolocation=f"{item['coordinates']['latitude']},{item['coordinates']['longitude']}",
                     petSizePref='small',  # You can add logic to determine pet size preference
                     leashPolicy=False,  # You can add logic to determine leash policy
                     disabledFriendly=False,  # You can add logic to determine disabled friendliness
