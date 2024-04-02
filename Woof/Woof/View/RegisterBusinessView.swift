@@ -28,7 +28,7 @@ struct RegisterBusinessView: View {
                         .foregroundColor(.teal)
                         .font(.title)
                         .padding(.vertical)
-                        .fontWeight(.bold)) {
+                        .fontWeight(.semibold)) {
                             VStack(alignment: .leading, spacing: 5) {
                                 Text("Business Name")
                                     .font(.caption)
