@@ -23,44 +23,68 @@ struct HomeView: View {
                    //     .font(.title2)
                     //    .fontWeight(.semibold)
                      //   .padding(.leading)
-                      //  .foregroundColor(.teal.opacity(0.8))
+                      //  .foregroundColor(.Teal.opacity(0.8))
                     
                     Spacer()
                     
                     NavigationLink(destination: ProfileView()) {
-                        FunButton(title: "Profile", icon: "person.circle.fill", buttonColor: "teal")
+                        FunButton(title: "Profile", icon: "person.circle.fill", buttonColor: "Teal")
                     }
                     .buttonStyle(ExploreButtonStyle())
                     
                     NavigationLink(destination: SearchView()) {
-                        FunButton(title: "Search Businesses", icon: "magnifyingglass", buttonColor: "teal")
+                        FunButton(title: "Search Businesses", icon: "magnifyingglass", buttonColor: "Teal")
                     }
                     .buttonStyle(ExploreButtonStyle())
                     
                     NavigationLink(destination: LocalEventsView()) {
-                        FunButton(title: "Local Events", icon: "location.fill", buttonColor: "teal")
+                        FunButton(title: "Local Events", icon: "location.fill", buttonColor: "Teal")
                     }
                     .buttonStyle(ExploreButtonStyle())
+                    
+//                    NavigationLink(destination: RegisterBusinessView()) {
+//                        FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: "Teal")
+//                    }
+//                    .buttonStyle(ExploreButtonStyle())
+//                    NavigationLink(destination: CreateEventView()) {
+//                        FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: "Teal")
+//                    }
+//                    .buttonStyle(ExploreButtonStyle())
+//                    
+//                    NavigationLink(destination: UpdateEventsListView()) {
+//                        FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: "Teal")
+//                    }
+//                    .buttonStyle(ExploreButtonStyle())
+//                    
+//                    NavigationLink(destination: UpdateBusinessView()) {
+//                        FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: "Teal")
+//                    }
+//                    .buttonStyle(ExploreButtonStyle())
+                    
+//                    NavigationLink(destination: LocalEventsMapView()) {
+//                                           FunButton(title: "Local events map", icon: "magnifyingglass", buttonColor: "Teal")
+//                                       }
+//                                       .buttonStyle(ExploreButtonStyle())
                     
                     
                     if sessionManager.currentUser?.accountType == "business" && !sessionManager.isBusinessOwner {
                         NavigationLink(destination: RegisterBusinessView()) {
-                            FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: "teal")
+                            FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: "Teal")
                         }
                         .buttonStyle(ExploreButtonStyle())
                     }else if sessionManager.isBusinessOwner{
                         NavigationLink(destination: CreateEventView()) {
-                            FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: "teal")
+                            FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: "Teal")
                         }
                         .buttonStyle(ExploreButtonStyle())
                         
                         NavigationLink(destination: UpdateEventsListView()) {
-                            FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: "teal")
+                            FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: "Teal")
                         }
                         .buttonStyle(ExploreButtonStyle())
                         
                         NavigationLink(destination: UpdateBusinessView()) {
-                            FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: "teal")
+                            FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: "Teal")
                         }
                         .buttonStyle(ExploreButtonStyle())
                     }

@@ -53,23 +53,23 @@ class BusinessReviewsViewModel: ObservableObject {
             do {
                 let imageInfo = try JSONDecoder().decode([ImageInfo].self, from: data)
                 if let info = imageInfo.first {
-                    if self.business.dataLocation == "foreign"{
+                    if self.business.dataLocation == "foreign" {
                         guard let imageUrl = URL(string: info.imgName) else {
                             print("Invalid URL")
                             return
                         }
-                                
+
                         let task = URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
                             if let error = error {
                                 print("Error: \(error)")
                                 return
                             }
-                            
+
                             guard let imageData = data else {
                                 print("No image data")
                                 return
                             }
-                            
+
                             if let image = UIImage(data: imageData) {
                                 DispatchQueue.main.async {
                                     self.businessImgData = imageData
@@ -78,17 +78,22 @@ class BusinessReviewsViewModel: ObservableObject {
                                 print("Unable to create image from data")
                             }
                         }
-                    }else{
+                        task.resume()
+                    } else {
                         let fileURL = URL(fileURLWithPath: #file)
                         let directoryURL = fileURL.deletingLastPathComponent()
-                        
+
                         // Constructing the file URL
                         let uploadsUrl = directoryURL.appendingPathComponent("uploads")
                         let imageUrl = uploadsUrl.appendingPathComponent(info.imgType).appendingPathComponent(info.imgName)
-                        
-                        let imageData = try Data(contentsOf: imageUrl)
-                        DispatchQueue.main.async {
-                            self.businessImgData = imageData
+
+                        do {
+                            let imageData = try Data(contentsOf: imageUrl)
+                            DispatchQueue.main.async {
+                                self.businessImgData = imageData
+                            }
+                        } catch {
+                            print("Error loading image data: \(error)")
                         }
                     }
                 }

@@ -38,8 +38,10 @@
 - left align "Reviews"
 - make map smaller
 - add title to img picker
+- style images
 
 <img src="businessfullcontextview.png" alt="LoginView" width="300">
+<img src="businessfullcontext2.png" alt="LoginView" width="300">
 
 ## ReviewCard (Asset)
 - conditionally add the "delete review" button if user owns business (?)
