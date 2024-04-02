@@ -22,14 +22,15 @@ Fixes:
     -businesses have pins of their location
     -geolocation fix
     -map view is modular (custom view if input vs default user = center)
-
-
-Future endeavors:
-    -clickable pins for each event (clickable that lead to eventFull context)
-        - need to make algo that looks at users current location and shows them events within x radius
     -auto complete for user location on: (to ensure that proper geolocation and address are stored in database)
         -business creation
         -event creation
         -business update
         -event update
+
+
+Future endeavors:
+    -clickable pins for each event (clickable that lead to eventFull context)
+        - need to make algo that looks at users current location and shows them events within x radius
+    
     

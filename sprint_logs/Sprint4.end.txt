@@ -14,6 +14,7 @@ progress:
         -update event page (when deleting event it doesn't sync with the frontend not sure why API database side is fine tho)
 
     -most pages are revamped aesthetically
+
     -Big feature map was added (swag):
         -map added to business full context
         -map being worked on for
@@ -34,7 +35,6 @@ Things we didn't complete:
 plans for next spring:
     -complete map feature
         -event pins on map that will take user to event full context
-        -auto complete for addresses (business & event creation/update)
     -more accurate Yelp API calls
         -gather more diverse data
         -clean data to our liking better
