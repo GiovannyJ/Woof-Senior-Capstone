@@ -34,52 +34,70 @@ class RegisterBusinessViewModel: ObservableObject{
     private var ownerUserID: Int = SessionManager.shared.currentUser?.userID ?? 0
     
     public func registerBusiness() {
-        let businessData: [String: Any] = [
-            "businessName": businessName,
-            "businessType": businessType,
-            "ownerUserID": ownerUserID,
-            "location": location,
-            "contact": contact,
-            "description": description,
-            "petSizePref": petSizePref,
-            "leashPolicy": leashPolicy,
-            "disabledFriendly": disabledFriendly,
-            "dataLocation": "internal",
-        ]
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: businessData) else {
-            print("Error converting data to JSON")
-            return
-        }
-        
-        guard let url = URL(string: "http://localhost:8080/businesses") else {
-            print("Invalid URL")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        
-        request.httpBody = jsonData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let httpResponse = response as? HTTPURLResponse {
-                switch httpResponse.statusCode {
-                case 201:
-                    self.uploadBusinessImage()
-                    SessionManager.shared.checkUserBusinessOwner()
-                    self.showAlert(title: "Business Registered", message: "Congratulations your business has been registered with Woof")
-                case 500:
-                    print("Error: \(httpResponse.statusCode)")
-                    self.showAlert(title: "Error", message: "Error registering business")
-                default:
-                    print("Unexpected error occurred")
-                    self.showAlert(title: "Error", message: "Error registering business")
+        // Perform forward geocoding to get the location coordinates
+        ForwardGeocoding(address: location) { result in
+            switch result {
+            case .success(let geolocation):
+                // If forward geocoding succeeds, proceed with registering the business
+                let businessData: [String: Any] = [
+                    "businessName": self.businessName,
+                    "businessType": self.businessType,
+                    "ownerUserID": self.ownerUserID,
+                    "location": self.location,
+                    "contact": self.contact,
+                    "description": self.description,
+                    "petSizePref": self.petSizePref,
+                    "leashPolicy": self.leashPolicy,
+                    "disabledFriendly": self.disabledFriendly,
+                    "geolocation": geolocation,
+                    "dataLocation": "internal",
+                ]
+                
+                // Convert business data to JSON
+                guard let jsonData = try? JSONSerialization.data(withJSONObject: businessData) else {
+                    print("Error converting data to JSON")
+                    return
                 }
+                
+                guard let url = URL(string: "http://localhost:8080/businesses") else {
+                    print("Invalid URL")
+                    return
+                }
+                
+                var request = URLRequest(url: url)
+                request.httpMethod = "POST"
+                
+                request.httpBody = jsonData
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                
+                // Perform the HTTP request to register the business
+                URLSession.shared.dataTask(with: request) { data, response, error in
+                    if let httpResponse = response as? HTTPURLResponse {
+                        switch httpResponse.statusCode {
+                        case 201:
+                            // Business registered successfully
+                            self.uploadBusinessImage()
+                            SessionManager.shared.checkUserBusinessOwner()
+                            self.showAlert(title: "Business Registered", message: "Congratulations your business has been registered with Woof")
+                        case 500:
+                            // Server error
+                            print("Error: \(httpResponse.statusCode)")
+                            self.showAlert(title: "Error", message: "Error registering business")
+                        default:
+                            // Unexpected error
+                            print("Unexpected error occurred")
+                            self.showAlert(title: "Error", message: "Error registering business")
+                        }
+                    }
+                }.resume()
+            case .failure(let error):
+                // Handle forward geocoding failure
+                print("Error performing forward geocoding: \(error)")
+                self.showAlert(title: "Error", message: "Error registering business")
             }
-        }.resume()
+        }
     }
+
     
     func uploadBusinessImage() {
         guard let image = newBusinessImage else {

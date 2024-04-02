@@ -13,8 +13,10 @@ import MapKit
 struct WoofApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView().environmentObject(SessionManager.shared) 
+//            MapTestThing()
+            LoginView().environmentObject(SessionManager.shared)
 //            ContentView().locationManager(// Start directly with the Login view
         }
     }
 }
+

@@ -87,45 +87,54 @@ class UpdateEventViewModel: ObservableObject {
         let leashPolicyValue = event.leashPolicy ? 1 : 0
         let disabledFriendlyValue = event.disabledFriendly ? 1 : 0
         
-        // Check if a new event image exists
-        if let newEventImage = newEventImage {
-            // Upload the new event image
-            uploadEventImage { result in
-                switch result {
-                case .success(let imgID):
-                    // Include the imgID in the updateData JSON body
+        // Perform forward geocoding to get the geolocation
+        ForwardGeocoding(address: event.location) { result in
+            switch result {
+            case .success(let geolocation):
+                // Check if a new event image exists
+                if self.newEventImage != nil {
+                    // Upload the new event image
+                    self.uploadEventImage { result in
+                        switch result {
+                        case .success(let imgID):
+                            // Include the imgID and geolocation in the updateData JSON body
+                            let requestBody: [String: Any] = [
+                                "tablename": "events",
+                                "columns_old": ["eventID"],
+                                "values_old": [self.event.eventID],
+                                "columns_new": ["eventName", "eventDescription", "eventDate", "location", "contactInfo", "leashPolicy", "disabledFriendly", "petSizePref", "imgID", "geolocation"],
+                                // Updated the values for leashPolicy, disabledFriendly, imgID, and geolocation
+                                "values_new": [self.event.eventName, self.event.eventDescription, self.event.eventDate, self.event.location, self.event.contactInfo, leashPolicyValue, disabledFriendlyValue, self.event.petSizePref, imgID, geolocation]
+                            ]
+                            
+                            // Perform the PATCH request
+                            self.performPatchRequest(with: requestBody)
+                            
+                        case .failure(let error):
+                            print("Error uploading event image:", error)
+                        }
+                    }
+                } else {
+                    // No new event image, perform the PATCH request directly
                     let requestBody: [String: Any] = [
                         "tablename": "events",
                         "columns_old": ["eventID"],
                         "values_old": [self.event.eventID],
-                        "columns_new": ["eventName", "eventDescription", "eventDate", "location", "contactInfo", "leashPolicy", "disabledFriendly", "petSizePref", "imgID"],
-                        // Updated the values for leashPolicy, disabledFriendly, and imgID
-                        "values_new": [self.event.eventName, self.event.eventDescription, self.event.eventDate, self.event.location, self.event.contactInfo, leashPolicyValue, disabledFriendlyValue, self.event.petSizePref, imgID]
+                        "columns_new": ["eventName", "eventDescription", "eventDate", "location", "contactInfo", "leashPolicy", "disabledFriendly", "petSizePref", "geolocation"],
+                        // Updated the values for leashPolicy, disabledFriendly, and geolocation
+                        "values_new": [self.event.eventName, self.event.eventDescription, self.event.eventDate, self.event.location, self.event.contactInfo, leashPolicyValue, disabledFriendlyValue, self.event.petSizePref, geolocation]
                     ]
                     
                     // Perform the PATCH request
                     self.performPatchRequest(with: requestBody)
-                    
-                case .failure(let error):
-                    print("Error uploading event image:", error)
                 }
+                
+            case .failure(let error):
+                print("Error performing forward geocoding:", error.localizedDescription)
             }
-        } else {
-            // No new event image, perform the PATCH request directly
-            let requestBody: [String: Any] = [
-                "tablename": "events",
-                "columns_old": ["eventID"],
-                "values_old": [event.eventID],
-                "columns_new": ["eventName", "eventDescription", "eventDate", "location", "contactInfo", "leashPolicy", "disabledFriendly", "petSizePref"],
-                // Updated the values for leashPolicy and disabledFriendly
-                "values_new": [event.eventName, event.eventDescription, event.eventDate, event.location, event.contactInfo, leashPolicyValue, disabledFriendlyValue, event.petSizePref]
-            ]
-            
-            // Perform the PATCH request
-            self.performPatchRequest(with: requestBody)
         }
     }
-    
+
     func performPatchRequest(with body: [String: Any]) {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
             print("Error: Failed to serialize JSON")

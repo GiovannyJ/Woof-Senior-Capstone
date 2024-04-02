@@ -15,6 +15,7 @@ struct CreateEventView: View {
     var body: some View {
         NavigationView {
             VStack{
+                
                 Form {
                     Section(header: Text("Event Information")) {
                         TextField("Event Name", text: $viewModel.eventName)
@@ -24,7 +25,10 @@ struct CreateEventView: View {
                             .foregroundColor(.gray)
                             .padding()
                             .cornerRadius(8)
-                        TextField("Location", text: $viewModel.location)
+//                        TextField("Location", text: $viewModel.location)
+                        AddressAutocompleteTextField(text: $viewModel.location)
+                        
+                                
                         TextField("Contact Information", text: $viewModel.contactInfo)
                         Toggle("Leash Policy", isOn: $viewModel.leashPolicy)
                         Toggle("Disabled Friendly", isOn: $viewModel.disabledFriendly)
