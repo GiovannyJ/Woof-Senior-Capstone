@@ -106,22 +106,22 @@ struct BusinessFullContext: View {
                             .font(.title2)
                             .foregroundColor(.teal)
                         
-                        Text("Test geolocation:")
-                            .fontWeight(.bold)
-                        Text(" \(viewModel.business.geolocation)")
-                            .font(.title2)
-                            .foregroundColor(.teal)
+                        // Text("Test geolocation:")
+                        //     .fontWeight(.bold)
+                        // Text(" \(viewModel.business.geolocation)")
+                        //     .font(.title2)
+                        //     .foregroundColor(.teal)
                         
-                                            // Display map with the location
-                    
-                    if let coordinates = ParseCoordinates(from: viewModel.business.geolocation) {
-                        let annotation = CustomAnnotation(coordinate: coordinates, title: viewModel.business.businessName + "\n" + viewModel.business.location)
-                        MapViewModel(centerCoordinate: coordinates, annotations: [annotation])
-                            .frame(height: 200)
-                            .cornerRadius(8)
-                            .padding(.top, 10)
+                        // Display map with the location
+                        
+                        if let coordinates = ParseCoordinates(from: viewModel.business.geolocation) {
+                            let annotation = CustomAnnotation(coordinate: coordinates, title: viewModel.business.businessName + "\n" + viewModel.business.location)
+                            MapViewModel(centerCoordinate: coordinates, annotations: [annotation])
+                                .frame(height: 200)
+                                .cornerRadius(8)
+                                .padding(.top, 10)
+                        }
                     }
-                }
                         
                         // Display business image
                         if let businessImgData = viewModel.businessImgData,
@@ -261,7 +261,7 @@ struct BusinessFullContext: View {
             }
         }
     }
-}
+
 
 struct BusinessFullContext_Previews: PreviewProvider {
     static var previews: some View {

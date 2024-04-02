@@ -40,6 +40,7 @@ struct LocalEventsView: View {
                 .onAppear {
                     viewModel.fetchEvents(type: "local")
                 }
+                
                 .navigationTitle("Local Events")
             }
         }

@@ -73,14 +73,15 @@ struct LoginView: View {
             }
             .background(
                 Color.white.opacity(1.0) // Ensure full opacity
+                
             )
             .overlay(
-                Image("Image 1")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .edgesIgnoringSafeArea(.all)
-                    .opacity(0.3)
+               Image("Image 1")
+            .resizable()
+            .scaledToFill()
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .edgesIgnoringSafeArea(.all)
+            .opacity(0.3)
             )
         }
     }

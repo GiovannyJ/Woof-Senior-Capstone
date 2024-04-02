@@ -28,19 +28,42 @@ struct HomeView: View {
                     Spacer()
                     
                     NavigationLink(destination: ProfileView()) {
-                        FunButton(title: "Profile", icon: "person.circle.fill")
+                        FunButton(title: "Profile", icon: "person.circle.fill", buttonColor: "teal")
                     }
                     .buttonStyle(ExploreButtonStyle())
                     
                     NavigationLink(destination: SearchView()) {
-                        FunButton(title: "Search Businesses", icon: "magnifyingglass")
+                        FunButton(title: "Search Businesses", icon: "magnifyingglass", buttonColor: "teal")
                     }
                     .buttonStyle(ExploreButtonStyle())
                     
                     NavigationLink(destination: LocalEventsView()) {
-                        FunButton(title: "Local Events", icon: "location.fill")
+                        FunButton(title: "Local Events", icon: "location.fill", buttonColor: "teal")
                     }
                     .buttonStyle(ExploreButtonStyle())
+                    
+                    
+                    if sessionManager.currentUser?.accountType == "business" && !sessionManager.isBusinessOwner {
+                        NavigationLink(destination: RegisterBusinessView()) {
+                            FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: "teal")
+                        }
+                        .buttonStyle(ExploreButtonStyle())
+                    }else if sessionManager.isBusinessOwner{
+                        NavigationLink(destination: CreateEventView()) {
+                            FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: "teal")
+                        }
+                        .buttonStyle(ExploreButtonStyle())
+                        
+                        NavigationLink(destination: UpdateEventsListView()) {
+                            FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: "teal")
+                        }
+                        .buttonStyle(ExploreButtonStyle())
+                        
+                        NavigationLink(destination: UpdateBusinessView()) {
+                            FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: "teal")
+                        }
+                        .buttonStyle(ExploreButtonStyle())
+                    }
                     
                     Spacer()
                 }
@@ -68,6 +91,7 @@ struct HomeView: View {
 struct FunButton: View {
     var title: String
     var icon: String
+    var buttonColor: String
     
     var body: some View {
         VStack(spacing: 8) {
@@ -83,7 +107,7 @@ struct FunButton: View {
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color("ButtonColor"))
+                .fill(Color(buttonColor))
         )
         .padding(.horizontal, 20)
     }

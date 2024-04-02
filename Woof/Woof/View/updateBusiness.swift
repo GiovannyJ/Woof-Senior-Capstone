@@ -132,7 +132,7 @@ struct UpdateBusinessView: View {
                         
                         //delete business button
                         Button(action: viewModel.deleteBusiness) {
-                            Text("Delete Event")
+                            Text("Delete Business")
                                 .foregroundColor(.white)
                                 .padding()
                                 .background(Color.red)

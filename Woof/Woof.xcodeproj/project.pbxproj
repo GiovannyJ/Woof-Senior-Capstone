@@ -244,7 +244,6 @@
 			children = (
 				3FD4A4332B8822B900E92B07 /* HomeView.swift */,
 				3F79A3B32BBA620700DF668E /* MapViewModel.swift */,
-				5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */,
 				3FD4A4232B88206E00E92B07 /* EventFullContextView.swift */,
 				3FD4A4252B88208100E92B07 /* LocalEventsView.swift */,
 				3FD4A42B2B88217C00E92B07 /* BusinessFullContext.swift */,
@@ -279,6 +278,7 @@
 				3FE90D502B8829F100FCCF54 /* archive_RegisterBusiness.swift */,
 				3FE90D542B8829F100FCCF54 /* archive_Search.swift */,
 				3FBF9E112B74A775000D584B /* idkIfNeed_BusinessFullContext.swift */,
+				5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */,
 			);
 			path = archive;
 			sourceTree = "<group>";
