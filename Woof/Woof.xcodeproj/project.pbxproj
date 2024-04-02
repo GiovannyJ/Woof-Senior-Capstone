@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		3F514F982B70A25B00C1DEE7 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F514F972B70A25B00C1DEE7 /* SessionManager.swift */; };
+		3F79A3B42BBA620700DF668E /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F79A3B32BBA620700DF668E /* MapViewModel.swift */; };
+		3F79A3B62BBA6F2F00DF668E /* MapHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F79A3B52BBA6F2F00DF668E /* MapHelper.swift */; };
+		3F79A3B82BBA71A400DF668E /* LocalEventsMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F79A3B72BBA71A400DF668E /* LocalEventsMapView.swift */; };
+		3F79A3BA2BBAFFB700DF668E /* AddressAutoCompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F79A3B92BBAFFB700DF668E /* AddressAutoCompleteTextField.swift */; };
 		3FA46B202BA751740023302F /* EventCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA46B1F2BA751740023302F /* EventCardViewModel.swift */; };
 		3FBF9E102B749A03000D584B /* uploads in Resources */ = {isa = PBXBuildFile; fileRef = 3FBF9E0F2B749A03000D584B /* uploads */; };
 		3FBF9E122B74A775000D584B /* idkIfNeed_BusinessFullContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBF9E112B74A775000D584B /* idkIfNeed_BusinessFullContext.swift */; };
@@ -36,7 +40,6 @@
 		3FD97F652B9A357F00A53464 /* DeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F642B9A357F00A53464 /* DeleteButton.swift */; };
 		3FD97F672B9B9AB900A53464 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F662B9B9AB800A53464 /* ImageUploader.swift */; };
 		3FD97F8B2B9E55BD00A53464 /* LocationRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F8A2B9E55BD00A53464 /* LocationRequestView.swift */; };
-		3FD97F8E2B9E562800A53464 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F8C2B9E562800A53464 /* MapView.swift */; };
 		3FD97F932B9E566800A53464 /* Geocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F912B9E566800A53464 /* Geocoding.swift */; };
 		3FD97F962B9E568900A53464 /* AddressFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F942B9E568900A53464 /* AddressFinder.swift */; };
 		3FD97F972B9E568900A53464 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD97F952B9E568900A53464 /* LocationManager.swift */; };
@@ -57,6 +60,7 @@
 		3FE90D6A2B883F7F00FCCF54 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D692B883F7F00FCCF54 /* ProfileViewModel.swift */; };
 		3FE90D6C2B8840B600FCCF54 /* LocalEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D6B2B8840B600FCCF54 /* LocalEventsViewModel.swift */; };
 		3FE90D6E2B88412000FCCF54 /* CreateNewEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE90D6D2B88412000FCCF54 /* CreateNewEventViewModel.swift */; };
+		5B5F29302BB616F90053D978 /* MapHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F292F2BB616F90053D978 /* MapHomeView.swift */; };
 		5BDB24852BA0B29700CD5042 /* AddressFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */; };
 		C03488762B9608EF00D4AD91 /* updateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488752B9608EF00D4AD91 /* updateAccount.swift */; };
 		C03488782B9609D600D4AD91 /* updateBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03488772B9609D600D4AD91 /* updateBusiness.swift */; };
@@ -88,6 +92,10 @@
 
 /* Begin PBXFileReference section */
 		3F514F972B70A25B00C1DEE7 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		3F79A3B32BBA620700DF668E /* MapViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		3F79A3B52BBA6F2F00DF668E /* MapHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHelper.swift; sourceTree = "<group>"; };
+		3F79A3B72BBA71A400DF668E /* LocalEventsMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalEventsMapView.swift; sourceTree = "<group>"; };
+		3F79A3B92BBAFFB700DF668E /* AddressAutoCompleteTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAutoCompleteTextField.swift; sourceTree = "<group>"; };
 		3FA46B1F2BA751740023302F /* EventCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCardViewModel.swift; sourceTree = "<group>"; };
 		3FBF9E0F2B749A03000D584B /* uploads */ = {isa = PBXFileReference; lastKnownFileType = folder; path = uploads; sourceTree = "<group>"; };
 		3FBF9E112B74A775000D584B /* idkIfNeed_BusinessFullContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = idkIfNeed_BusinessFullContext.swift; sourceTree = "<group>"; };
@@ -116,7 +124,6 @@
 		3FD97F642B9A357F00A53464 /* DeleteButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteButton.swift; sourceTree = "<group>"; };
 		3FD97F662B9B9AB800A53464 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		3FD97F8A2B9E55BD00A53464 /* LocationRequestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationRequestView.swift; sourceTree = "<group>"; };
-		3FD97F8C2B9E562800A53464 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		3FD97F912B9E566800A53464 /* Geocoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geocoding.swift; sourceTree = "<group>"; };
 		3FD97F942B9E568900A53464 /* AddressFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressFinder.swift; sourceTree = "<group>"; };
 		3FD97F952B9E568900A53464 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -137,6 +144,7 @@
 		3FE90D692B883F7F00FCCF54 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		3FE90D6B2B8840B600FCCF54 /* LocalEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalEventsViewModel.swift; sourceTree = "<group>"; };
 		3FE90D6D2B88412000FCCF54 /* CreateNewEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewEventViewModel.swift; sourceTree = "<group>"; };
+		5B5F292F2BB616F90053D978 /* MapHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHomeView.swift; sourceTree = "<group>"; };
 		5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressFinderView.swift; sourceTree = "<group>"; };
 		5BDB24862BA0D81400CD5042 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C03488752B9608EF00D4AD91 /* updateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateAccount.swift; sourceTree = "<group>"; };
@@ -189,6 +197,7 @@
 				3FD4A43B2B8823AC00E92B07 /* BusinessButton.swift */,
 				3FD97F592B9617F400A53464 /* ImagePicker.swift */,
 				3FA46B1F2BA751740023302F /* EventCardViewModel.swift */,
+				3F79A3B92BBAFFB700DF668E /* AddressAutoCompleteTextField.swift */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -234,8 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				3FD4A4332B8822B900E92B07 /* HomeView.swift */,
-				3FD97F8A2B9E55BD00A53464 /* LocationRequestView.swift */,
-				3FD97F8C2B9E562800A53464 /* MapView.swift */,
+				3F79A3B32BBA620700DF668E /* MapViewModel.swift */,
 				5BDB24842BA0B29700CD5042 /* AddressFinderView.swift */,
 				3FD4A4232B88206E00E92B07 /* EventFullContextView.swift */,
 				3FD4A4252B88208100E92B07 /* LocalEventsView.swift */,
@@ -250,6 +258,7 @@
 				3FD4A43D2B8823C900E92B07 /* SearchView.swift */,
 				3FD4A43F2B8823F500E92B07 /* LoginView.swift */,
 				3FD97F5D2B99443F00A53464 /* UpdateEventsListView.swift */,
+				3F79A3B72BBA71A400DF668E /* LocalEventsMapView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -257,6 +266,8 @@
 		3FD4A4422B88294200E92B07 /* archive */ = {
 			isa = PBXGroup;
 			children = (
+				5B5F292F2BB616F90053D978 /* MapHomeView.swift */,
+				3FD97F8A2B9E55BD00A53464 /* LocationRequestView.swift */,
 				3FE90D4F2B8829F100FCCF54 /* archive_BusinessReviews.swift */,
 				3FE90D532B8829F100FCCF54 /* archive_CreateEvent.swift */,
 				3FE90D552B8829F100FCCF54 /* Archive_EventFullContextView.swift */,
@@ -278,6 +289,7 @@
 				3FD97F942B9E568900A53464 /* AddressFinder.swift */,
 				3FD97F912B9E566800A53464 /* Geocoding.swift */,
 				3FD97F952B9E568900A53464 /* LocationManager.swift */,
+				3F79A3B52BBA6F2F00DF668E /* MapHelper.swift */,
 			);
 			path = MapAsset;
 			sourceTree = "<group>";
@@ -491,6 +503,7 @@
 				3FE90D6E2B88412000FCCF54 /* CreateNewEventViewModel.swift in Sources */,
 				C03488762B9608EF00D4AD91 /* updateAccount.swift in Sources */,
 				3FE90D592B8829F100FCCF54 /* archive_BusinessReviews.swift in Sources */,
+				3F79A3B42BBA620700DF668E /* MapViewModel.swift in Sources */,
 				3FE90D572B8829F100FCCF54 /* archive_Register.swift in Sources */,
 				3FE90D5A2B8829F100FCCF54 /* archive_RegisterBusiness.swift in Sources */,
 				3FBF9E122B74A775000D584B /* idkIfNeed_BusinessFullContext.swift in Sources */,
@@ -504,9 +517,11 @@
 				3FE90D5E2B8829F100FCCF54 /* archive_Search.swift in Sources */,
 				3FE90D5B2B8829F100FCCF54 /* archive_LocalEvents.swift in Sources */,
 				3FD4A4362B8822FC00E92B07 /* ProfileView.swift in Sources */,
+				5B5F29302BB616F90053D978 /* MapHomeView.swift in Sources */,
 				3FE90D582B8829F100FCCF54 /* archive_Home.swift in Sources */,
 				3FD4A4242B88206E00E92B07 /* EventFullContextView.swift in Sources */,
 				3FD97F962B9E568900A53464 /* AddressFinder.swift in Sources */,
+				3F79A3B82BBA71A400DF668E /* LocalEventsMapView.swift in Sources */,
 				3FD4A4412B88265E00E92B07 /* EventFullContextViewModel.swift in Sources */,
 				3FD4A43A2B88238600E92B07 /* SearchBar.swift in Sources */,
 				3FE90D622B882A7900FCCF54 /* RegisterBusinessViewModel.swift in Sources */,
@@ -526,13 +541,14 @@
 				3FD4A4342B8822B900E92B07 /* HomeView.swift in Sources */,
 				5BDB24852BA0B29700CD5042 /* AddressFinderView.swift in Sources */,
 				3FD4A42E2B8821B900E92B07 /* BusinessFullContextViewModel.swift in Sources */,
+				3F79A3B62BBA6F2F00DF668E /* MapHelper.swift in Sources */,
 				3FD97F972B9E568900A53464 /* LocationManager.swift in Sources */,
 				3FD97F582B96179B00A53464 /* UpdateAccountViewModel.swift in Sources */,
-				3FD97F8E2B9E562800A53464 /* MapView.swift in Sources */,
 				3FD4A42A2B88214900E92B07 /* ReviewCard.swift in Sources */,
 				3FD97F932B9E566800A53464 /* Geocoding.swift in Sources */,
 				3FE90D6C2B8840B600FCCF54 /* LocalEventsViewModel.swift in Sources */,
 				3FD4A43C2B8823AC00E92B07 /* BusinessButton.swift in Sources */,
+				3F79A3BA2BBAFFB700DF668E /* AddressAutoCompleteTextField.swift in Sources */,
 				3FE90D6A2B883F7F00FCCF54 /* ProfileViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -700,7 +716,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Woof/Info.plist;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow access to your location.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to provide you with nearby places.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show user location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -730,7 +747,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Woof/Info.plist;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow access to your location.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to provide you with nearby places.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show user location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

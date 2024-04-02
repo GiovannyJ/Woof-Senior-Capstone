@@ -3,9 +3,10 @@
 //  Woof
 //
 //  Created by Giovanny Joseph on 2/22/24.
-//
+//  
 
 import SwiftUI
+import MapKit
 
     struct ReviewsView: View {
         @Binding var reviews: [Review] // Use a binding to keep the reviews array in sync with the parent view
@@ -37,6 +38,7 @@ struct BusinessFullContext: View {
     @State private var userReview: String = ""
     @State private var userRating: Int = 1 // Default rating
     @State private var reviews: [Review] = [] // Track reviews separately
+    
     
     public init(business: Business) {
         viewModel = BusinessReviewsViewModel(business: business)
@@ -109,6 +111,17 @@ struct BusinessFullContext: View {
                         Text(" \(viewModel.business.geolocation)")
                             .font(.title2)
                             .foregroundColor(.teal)
+                        
+                                            // Display map with the location
+                    
+                    if let coordinates = ParseCoordinates(from: viewModel.business.geolocation) {
+                        let annotation = CustomAnnotation(coordinate: coordinates, title: viewModel.business.businessName + "\n" + viewModel.business.location)
+                        MapViewModel(centerCoordinate: coordinates, annotations: [annotation])
+                            .frame(height: 200)
+                            .cornerRadius(8)
+                            .padding(.top, 10)
+                    }
+                }
                         
                         // Display business image
                         if let businessImgData = viewModel.businessImgData,
@@ -260,7 +273,7 @@ struct BusinessFullContext_Previews: PreviewProvider {
         ]
         
         // Creating a Business instance for the BusinessFullContext
-        let business = Business(businessID: 1, businessName: "Paws & Claws Pet Store", ownerUserID: 1, businessType: "Pet Store", location: "123 Main St", contact: "info@pawsnclaws.com", description: "cool pet store", event: "", rating: "small", dataLocation: "internal", imgID: ImageID(Int64: 1, Valid: true), petSizePref: "small", leashPolicy: true, disabledFriendly: true, reviews: reviews, geolocation: "here")
+        let business = Business(businessID: 1, businessName: "Paws & Claws Pet Store", ownerUserID: 1, businessType: "Pet Store", location: "123 Main St", contact: "info@pawsnclaws.com", description: "cool pet store", event: "", rating: "small", dataLocation: "internal", imgID: ImageID(Int64: 1, Valid: true), petSizePref: "small", leashPolicy: true, disabledFriendly: true, reviews: reviews, geolocation: "40.73061,-73.09164")
         
         // Creating the BusinessFullContext view with the example business
         return BusinessFullContext(business: business)

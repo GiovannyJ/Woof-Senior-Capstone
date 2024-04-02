@@ -52,13 +52,13 @@ class UpdateAccountViewModel: ObservableObject {
         }
         
         // Check if a new profile image exists
-        if let newProfileImage = newProfileImage {
+        if newProfileImage != nil {
             // Upload the profile image
             uploadProfileImage { result in
                 switch result {
                 case .success(let imgID):
                     // Include the imgID in the updateData JSON body
-                    var updateData: [String: Any] = [
+                    let updateData: [String: Any] = [
                         "tablename": "user",
                         "columns_old": ["userID"],
                         "values_old": [currentUserID],
