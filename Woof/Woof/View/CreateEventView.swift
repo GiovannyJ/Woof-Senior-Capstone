@@ -20,12 +20,11 @@ struct CreateEventView: View {
                     Section(header: Text("Event Information")) {
                         TextField("Event Name", text: $viewModel.eventName)
                         TextField("Event Description", text: $viewModel.eventDescription)
-                        DatePicker("Date", selection: $viewModel.eventDate, in: Date()..., displayedComponents: .date)
+                        DatePicker("Date", selection: $viewModel.eventDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
                             .datePickerStyle(.compact)
                             .foregroundColor(.gray)
                             .padding()
                             .cornerRadius(8)
-//                        TextField("Location", text: $viewModel.location)
                         AddressAutocompleteTextField(text: $viewModel.location)
                         
                                 

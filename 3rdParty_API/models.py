@@ -17,7 +17,7 @@ class Business:
     leashPolicy: bool
     disabledFriendly: bool
     geolocation: str
-    imgID: int
+    imgID: int = 0
     ownerUserID: int = 2
     dataLocation: str = "foreign"
 

@@ -5,6 +5,8 @@ from woof_API import WoofAPI
 if __name__ == '__main__':
     api = WoofAPI()
     api.send_defaults()
+    api.populate_random()
+    # print(api.getInternalAccountNames())
     
     params = {
         'term': 'pet friendly',
@@ -15,8 +17,4 @@ if __name__ == '__main__':
     businesses = YelpScraper("businesses", params).getData()
     reviews = YelpScraper("reviews", params).getData()
     
-    # for business in businesses:
-    #     print(business)
-    # for i in api.getBusinesses("90"):
-    #     print(i)
     
