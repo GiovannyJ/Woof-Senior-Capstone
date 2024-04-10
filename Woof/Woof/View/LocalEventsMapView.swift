@@ -23,11 +23,26 @@ struct LocalEventsMapView: View {
                 .foregroundColor(.orange)
                 .padding()
             
-            MapViewUI(centerCoordinate: defaultCoords, annotations: viewModel.annotations)
-                .frame(height: 500)
-                .cornerRadius(8)
-                .padding(.top, 10)
-            
+            if let centerCoords = LocationManager.shared.userLocation?.coordinate {
+                MapViewUI(centerCoordinate: centerCoords, annotations: viewModel.annotations)
+                    .frame(height: 500)
+                    .cornerRadius(8)
+                    .padding(.top, 10)
+            }else{
+                Button {
+                    LocationManager.shared.requestLocation()
+                } label: {
+                    Text("Allow location")
+                        .padding()
+                        .font(.headline)
+                        .foregroundColor(Color(.systemBlue))
+                }
+                .frame(width: UIScreen.main.bounds.width)
+                .padding(.horizontal, -32)
+                .background(Color.white)
+                .clipShape(Capsule())
+                .padding()
+            }
         }
         .padding()
         .onAppear {

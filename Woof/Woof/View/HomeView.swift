@@ -74,17 +74,17 @@ struct HomeView: View {
                         .buttonStyle(ExploreButtonStyle())
                     }else if sessionManager.isBusinessOwner{
                         NavigationLink(destination: CreateEventView()) {
-                            FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: "Teal")
+                            FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: "teal")
                         }
                         .buttonStyle(ExploreButtonStyle())
                         
                         NavigationLink(destination: UpdateEventsListView()) {
-                            FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: "Teal")
+                            FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: "teal")
                         }
                         .buttonStyle(ExploreButtonStyle())
                         
                         NavigationLink(destination: UpdateBusinessView()) {
-                            FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: "Teal")
+                            FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: "teal")
                         }
                         .buttonStyle(ExploreButtonStyle())
                     }

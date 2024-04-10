@@ -1,0 +1,37 @@
+What we want to show:
+-Login 
+-Homeview
+    -Regular
+    -business
+    -registered business
+-Searching business
+-Business full context
+    -yelp business
+    -internal business
+-Searching events
+-Events Map!!
+-Event full context
+-Register business -> takes user to registered business view
+-Create event
+-profile view
+    -show owned business
+    -show that they saved
+    -show that they are attending
+
+- OPTIONAL update ?
+
+!!Record Second video for user stories
+
+What we want to talk ab in doc 
+-Features of the app
+-About us
+-Inspiration
+-User Stories
+-Design choices
+    -Session Manager
+    -Location Manager
+    -View/ViewModel
+    -Assets
+    -Types
+-WoofAPI -> Point to API/layout.md
+-YelpAPIScrapper (powered by WoofAPI) -> point to 3rdParty_API/layout.md
