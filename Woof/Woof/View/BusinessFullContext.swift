@@ -115,7 +115,7 @@ struct BusinessFullContext: View {
                         // Display map with the location
                         
                         if let coordinates = ParseCoordinates(from: viewModel.business.geolocation) {
-                            let annotation = CustomAnnotation(coordinate: coordinates, title: viewModel.business.businessName + "\n" + viewModel.business.location)
+                            let annotation = CustomAnnotation(coordinate: coordinates, title: viewModel.business.businessName + "\n" + viewModel.business.location, type: "business")
                             MapViewModel(centerCoordinate: coordinates, annotations: [annotation])
                                 .frame(height: 200)
                                 .cornerRadius(8)

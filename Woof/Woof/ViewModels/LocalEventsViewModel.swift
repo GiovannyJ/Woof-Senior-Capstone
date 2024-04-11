@@ -48,7 +48,7 @@ class LocalEventsViewModel: ObservableObject {
         annotations.removeAll()
         for event in events {
             if let coordinates = ParseCoordinates(from: event.geolocation) {
-                let annotation = CustomAnnotation(coordinate: coordinates, title: event.eventName + "\n" + event.location)
+                let annotation = CustomAnnotation(coordinate: coordinates, title: event.eventName + "\n" + event.location, type: "event", event: event)
                 annotations.append(annotation)
             }
         }

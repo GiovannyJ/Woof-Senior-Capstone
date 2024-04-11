@@ -26,65 +26,68 @@ struct HomeView: View {
                       //  .foregroundColor(.Teal.opacity(0.8))
                     
                     Spacer()
+                    NavigationLink(destination: LocalEventsMapView()) {
+                        FunButton(title: "Test Map Events", icon: "person.circle.fill", buttonColor: Color.teal)
+                    }.buttonStyle(ExploreButtonStyle())
                     
                     NavigationLink(destination: ProfileView()) {
-                        FunButton(title: "Profile", icon: "person.circle.fill", buttonColor: "Teal")
+                        FunButton(title: "Profile", icon: "person.circle.fill", buttonColor: Color.teal)
                     }
                     .buttonStyle(ExploreButtonStyle())
                     
                     NavigationLink(destination: SearchView()) {
-                        FunButton(title: "Search Businesses", icon: "magnifyingglass", buttonColor: "Teal")
+                        FunButton(title: "Search Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
                     }
                     .buttonStyle(ExploreButtonStyle())
                     
                     NavigationLink(destination: LocalEventsView()) {
-                        FunButton(title: "Local Events", icon: "location.fill", buttonColor: "Teal")
+                        FunButton(title: "Local Events", icon: "location.fill", buttonColor: Color.teal)
                     }
                     .buttonStyle(ExploreButtonStyle())
                     
 //                    NavigationLink(destination: RegisterBusinessView()) {
-//                        FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: "Teal")
+//                        FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
 //                    }
 //                    .buttonStyle(ExploreButtonStyle())
 //                    NavigationLink(destination: CreateEventView()) {
-//                        FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: "Teal")
+//                        FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: Color.teal)
 //                    }
 //                    .buttonStyle(ExploreButtonStyle())
 //                    
 //                    NavigationLink(destination: UpdateEventsListView()) {
-//                        FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: "Teal")
+//                        FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: Color.teal)
 //                    }
 //                    .buttonStyle(ExploreButtonStyle())
 //                    
 //                    NavigationLink(destination: UpdateBusinessView()) {
-//                        FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: "Teal")
+//                        FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
 //                    }
 //                    .buttonStyle(ExploreButtonStyle())
                     
 //                    NavigationLink(destination: LocalEventsMapView()) {
-//                                           FunButton(title: "Local events map", icon: "magnifyingglass", buttonColor: "Teal")
+//                                           FunButton(title: "Local events map", icon: "magnifyingglass", buttonColor: Color.teal)
 //                                       }
 //                                       .buttonStyle(ExploreButtonStyle())
                     
                     
                     if sessionManager.currentUser?.accountType == "business" && !sessionManager.isBusinessOwner {
                         NavigationLink(destination: RegisterBusinessView()) {
-                            FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: "Teal")
+                            FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
                         }
                         .buttonStyle(ExploreButtonStyle())
                     }else if sessionManager.isBusinessOwner{
                         NavigationLink(destination: CreateEventView()) {
-                            FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: "teal")
+                            FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: Color.teal)
                         }
                         .buttonStyle(ExploreButtonStyle())
                         
                         NavigationLink(destination: UpdateEventsListView()) {
-                            FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: "teal")
+                            FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: Color.teal)
                         }
                         .buttonStyle(ExploreButtonStyle())
                         
                         NavigationLink(destination: UpdateBusinessView()) {
-                            FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: "teal")
+                            FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
                         }
                         .buttonStyle(ExploreButtonStyle())
                     }
@@ -115,7 +118,7 @@ struct HomeView: View {
 struct FunButton: View {
     var title: String
     var icon: String
-    var buttonColor: String
+    var buttonColor: Color
     
     var body: some View {
         VStack(spacing: 8) {
@@ -131,7 +134,7 @@ struct FunButton: View {
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color(buttonColor))
+                .fill(buttonColor.opacity(0.1))
         )
         .padding(.horizontal, 20)
     }

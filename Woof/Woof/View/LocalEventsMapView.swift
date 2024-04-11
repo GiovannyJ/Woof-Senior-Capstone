@@ -12,52 +12,56 @@ import CoreLocation
 struct LocalEventsMapView: View {
     @ObservedObject var viewModel = LocalEventsViewModel()
     @ObservedObject var sessionManager = SessionManager.shared
-
+    
     var defaultCoords = CLLocationCoordinate2D(latitude: 40.7045471, longitude: -73.6687173)
-   
-
+    @State private var isNavigatingToEventView = false
+    @State private var eventDestinationViewModel: EventFullContextViewModel?
+    @State private var isNavigationActive = false
+    
+    let testEvent = Event(eventID: 1,
+                          attendance_count: 10,
+                          businessID: 1,
+                          contactInfo: "test@example.com",
+                          dataLocation: "internal",
+                          disabledFriendly: true,
+                          eventDate: "2024-01-09",
+                          eventDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                          eventName: "Test Event",
+                          imgID: nil,
+                          leashPolicy: true,
+                          location: "Test Location",
+                          petSizePref: "Medium",
+                          geolocation: "here")
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Pet-Friendly Events Near You")
                 .font(.largeTitle)
                 .foregroundColor(.orange)
                 .padding()
+            MapViewUI(navigationBinding: $isNavigatingToEventView, eventDestinationViewModel: eventDestinationViewModel, centerCoordinate: defaultCoords, annotations: viewModel.annotations)
+                .frame(height: 500)
+                .cornerRadius(8)
+                .padding(.top, 10)
             
-            if let centerCoords = LocationManager.shared.userLocation?.coordinate {
-                MapViewUI(centerCoordinate: centerCoords, annotations: viewModel.annotations)
-                    .frame(height: 500)
-                    .cornerRadius(8)
-                    .padding(.top, 10)
-            }else{
-                Button {
-                    LocationManager.shared.requestLocation()
-                } label: {
-                    Text("Allow location")
-                        .padding()
-                        .font(.headline)
-                        .foregroundColor(Color(.systemBlue))
-                }
-                .frame(width: UIScreen.main.bounds.width)
-                .padding(.horizontal, -32)
-                .background(Color.white)
-                .clipShape(Capsule())
-                .padding()
-            }
         }
         .padding()
         .onAppear {
             viewModel.fetchEvents(type: "local")
-//            viewModel.updateAnnotations()
         }
         .navigationTitle("Local Events")
+        .sheet(isPresented: $isNavigationActive) {
+            if let eventDestinationViewModel = eventDestinationViewModel {
+                EventFullContextView(viewModel: eventDestinationViewModel)
+            } else {
+                EmptyView()
+            }
+        }
     }
 }
-
 
 struct LocalEventsMap_Previews: PreviewProvider {
     static var previews: some View {
         LocalEventsMapView()
     }
 }
-
-

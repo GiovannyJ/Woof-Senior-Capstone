@@ -30,7 +30,7 @@ struct MapViewModel: View {
                             // Get address from coordinates and add annotation to map
                             getAddressFromCoordinates(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude) { address in
                                 if let address = address {
-                                    MapViewUI.mapView.addAnnotation(CustomAnnotation(coordinate: userLocation.coordinate, title: address))
+                                    MapViewUI.mapView.addAnnotation(CustomAnnotation(coordinate: userLocation.coordinate, title: address, type: "user"))
                                 }
                             }
                         }
@@ -55,54 +55,77 @@ struct MapViewModel: View {
     }
 }
 
-
-struct MapViewUI: UIViewRepresentable {
-    // Static instance of MKMapView
-    static var mapView = MKMapView()
-
-    // Center coordinate of the map
-    let centerCoordinate: CLLocationCoordinate2D
-    let annotations: [CustomAnnotation]?
-
-    // Create the UIView representing the map
-    func makeUIView(context: Context) -> MKMapView {
-        // Disable the default blue dot indicating user location
-        Self.mapView.showsUserLocation = false
-        return Self.mapView
-    }
-
-    // Update the UIView when the center coordinate changes
-    func updateUIView(_ mapView: MKMapView, context: Context) {
-        // Define the region based on the center coordinate
-        let region = MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-        // Set the region for the map view
-        mapView.setRegion(region, animated: true)
-        
-        // Remove all existing annotations
-        mapView.removeAnnotations(mapView.annotations)
-        
-        // Add annotations if available
-        if let annotations = annotations {
-            mapView.addAnnotations(annotations)
-        }
-    }
-    
-    // Method to remove all annotations from the map
-    static func removeAllAnnotations() {
-        Self.mapView.removeAnnotations(Self.mapView.annotations)
-    }
-}
-
-
-
 class CustomAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var title: String?
+    var type: String
+    var event: Event? // Making it optional
 
-    // Initialize the annotation with a coordinate and title
-    init(coordinate: CLLocationCoordinate2D, title: String?) {
+    init(coordinate: CLLocationCoordinate2D, title: String?, type: String, event: Event? = nil) {
         self.coordinate = coordinate
         self.title = title
+        self.type = type
+        self.event = event
     }
 }
 
+struct MapViewUI: UIViewRepresentable {
+    var navigationBinding: Binding<Bool>?
+    var eventDestinationViewModel: EventFullContextViewModel?
+    @State private var showEventFullContext = false
+
+    static var mapView = MKMapView()
+    
+    let centerCoordinate: CLLocationCoordinate2D
+    let annotations: [CustomAnnotation]?
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    func makeUIView(context: Context) -> MKMapView {
+        Self.mapView.showsUserLocation = false
+        Self.mapView.delegate = context.coordinator
+        return Self.mapView
+    }
+    
+    func updateUIView(_ mapView: MKMapView, context: Context) {
+        let region = MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        mapView.setRegion(region, animated: true)
+        mapView.removeAnnotations(mapView.annotations)
+        if let annotations = annotations {
+            for annotation in annotations {
+                let marker = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
+                marker.canShowCallout = true
+                marker.calloutOffset = CGPoint(x: -5, y: 5)
+                marker.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+                marker.markerTintColor = UIColor.orange
+                marker.glyphImage = UIImage(systemName: "pawprint.fill") // Set the custom marker image
+                mapView.addAnnotation(marker.annotation!)
+            }
+        }
+    }
+    
+    class Coordinator: NSObject, MKMapViewDelegate {
+        var parent: MapViewUI
+        
+        init(_ parent: MapViewUI) {
+            self.parent = parent
+        }
+        
+        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            if let annotation = view.annotation as? CustomAnnotation {
+                if annotation.type == "event" {
+                    if let event = annotation.event {
+                        let eventViewModel = EventFullContextViewModel(event: event)
+                        let eventFullContextView = EventFullContextView(viewModel: eventViewModel)
+                        // Present the EventFullContextView modally
+                        UIApplication.shared.windows.first?.rootViewController?.present(UIHostingController(rootView: eventFullContextView), animated: true)
+                        
+                        mapView.deselectAnnotation(annotation, animated: true)
+                    }
+                }
+            }
+        }
+    }
+}
