@@ -6,7 +6,7 @@
     - contributions: frontend, designs
 - Giovanny Joseph: Nice dude loves to code and stuff
     - contributions: backend, frontend, project management
-- Marin Genao: Hes chill smart guy watches anime too
+- Martin Genao: Hes chill smart guy watches anime too
     - contributions: backend, map asset
 ## Inspiration
 we made woof bc they said we couldn't do it but we did it swag
