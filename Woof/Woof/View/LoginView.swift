@@ -10,11 +10,20 @@ import SwiftUI
 struct LoginView: View {
     @ObservedObject private var viewModel = LoginViewModel()
     @State private var showingAlert = false
-
+    
     var body: some View {
-        GeometryReader { geometry in
+        VStack {
+            
+            Image("Image 2")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .edgesIgnoringSafeArea(.top)
+                .frame(height: UIScreen.main.bounds.height * 0.33)
+                .clipped()
+            
             NavigationStack {
-                VStack(spacing: 13.0) {
+                VStack(spacing: 8.0) {
                     TextField("Username", text: $viewModel.username)
                         .disableAutocorrection(true)
                         .textContentType(.none)
@@ -54,14 +63,14 @@ struct LoginView: View {
                                 .foregroundColor(Color.red)
                                 .padding(.leading)
                         })
-                        .padding(.bottom)
-                        .opacity(1.0) // Ensure full opacity
+                    .padding(.bottom)
+                    .opacity(1.0)
                     
                     if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
                             .foregroundColor(.red)
                             .padding(.top, 10)
-                            .opacity(1.0) // Ensure full opacity
+                            .opacity(1.0)
                     }
                 }
                 .padding(.horizontal)
@@ -72,17 +81,9 @@ struct LoginView: View {
                     }
             }
             .background(
-                Color.white.opacity(1.0) // Ensure full opacity
-                
+                Color.white.opacity(0.4)
             )
-//            .overlay(
-//               Image("Image 1")
-//            .resizable()
-//            .scaledToFill()
-//            .frame(width: geometry.size.width, height: geometry.size.height)
-//            .edgesIgnoringSafeArea(.all)
-//            .opacity(0.3)
-//            )
+            .padding(.top, -100)
         }
     }
 }
