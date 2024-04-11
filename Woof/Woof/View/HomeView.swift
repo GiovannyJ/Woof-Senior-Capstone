@@ -30,10 +30,10 @@ struct HomeView: View {
                         FunButton(title: "Test Map Events", icon: "person.circle.fill", buttonColor: Color.teal)
                     }.buttonStyle(ExploreButtonStyle())
                     
-                    NavigationLink(destination: ProfileView()) {
-                        FunButton(title: "Profile", icon: "person.circle.fill", buttonColor: Color.teal)
-                    }
-                    .buttonStyle(ExploreButtonStyle())
+                   // NavigationLink(destination: ProfileView()) {
+                    //    FunButton(title: "Profile", icon: "person.circle.fill", buttonColor: Color.teal)
+                   // }
+                    //.buttonStyle(ExploreButtonStyle())
                     
                     NavigationLink(destination: SearchView()) {
                         FunButton(title: "Search Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
@@ -96,13 +96,13 @@ struct HomeView: View {
                 }
                 .padding()
                 .overlay(
-                    NavigationLink(destination: UpdateAccountView()){
+                    NavigationLink(destination: ProfileView()){
                         Image(systemName: "person.crop.circle.fill.badge.plus")
                             .resizable()
                             .frame(width: 24, height: 24)
                             .padding()
                             .foregroundColor(.white)
-                            .background(Color.red.opacity(0.8))
+                            .background(Color.orange.opacity(0.8))
                             .clipShape(Circle())
                             .padding([.top, .trailing], 16)
                     },
