@@ -41,7 +41,20 @@ struct ProfileView: View {
             }
             .navigationTitle("Profile")
         }
-    }
+        .overlay(
+                   NavigationLink(destination: UpdateAccountView()){
+                       Image(systemName: "person.crop.circle.fill.badge.plus")
+                           .resizable()
+                           .frame(width: 24, height: 24)
+                           .padding()
+                           .foregroundColor(.white)
+                           .background(Color.orange.opacity(0.8))
+                           .clipShape(Circle())
+                           .padding([.top, .trailing], 16)
+                   },
+                   alignment: .topTrailing
+               )
+        }
     
     private var profileImageSection: some View {
         VStack {
