@@ -73,9 +73,67 @@ class YelpScraper:
                     imgID = api.sendImg(imgObj=img)
                 
                 # Create a business object with sanitized attributes
+                business_categories = [category['title'] for category in item['categories']]
+                ourBusiness_categories = [
+                                        "Seafood",
+                                        "Seafood Markets",
+                                        "Brewpubs",
+                                        "Bars",
+                                        "Seafood",
+                                        "Barbeque",
+                                        "American",
+                                        "Soup",
+                                        "American",
+                                        "Bars",
+                                        "Comfort Food",
+                                        "Cheese Shops",
+                                        "Cafes",
+                                        "Breweries",
+                                        "Wineries",
+                                        "Breweries",
+                                        "Venues & Event Spaces",
+                                        "Burgers",
+                                        "Barbeque",
+                                        "Sports Bars",
+                                        "Breweries",
+                                        "Wine Tasting Room",
+                                        "Cafes",
+                                        "Coffee & Tea",
+                                        "Bakeries",
+                                        "Breweries",
+                                        "Brewpubs",
+                                        "Coffee & Tea",
+                                        "Bakeries",
+                                        "Juice Bars & Smoothies"
+]
+
+                # official_businessType = 'other'
+                filtered_outside = [x.lower() for x in business_categories]
+                filtered_insider = [x.lower() for x in ourBusiness_categories]
+
+                # final = "other"
+                # for category in filtered_insider:
+                #      if category in filtered_outside:
+                #         final = filtered_outside
+                #         break
+                # official_businessType = 'other'
+
+                for category in filtered_insider:
+                    if category in filtered_outside:
+                        # Find the index of the matching category in ourBusiness_categories
+                        index = filtered_insider.index(category)
+                        # Assign the corresponding business type from ourBusiness_categories
+                        official_businessType = ourBusiness_categories[index]
+                        break
+
+                # Now official_businessType will contain the correct business type if a match is found
+
+               
+
+
                 business = models.Business(
                     businessName=sanitize_string(item['name']),
-                    businessType=', '.join([category['title'] for category in item['categories']]),
+                    businessType=official_businessType,#', '.join([category['title'] for category in item['categories']]),
                     location=', '.join(item['location']['display_address']),
                     contact=item.get('phone', ''),
                     description=', '.join([category['title'] for category in item['categories']]),  # Combine all category titles as description
