@@ -25,7 +25,11 @@ class SearchViewModel: ObservableObject {
             queryItems.append(URLQueryItem(name: "businessName", value: keyword))
         }
         if filter != "All"{
-            queryItems.append(URLQueryItem(name: "businessType", value: filter))
+            if filter == "Yelp Reviewed"{
+                queryItems.append(URLQueryItem(name: "dataLocation", value: "foreign"))
+            }else{
+                queryItems.append(URLQueryItem(name: "businessType", value: filter))
+            }
         }
         urlComponents.queryItems = queryItems
 

@@ -18,11 +18,12 @@ struct EventCardView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(viewModel.event.eventName)
                         .font(.headline)
+                        .underline()
                     Text(viewModel.event.eventDescription)
                         .font(.subheadline)
                     Text("Date: \(viewModel.event.eventDate)") // Format the date
                     Text("Location: \(viewModel.event.location)")
-                    Text("Contact: \(viewModel.event.contactInfo)")
+//                    Text("Contact: \(viewModel.event.contactInfo)")
                     // Additional event details can be displayed here
                     
                     // Example: Display attendance count
@@ -30,16 +31,16 @@ struct EventCardView: View {
                         .font(.subheadline)
                     
                     // Example: Display pet-related preferences
-                    Text("Pet Size Preference: \(viewModel.event.petSizePref)")
-                        .font(.subheadline)
+//                    Text("Pet Size Preference: \(viewModel.event.petSizePref)")
+//                        .font(.subheadline)
                     
                     // Example: Display if leash policy is enforced
-                    Text("Leash Policy: \(viewModel.event.leashPolicy ? "Enforced" : "Not Enforced")")
-                        .font(.subheadline)
+//                    Text("Leash Policy: \(viewModel.event.leashPolicy ? "Enforced" : "Not Enforced")")
+//                        .font(.subheadline)
                     
                     // Example: Display if disabled-friendly
-                    Text("Disabled Friendly: \(viewModel.event.disabledFriendly ? "Yes" : "No")")
-                        .font(.subheadline)
+//                    Text("Disabled Friendly: \(viewModel.event.disabledFriendly ? "Yes" : "No")")
+//                        .font(.subheadline)
                     
                     Text("View Event")
                         .foregroundColor(.teal)
@@ -50,9 +51,12 @@ struct EventCardView: View {
                         .fontWeight(.heavy)
                 }
                 .padding()
-                .background(Color.teal.opacity(0.2))
+                .background(Color.white.opacity(0.99)) // Set the background color to teal
                 .cornerRadius(8)
             }
+            .padding(.horizontal, 20) // Adjust horizontal padding
+            .padding(.vertical, 10) // Adjust vertical padding
+            .frame(maxWidth: .infinity) // Allow the button to take up the full width
             .background(
                 NavigationLink(destination:
                     destinationView(),
@@ -62,7 +66,7 @@ struct EventCardView: View {
             )
         }
     }
-    
+
     private func destinationView() -> some View {
         if viewModel.type == "business" {
             return AnyView(UpdateEventView(event: viewModel.event))

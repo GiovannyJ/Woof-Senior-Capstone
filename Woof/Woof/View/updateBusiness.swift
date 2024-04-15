@@ -15,17 +15,17 @@ struct UpdateBusinessView: View {
     
     init() {
         self.viewModel = UpdateBusinessViewModel()
-        
     }
     
     var body: some View {
-        VStack {
-            Form {
-                Section(header: Text("Update Business Details")
-                    .foregroundColor(.orange)
-                    .font(.title)
-                    .padding(.vertical)
-                    .fontWeight(.regular)) {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Update Your Business")
+                .font(.largeTitle)
+                .foregroundColor(.orange)
+                .padding()
+            Form{
+                VStack {
+                    Section{
                         VStack(alignment: .leading, spacing: 5) {
                             Text("Business Name")
                                 .font(.caption)
@@ -40,7 +40,7 @@ struct UpdateBusinessView: View {
                                 .font(.caption)
                                 .foregroundColor(.gray)
                             Picker("Business Type", selection: $viewModel.businessType) {
-                                ForEach(viewModel.businessTypes, id: \.self) { type in
+                                ForEach(BusinessTypes, id: \.self) { type in
                                     Text(type)
                                         .tag(type)
                                         .foregroundColor(.gray)
@@ -69,14 +69,9 @@ struct UpdateBusinessView: View {
                                 .background(Color.teal.opacity(0.2))
                                 .cornerRadius(8)
                         }
-                    }
-                    .cornerRadius(4)
-                    .padding(.vertical, 5)
-                
-                Section(header: Text("Additional Information").foregroundColor(.teal)
-                    .font(.headline)
-                    .padding(.vertical)
-                    .fontWeight(.medium)) {
+                    
+                    
+                    
                         VStack(alignment: .leading, spacing: 5) {
                             Text("Description")
                                 .font(.caption)
@@ -138,39 +133,41 @@ struct UpdateBusinessView: View {
                                 .background(Color.red)
                                 .cornerRadius(8)
                         }
-                            .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity)
                         
                     }
                     .cornerRadius(10)
                     .padding(.vertical, 5)
-            }
-            
-            Button(action: {
-                viewModel.updateBusiness()
-            }) {
-                Text("Update Business")
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.orange.opacity(0.8))
-                    .cornerRadius(8)
-                    .font(.headline)
-            }
-            .padding(.vertical)
-            .buttonStyle(PlainButtonStyle())
-            
-        }
-        .padding()
-        .background(Color.white.opacity(0.2))
-        .alert(isPresented: $viewModel.showAlert) {
-            Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
-                if viewModel.alertTitle == "Business Deleted"{
-                    presentationMode.wrappedValue.dismiss()
                 }
-            })
+                
+                Button(action: {
+                    viewModel.updateBusiness()
+                }) {
+                    Text("Update Business")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.orange.opacity(0.8))
+                        .cornerRadius(8)
+                        .font(.headline)
+                }
+                .padding(.vertical)
+                .buttonStyle(PlainButtonStyle())
+                
+            }
+            .padding()
+            .background(Color.white.opacity(0.2))
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
+                    if viewModel.alertTitle == "Business Deleted"{
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                })
+            }
         }
     }
 }
+
 
 struct UpdateBusinessView_Previews: PreviewProvider {
     static var previews: some View {

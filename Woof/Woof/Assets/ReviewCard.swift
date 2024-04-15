@@ -20,8 +20,8 @@ struct ReviewCard: View {
             } else {
                 Text("User: Guest").font(.headline)
             }
-            Text("Rating: \(review.rating)").font(.headline)
-            Text("Comment: \(review.comment)").font(.headline)
+            Text("Rating: \(review.rating) \(Image(systemName: "pawprint.fill"))'s").font(.headline)
+            Text("\(review.comment)").font(.headline)
             if let reviewImage = reviewImageData,
                let uiImage = UIImage(data: reviewImage) {
                 Image(uiImage: uiImage)
@@ -29,16 +29,18 @@ struct ReviewCard: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 200, height: 200)
             }
-            Button(action: deleteReview) {
-                Text("Delete Review")
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.red)
-                    .cornerRadius(8)
+            if (review.userID == SessionManager.shared.userID){
+                Button(action: deleteReview) {
+                    Text("Delete Review")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.red)
+                        .cornerRadius(8)
+                }
             }
         }
         .padding()
-        .background(review.dataLocation == "foreign" ? Color.red.opacity(0.1) : Color.teal.opacity(0.1))
+        .background(review.dataLocation == "foreign" ? Color.red.opacity(0.3) : Color.teal.opacity(0.3))
         .cornerRadius(8)
         .onAppear {
             fetchReviewImage()

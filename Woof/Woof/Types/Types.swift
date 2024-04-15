@@ -126,3 +126,25 @@ struct AddressCompletion: Hashable {
     var title: String
     var subtitle: String
 }
+
+let BusinessTypes = ["All", 
+                     "Arts & Entertainment",
+                     "Active Life",
+                     "Hotels & Travel",
+                     "Local Flavor",
+                     "Restaurants",
+                     "Shopping",
+                     "Seafood",
+                     "American",
+                     "Bars",
+                     "Comfort Food",
+                     "Breweries",
+                     "Venues & Event Spaces",
+                     "Burgers",
+                     "Barbeque",
+                     "Sports Bars",
+                     "Bakeries",
+                     "Coffee & Tea",
+                     "Juice Bars & Smoothies",
+                     "Other",
+                     "Yelp Reviewed"]

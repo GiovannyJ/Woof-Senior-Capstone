@@ -23,7 +23,7 @@ struct UpdateAccountView: View {
     
     var body: some View {
         ScrollView{
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .center, spacing: 16) {
                 
                 Text("Update Account Information")
                     .font(.largeTitle)

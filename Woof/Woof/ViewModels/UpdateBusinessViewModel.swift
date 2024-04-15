@@ -30,7 +30,7 @@ class UpdateBusinessViewModel: ObservableObject {
     @Published var alertMessage: String = ""
     
     
-    let businessTypes = ["All", "Arts & Entertainment", "Active Life", "Hotels & Travel", "Local Flavor", "Restaurants", "Shopping", "Other"]
+//    let businessTypes = ["All", "Arts & Entertainment", "Active Life", "Hotels & Travel", "Local Flavor", "Restaurants", "Shopping", "Other"]
     let petSizePreferences = ["Small pets", "Medium pets", "Large pets"]
     
     
@@ -38,7 +38,7 @@ class UpdateBusinessViewModel: ObservableObject {
     init() {
         if let ownedBusiness = SessionManager.shared.ownedBusiness {
             self.businessName = ownedBusiness.businessName
-            self.businessType = businessTypes.contains(ownedBusiness.businessType) ? ownedBusiness.businessType : "Other"
+            self.businessType = BusinessTypes.contains(ownedBusiness.businessType) ? ownedBusiness.businessType : "Other"
             self.location = ownedBusiness.location
             self.contact = ownedBusiness.contact
             self.description = ownedBusiness.description

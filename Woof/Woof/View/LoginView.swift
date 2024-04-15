@@ -12,29 +12,30 @@ struct LoginView: View {
     @State private var showingAlert = false
     
     var body: some View {
-        VStack {
-            
-            Image("Image 2")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .edgesIgnoringSafeArea(.top)
-                .frame(height: UIScreen.main.bounds.height * 0.33)
-                .clipped()
-            
             NavigationStack {
-                VStack(spacing: 8.0) {
+                VStack{
+                    Image("Image 2")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .edgesIgnoringSafeArea(.top)
+                        .frame(height: UIScreen.main.bounds.height * 0.33)
+                        .clipped()
+                        .padding(.bottom, 50)
+                    
                     TextField("Username", text: $viewModel.username)
                         .disableAutocorrection(true)
                         .textContentType(.none)
                         .padding()
-                        .background(Color.white)
+                        .background(Color.teal.opacity(0.2))
                         .cornerRadius(8)
+                        
                     
                     SecureField("Password", text: $viewModel.password)
                         .padding()
-                        .background(Color.white)
+                        .background(Color.teal.opacity(0.2))
                         .cornerRadius(8)
+                        
                     
                     Button(action: {
                         viewModel.authenticateUser()
@@ -49,7 +50,6 @@ struct LoginView: View {
                     }
                     .padding(.horizontal)
                     .padding()
-                    .navigationTitle("Login")
                     .alert(isPresented: $showingAlert) {
                         Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
                     }
@@ -57,14 +57,14 @@ struct LoginView: View {
                     NavigationLink(
                         destination: RegisterAccountView(),
                         label: {
-                            Text("Don't have an account? Sign Up")
+                            Text("Don't have an account? Sign Up!")
                                 .font(.subheadline)
                                 .fontWeight(.bold)
                                 .foregroundColor(Color.red)
                                 .padding(.leading)
+                                .underline()
                         })
-                    .padding(.bottom)
-                    .opacity(1.0)
+//                    .padding(.bottom)
                     
                     if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
@@ -74,7 +74,8 @@ struct LoginView: View {
                     }
                 }
                 .padding(.horizontal)
-                .navigationTitle("Login")
+                .padding(.top , -150)
+//                .navigationTitle("Login")
                 .navigationDestination(
                     isPresented: $viewModel.isLoggedIn) {
                         HomeView()
@@ -83,10 +84,9 @@ struct LoginView: View {
             .background(
                 Color.white.opacity(0.4)
             )
-            .padding(.top, -100)
+//            .padding(.top, -150)
         }
     }
-}
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {

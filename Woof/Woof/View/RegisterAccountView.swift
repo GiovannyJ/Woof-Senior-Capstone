@@ -97,8 +97,8 @@ struct RegisterAccountView: View {
                         .fontWeight(Font.Weight.heavy)
                 }
                 .padding(.horizontal)
-                .padding()
-                .navigationTitle("Register")
+                
+                .navigationTitle("Sign Up")
                 .alert(isPresented: $viewModel.showAlert) {
                     Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
                         if viewModel.alertTitle == "Success"{
@@ -108,7 +108,7 @@ struct RegisterAccountView: View {
                 }
             }
         }.padding(.horizontal)
-        .padding()
+        
     }
 }
 

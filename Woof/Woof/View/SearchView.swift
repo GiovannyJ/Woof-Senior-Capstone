@@ -16,7 +16,7 @@ struct SearchView: View {
     @ObservedObject private var viewModel = SearchViewModel()
 
     // Array for business types
-    let businessTypes = ["All", "Arts & Entertainment", "Active Life", "Hotels & Travel", "Local Flavor", "Restaurants", "Shopping", "Other"]
+//    let businessTypes = ["All", "Arts & Entertainment", "Active Life", "Hotels & Travel", "Local Flavor", "Restaurants", "Shopping", "Other"]
 
     var body: some View {
         NavigationView {
@@ -32,7 +32,7 @@ struct SearchView: View {
 
                     // Business Type Picker
                     Picker("Select Business Type", selection: $selectedBusinessType) {
-                        ForEach(businessTypes, id: \.self) {
+                        ForEach(BusinessTypes, id: \.self) {
                             Text($0)
                         }
                     }

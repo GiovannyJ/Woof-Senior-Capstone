@@ -105,7 +105,7 @@ class YelpScraper:
                                         "Coffee & Tea",
                                         "Bakeries",
                                         "Juice Bars & Smoothies"
-]
+                                    ]
 
                 # official_businessType = 'other'
                 filtered_outside = [x.lower() for x in business_categories]

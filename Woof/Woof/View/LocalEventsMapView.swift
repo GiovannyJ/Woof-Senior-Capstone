@@ -20,7 +20,7 @@ struct LocalEventsMapView: View {
     
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack {
             Text("Pet-Friendly Events Near You")
                 .font(.largeTitle)
                 .foregroundColor(.orange)
@@ -43,7 +43,9 @@ struct LocalEventsMapView: View {
                 EmptyView()
             }
         }
+        
     }
+    
 }
 
 struct LocalEventsMap_Previews: PreviewProvider {

@@ -144,6 +144,7 @@ func GetBusinesses(c *gin.Context) {
 	queryParams := map[string]string{
 		"businessID":       c.Query("businessID"),
 		"businessName":     c.Query("businessName"),
+		"dataLocation":		c.Query("dataLocation"),
 		"businessType":     c.Query("businessType"),
 		"location":         c.Query("location"),
 		"contact":          c.Query("contact"),

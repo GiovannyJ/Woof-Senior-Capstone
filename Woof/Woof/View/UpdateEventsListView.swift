@@ -18,10 +18,13 @@ struct UpdateEventsListView: View {
 
             // Display a list of events created and promoted by businesses
             ScrollView {
-                //MAPVIEW
-                ForEach(viewModel.events, id: \.eventID) { event in
-                    EventCardView(viewModel: EventCardViewModel(event: event, isAttending: true, type: "business"))
-                        .padding(.vertical, 8)
+                if viewModel.events.isEmpty{
+                 Text("No Events")
+                }else{
+                    ForEach(viewModel.events, id: \.eventID) { event in
+                        EventCardView(viewModel: EventCardViewModel(event: event, isAttending: true, type: "business"))
+                            .padding(.vertical, 8)
+                    }
                 }
             }
         }

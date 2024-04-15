@@ -60,6 +60,7 @@ struct AddressAutocompleteTextField: View {
             TextField("Enter an address", text: $text)
                 .textFieldStyle(.roundedBorder)
                 .padding(.horizontal)
+                
                 .onChange(of: text) { newValue in
                     viewModel.startSearching(with: newValue)
                 }

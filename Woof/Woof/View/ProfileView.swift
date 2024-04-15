@@ -11,50 +11,67 @@ struct ProfileView: View {
     @ObservedObject var sessionManager = SessionManager.shared
     
     var body: some View {
-        ZStack {
-            // Background image
-            Image("Image 4")
-                .resizable()
-                .scaledToFill()
-                .edgesIgnoringSafeArea(.all)
-            
-            ScrollView {
-                VStack(alignment: .center, spacing: 20) {
-                    profileImageSection
-                    Text("User Profile")
-                        .font(.title)
-                        .foregroundColor(.orange)
-                    
-                    Group {
-                        userInformationSection
-                        savedBusinessesSection
-                        eventsAttendingSection
+        NavigationStack{
+            ZStack {
+                
+                // Background image
+//                Image("Image 4")
+//                    .resizable()
+//                    .scaledToFill()
+//                    .edgesIgnoringSafeArea(.all)
+//                    .opacity(0.5) // Adj
+                
+                ScrollView {
+                    VStack {
+                        Spacer() // Pushes the profile button to the top
+                        HStack {
+                            Spacer() // Pushes the profile button to the right
+                            NavigationLink(destination: UpdateAccountView()) {
+                                Image(systemName: "person.crop.circle.fill.badge.plus")
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                                    .padding()
+                                    .foregroundColor(.white)
+                                    .background(Color.orange.opacity(0.8))
+                                    .clipShape(Circle())
+                                    .padding([.top, .trailing], 16)
+                            }
+                        }
+                        VStack(alignment: .center, spacing: 20) {
+                            profileImageSection
+                            Text("User Profile")
+                                .font(.title)
+                                .foregroundColor(.orange)
+                            
+                            Group {
+                                userInformationSection
+                                savedBusinessesSection
+                                eventsAttendingSection
+                            }
+                            .padding(.horizontal, 30)
+                            .padding(.vertical, 10)
+                            .background(Color.white.opacity(0.9))
+                            .cornerRadius(10)
+                            .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: 5)
+                            .padding(.horizontal)
+                        }
+                        .padding(.top, 20)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 10)
-                    .background(Color.white.opacity(0.8))
-                    .cornerRadius(10)
-                    .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
-                    .padding(.horizontal)
+                    
                 }
-                .padding(.top, 20)
+                
             }
-            .navigationTitle("Profile")
+            .background(
+                Image("Image 4")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .edgesIgnoringSafeArea(.all)
+//                                    .opacity(0.8) // Adj
+                        )
+            
         }
-        .overlay(
-                   NavigationLink(destination: UpdateAccountView()){
-                       Image(systemName: "person.crop.circle.fill.badge.plus")
-                           .resizable()
-                           .frame(width: 24, height: 24)
-                           .padding()
-                           .foregroundColor(.white)
-                           .background(Color.orange.opacity(0.8))
-                           .clipShape(Circle())
-                           .padding([.top, .trailing], 16)
-                   },
-                   alignment: .topTrailing
-               )
-        }
+    }
+        
     
     private var profileImageSection: some View {
         VStack {
@@ -107,21 +124,24 @@ struct ProfileView: View {
                 .foregroundColor(.orange)
             
             if let businesses = sessionManager.savedBusinesses {
-                if businesses.isEmpty {
-                    Text("No saved businesses.")
-                        .foregroundColor(.gray)
-                        .font(.subheadline)
-                } else {
+                if !businesses.isEmpty {
                     ForEach(businesses, id: \.businessinfo.businessName) { savedBusiness in
                         NavigationLink(destination: BusinessFullContext(business: savedBusiness.businessinfo)) {
                             Text(savedBusiness.businessinfo.businessName)
-                                .foregroundColor(.blue)
+                                .foregroundColor(.white)
                                 .font(.subheadline)
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(8)
                         }
                     }
+                } else {
+                    Text("Loading...")
+                        .foregroundColor(.gray)
+                        .font(.subheadline)
                 }
             } else {
-                Text("Loading...")
+                Text("No saved businesses.")
                     .foregroundColor(.gray)
                     .font(.subheadline)
             }
@@ -136,21 +156,24 @@ struct ProfileView: View {
                 .foregroundColor(.orange)
             
             if let events = sessionManager.eventsAttending {
-                if events.isEmpty {
-                    Text("Not attending any events.")
-                        .foregroundColor(.gray)
-                        .font(.subheadline)
-                } else {
+                if !events.isEmpty {
                     ForEach(events, id: \.eventID) { event in
                         NavigationLink(destination: EventFullContextView(viewModel: EventFullContextViewModel(event: event))) {
                             Text(event.eventName)
-                                .foregroundColor(.purple)
-                                .font(.subheadline)
+                                    .foregroundColor(.white)
+                                    .font(.subheadline)
+                                    .padding()
+                                    .background(Color.purple)
+                                    .cornerRadius(8)
                         }
                     }
+                } else {
+                    Text("Loading...")
+                        .foregroundColor(.gray)
+                        .font(.subheadline)
                 }
             } else {
-                Text("Loading...")
+                Text("Not attending any events.")
                     .foregroundColor(.gray)
                     .font(.subheadline)
             }

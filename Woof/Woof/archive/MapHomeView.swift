@@ -119,15 +119,15 @@ struct MapHomeView: View {
                                 .cornerRadius(10)
                         }
                         
-                        NavigationLink(destination: UpdateBusinessView()) {
-                            Text("Update Your Business")
-                                .fontWeight(.heavy)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.red)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
+//                        NavigationLink(destination: UpdateBusinessView()) {
+//                            Text("Update Your Business")
+//                                .fontWeight(.heavy)
+//                                .padding()
+//                                .frame(maxWidth: .infinity)
+//                                .background(Color.red)
+//                                .foregroundColor(.white)
+//                                .cornerRadius(10)
+//                        }
                     }
                 }
                     

@@ -12,15 +12,26 @@ struct LocalEventsView: View {
     @ObservedObject var sessionManager = SessionManager.shared
     
     var body: some View {
-        ZStack {
-            // Background image
-            Image("Image")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .edgesIgnoringSafeArea(.all)
-            
+        
             GeometryReader { geometry in
                 VStack(spacing: 16) {
+                    VStack {
+                        
+                        HStack {
+                            Spacer() // Pushes the profile button to the right
+                            NavigationLink(destination: LocalEventsMapView()) {
+                                Image(systemName: "map.circle.fill")
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                                    .padding()
+                                    .foregroundColor(.white)
+                                    .background(Color.orange.opacity(0.8))
+                                    .clipShape(Circle())
+                                    .padding([.top, .trailing], 16)
+                            }
+                        }
+                    }
+                    
                     Spacer()
                     Text("Pet-Friendly Events Near You.")
                         .font(.title)
@@ -41,8 +52,14 @@ struct LocalEventsView: View {
                     viewModel.fetchEvents(type: "local")
                 }
                 
-                .navigationTitle("Local Events")
-            }
+//                .navigationTitle("Local Events")
+                .background(
+                    Image("Image")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .edgesIgnoringSafeArea(.all)
+                )
+//            }
         }
     }
     

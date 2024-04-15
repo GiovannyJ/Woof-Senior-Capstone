@@ -5,13 +5,29 @@ struct HomeView: View {
     @ObservedObject private var locationManager = LocationManager.shared
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
+            VStack(alignment: .center, spacing: 25) {
             ScrollView {
-                VStack(alignment: .center, spacing: 24) {
+                VStack{
+                    Spacer() // Pushes the profile button to the top
+                    HStack {
+                        Spacer() // Pushes the profile button to the right
+                        NavigationLink(destination: ProfileView()){
+                            Image(systemName: "person.crop.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .padding()
+                                .foregroundColor(.white)
+                                .background(Color.orange.opacity(0.8))
+                                .clipShape(Circle())
+                                .padding([.top, .trailing], 16)
+                        }
+                    }
+                }
+                    Spacer(minLength: 40)
                     Text("Welcome Back \(sessionManager.currentUser?.username ?? "Guest")!")
                         .font(.title2)
                         .fontWeight(.bold)
-                       // .padding(.leading)
                         .foregroundColor(.orange.opacity(0.8))
                     
                     Text("Discover Pet-Friendly Businesses and Events.")
@@ -19,21 +35,6 @@ struct HomeView: View {
                         .foregroundColor(.orange)
                         .padding()
                     
-                  //  Text("Explore")
-                   //     .font(.title2)
-                    //    .fontWeight(.semibold)
-                     //   .padding(.leading)
-                      //  .foregroundColor(.Teal.opacity(0.8))
-                    
-                    Spacer()
-                    NavigationLink(destination: LocalEventsMapView()) {
-                        FunButton(title: "Test Map Events", icon: "person.circle.fill", buttonColor: Color.teal)
-                    }.buttonStyle(ExploreButtonStyle())
-                    
-                   // NavigationLink(destination: ProfileView()) {
-                    //    FunButton(title: "Profile", icon: "person.circle.fill", buttonColor: Color.teal)
-                   // }
-                    //.buttonStyle(ExploreButtonStyle())
                     
                     NavigationLink(destination: SearchView()) {
                         FunButton(title: "Search Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
@@ -45,75 +46,51 @@ struct HomeView: View {
                     }
                     .buttonStyle(ExploreButtonStyle())
                     
-//                    NavigationLink(destination: RegisterBusinessView()) {
-//                        FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
-//                    }
-//                    .buttonStyle(ExploreButtonStyle())
-//                    NavigationLink(destination: CreateEventView()) {
-//                        FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: Color.teal)
-//                    }
-//                    .buttonStyle(ExploreButtonStyle())
-//                    
-//                    NavigationLink(destination: UpdateEventsListView()) {
-//                        FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: Color.teal)
-//                    }
-//                    .buttonStyle(ExploreButtonStyle())
-//                    
-//                    NavigationLink(destination: UpdateBusinessView()) {
-//                        FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
-//                    }
-//                    .buttonStyle(ExploreButtonStyle())
-                    
-//                    NavigationLink(destination: LocalEventsMapView()) {
-//                                           FunButton(title: "Local events map", icon: "magnifyingglass", buttonColor: Color.teal)
-//                                       }
-//                                       .buttonStyle(ExploreButtonStyle())
-                    
                     
                     if sessionManager.currentUser?.accountType == "business" && !sessionManager.isBusinessOwner {
                         NavigationLink(destination: RegisterBusinessView()) {
-                            FunButton(title: "Register Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
+                            FunButton(title: "Register Businesses", icon: "plus", buttonColor: Color.teal)
                         }
                         .buttonStyle(ExploreButtonStyle())
-                    }else if sessionManager.isBusinessOwner{
+                    } else if sessionManager.isBusinessOwner {
                         NavigationLink(destination: CreateEventView()) {
-                            FunButton(title: "Create Event", icon: "magnifyingglass", buttonColor: Color.teal)
+                            FunButton(title: "Create Event", icon: "plus", buttonColor: Color.teal)
                         }
                         .buttonStyle(ExploreButtonStyle())
                         
                         NavigationLink(destination: UpdateEventsListView()) {
-                            FunButton(title: "Update Events", icon: "magnifyingglass", buttonColor: Color.teal)
+                            FunButton(title: "Update Events", icon: "pencil.circle", buttonColor: Color.teal)
                         }
                         .buttonStyle(ExploreButtonStyle())
                         
                         NavigationLink(destination: UpdateBusinessView()) {
-                            FunButton(title: "Update Businesses", icon: "magnifyingglass", buttonColor: Color.teal)
+                            FunButton(title: "Update Businesses", icon: "pencil.circle", buttonColor: Color.teal)
                         }
                         .buttonStyle(ExploreButtonStyle())
                     }
                     
                     Spacer()
                 }
-                .padding()
-                .overlay(
-                    NavigationLink(destination: ProfileView()){
-                        Image(systemName: "person.crop.circle.fill.badge.plus")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(Color.orange.opacity(0.8))
-                            .clipShape(Circle())
-                            .padding([.top, .trailing], 16)
-                    },
-                    alignment: .topTrailing
-                )
+                
             }
-            .navigationTitle("Home")
-            .fontWeight(.light)
+            .padding()
+//            .overlay(
+//                NavigationLink(destination: ProfileView()){
+//                    Image(systemName: "person.crop.circle.fill.badge.plus")
+//                        .resizable()
+//                        .frame(width: 24, height: 24)
+//                        .padding()
+//                        .foregroundColor(.white)
+//                        .background(Color.orange.opacity(0.8))
+//                        .clipShape(Circle())
+//                        .padding([.top, .trailing], 16)
+//                },
+//                alignment: .topTrailing
+//            )
         }
     }
 }
+
 
 struct FunButton: View {
     var title: String

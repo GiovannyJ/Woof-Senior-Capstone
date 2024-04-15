@@ -14,82 +14,86 @@ struct EventFullContextView: View {
     @State private var eventImage: UIImage?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Image(systemName:"pawprint.fill")
-                                .font(.title)
-                                .foregroundColor(.orange)
-                            Text(viewModel.event.eventName)
-                                .font(.largeTitle)
-                                .foregroundColor(.orange)
-            };
-            Text(viewModel.event.eventDescription)
-                .font(.subheadline)
-                .foregroundColor(.teal)
-            
-            Text("Date: \(viewModel.event.eventDate)")
-                .font(.headline)
-                .fontWeight(.bold)
-                .foregroundColor(.teal)
-            
-            Text("Location: \(viewModel.event.location)")
-                .font(.headline)
-                .foregroundColor(.teal)
-            
-            Text("Contact: \(viewModel.event.contactInfo)")
-                .font(.headline)
-                .foregroundColor(.teal)
-
-            Text("Attendance Count: \(viewModel.event.attendance_count)")
-                .font(.headline)
-                .foregroundColor(.teal)
-
-            Text("Pet Size Preference: \(viewModel.event.petSizePref)")
-                .font(.headline)
-                .foregroundColor(.teal)
-
-            Text("Leash Policy: \(viewModel.event.leashPolicy ? "Enforced" : "Not Enforced")")
-                .font(.headline)
-                .foregroundColor(.teal)
-
-            Text("Disabled Friendly: \(viewModel.event.disabledFriendly ? "Yes" : "No")")
-                .font(.headline)
-                .foregroundColor(.teal)
-
-            if let uiImage = eventImage {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 200, height: 200)
+        NavigationStack{
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Image(systemName:"pawprint.fill")
+                        .font(.title)
+                        .foregroundColor(.orange)
+                    Text(viewModel.event.eventName)
+                        .font(.largeTitle)
+                        .foregroundColor(.orange)
+                };
+                Text(viewModel.event.eventDescription)
+                    .font(.subheadline)
+                    .foregroundColor(.teal)
+                
+                Text("Date: \(viewModel.event.eventDate)")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.teal)
+                
+                Text("Location: \(viewModel.event.location)")
+                    .font(.headline)
+                    .foregroundColor(.teal)
+                
+                Text("Contact: \(viewModel.event.contactInfo)")
+                    .font(.headline)
+                    .foregroundColor(.teal)
+                
+                Text("Attendance Count: \(viewModel.event.attendance_count)")
+                    .font(.headline)
+                    .foregroundColor(.teal)
+                
+                Text("Pet Size Preference: \(viewModel.event.petSizePref)")
+                    .font(.headline)
+                    .foregroundColor(.teal)
+                
+                Text("Leash Policy: \(viewModel.event.leashPolicy ? "Enforced" : "Not Enforced")")
+                    .font(.headline)
+                    .foregroundColor(.teal)
+                
+                Text("Disabled Friendly: \(viewModel.event.disabledFriendly ? "Yes" : "No")")
+                    .font(.headline)
+                    .foregroundColor(.teal)
+                
+                if let uiImage = eventImage {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 200, height: 200)
+                }
+                
+                Button(action: {
+                    viewModel.toggleAttendance()
+                }) {
+                    Text(viewModel.isAttending ? "Unattend Event" : "Attend Event")
+                        .fontWeight(.light)
+                        .foregroundColor(.white)
+                        .font(.callout)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(viewModel.isAttending ? Color.red : Color.orange)
+                        .cornerRadius(8)
+                        .font(.title)
+                }
             }
-
-            Button(action: {
-                viewModel.toggleAttendance()
-            }) {
-                Text(viewModel.isAttending ? "Unattend Event" : "Attend Event")
-                    .fontWeight(.light)
-                    .foregroundColor(.white)
-                    .font(.callout)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(viewModel.isAttending ? Color.red : Color.orange)
-                    .cornerRadius(8)
-                    .font(.title)
+            .padding()
+            //                .background(LinearGradient(gradient: Gradient(colors: [Color.teal.opacity(0.2), Color.teal.opacity(0.4)]), startPoint: .top, endPoint: .bottom))
+            .cornerRadius(16)
+            .onAppear {
+                viewModel.fetchEventImage()
+                viewModel.isAttending = sessionManager.eventsAttending?.contains { $0.eventID == viewModel.event.eventID } ?? false
             }
-        }
-        .padding()
-                .background(LinearGradient(gradient: Gradient(colors: [Color.teal.opacity(0.2), Color.teal.opacity(0.4)]), startPoint: .top, endPoint: .bottom))
-                .cornerRadius(16)
-        .onAppear {
-            viewModel.fetchEventImage()
-            viewModel.isAttending = sessionManager.eventsAttending?.contains { $0.eventID == viewModel.event.eventID } ?? false
-        }
-        
-        .onReceive(viewModel.$imageData) { imageData in
-            if let data = imageData, let uiImage = UIImage(data: data) {
-                self.eventImage = uiImage
+            
+            .onReceive(viewModel.$imageData) { imageData in
+                if let data = imageData, let uiImage = UIImage(data: data) {
+                    self.eventImage = uiImage
+                }
             }
+            
         }
+//        .background(LinearGradient(gradient: Gradient(colors: [Color.teal.opacity(0.2), Color.teal.opacity(0.4)]), startPoint: .top, endPoint: .bottom))
     }
 }
 

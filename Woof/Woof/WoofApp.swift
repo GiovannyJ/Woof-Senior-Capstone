@@ -13,10 +13,11 @@ import MapKit
 struct WoofApp: App {
     var body: some Scene {
         WindowGroup {
-//            MapTestThing()
-            LoginView().environmentObject(SessionManager.shared)
-//            ContentView().locationManager(// Start directly with the Login view
+//            HomeView()
+            LoginView()
+//                .environmentObject(SessionManager.shared) // If you're using environmentObject
         }
     }
 }
+
 

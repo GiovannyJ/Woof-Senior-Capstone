@@ -14,31 +14,75 @@ struct CreateEventView: View {
     
     var body: some View {
         NavigationView {
-            VStack{
-                
+            VStack(alignment: .leading, spacing: 16){
+                Text("Create A Pet-Friendly Event")
+                    .font(.largeTitle)
+                    .foregroundColor(.orange)
+                    .padding()
                 Form {
                     Section(header: Text("Event Information")) {
-                        TextField("Event Name", text: $viewModel.eventName)
-                        TextField("Event Description", text: $viewModel.eventDescription)
-                        DatePicker("Date", selection: $viewModel.eventDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
-                            .datePickerStyle(.compact)
-                            .foregroundColor(.gray)
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Event Name")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            TextField("Event Name", text: $viewModel.eventName)
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Event Description")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            TextField("Event Description", text: $viewModel.eventDescription)
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Date")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            DatePicker("Date", selection: $viewModel.eventDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
+                                .datePickerStyle(.compact)
+                                .foregroundColor(.gray)
+                                .padding()
+                                .cornerRadius(8)
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Location")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            AddressAutocompleteTextField(text: $viewModel.location)
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Contact Information")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            TextField("Contact Information", text: $viewModel.contactInfo)
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Leash Policy")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Toggle("Leash Policy", isOn: $viewModel.leashPolicy)
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Disabled Friendly")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Toggle("Disabled Friendly", isOn: $viewModel.disabledFriendly)
+                        }
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Pet Size Preference")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Picker("Pet Size Preference", selection: $viewModel.petSizePref) {
+                                Text("Small Pets").tag("small")
+                                Text("Medium Pets").tag("medium")
+                                Text("Large Pets").tag("large")
+                            }
                             .padding()
                             .cornerRadius(8)
-                        AddressAutocompleteTextField(text: $viewModel.location)
-                        
-                                
-                        TextField("Contact Information", text: $viewModel.contactInfo)
-                        Toggle("Leash Policy", isOn: $viewModel.leashPolicy)
-                        Toggle("Disabled Friendly", isOn: $viewModel.disabledFriendly)
-                        Picker("Pet Size Preference", selection: $viewModel.petSizePref) {
-                            Text("Small Pets").tag("small")
-                            Text("Medium Pets").tag("medium")
-                            Text("Large Pets").tag("large")
                         }
-                        .padding()
-                        .cornerRadius(8)
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Event Picture")
+                                .font(.caption)
+                                .foregroundColor(.gray)
                             Button(action: {
                                 viewModel.selectEventPicture()
                             }) {
@@ -61,11 +105,6 @@ struct CreateEventView: View {
                                 ImagePicker(image: $viewModel.newProfileImage, isPresented: $viewModel.isShowingImagePicker, didSelectImage: viewModel.imagePickerDidSelectImage)
                             }
                         }
-                    }
-                    
-                    
-                    // Button to submit the event
-                    Section {
                         Button(action: {
                             viewModel.submitEvent() { success in
                                 if success {
@@ -87,8 +126,6 @@ struct CreateEventView: View {
                     }
                 }
             }
-        }
-            .navigationTitle("Create Event")
             .alert(isPresented: $viewModel.showAlert) {
                 Alert(title: Text(viewModel.alertTitle), message: Text(viewModel.alertMessage), dismissButton: .default(Text("OK")) {
                     presentationMode.wrappedValue.dismiss()
@@ -96,6 +133,8 @@ struct CreateEventView: View {
             }
         }
     }
+}
+
 
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {

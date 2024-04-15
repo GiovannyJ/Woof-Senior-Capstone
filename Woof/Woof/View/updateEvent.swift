@@ -14,7 +14,6 @@ struct UpdateEventView: View {
     
     init(event: Event) {
         self.viewModel = UpdateEventViewModel(event: event)
-        // Initialize the eventDate with the date from the event
         self._eventDate = State(initialValue: event.eventDate.dateFromISO8601 ?? Date())
     }
     
@@ -25,7 +24,6 @@ struct UpdateEventView: View {
                 .foregroundColor(.orange)
                 .padding()
                 
-            // input event details
             Form {
                 Section(header: Text("Event Information")){
                     VStack(alignment: .leading, spacing: 5) {
@@ -47,7 +45,7 @@ struct UpdateEventView: View {
                             viewModel.event.eventDate = value.iso8601
                         })
                     
-//                    TextField("Location", text: $viewModel.event.location)
+                    
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Event Location")
                             .font(.caption)
@@ -62,16 +60,12 @@ struct UpdateEventView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 5) {
-//                        Text("Leash Policy")
-//                            .font(.caption)
-//                            .foregroundColor(.gray)
+
                         Toggle("Leash Policy", isOn: $viewModel.event.leashPolicy)
                     }
                     
                     VStack(alignment: .leading, spacing: 5) {
-//                        Text("Leash Policy")
-//                            .font(.caption)
-//                            .foregroundColor(.gray)
+
                         Toggle("Disabled Friendly", isOn: $viewModel.event.disabledFriendly)
                     }
                     
@@ -86,7 +80,7 @@ struct UpdateEventView: View {
                         }
                         .pickerStyle(SegmentedPickerStyle())
                     }
-                   
+                    
                     
                     if let imageData = viewModel.imageData,
                        let uiImage = UIImage(data: imageData) {
@@ -106,6 +100,7 @@ struct UpdateEventView: View {
                                     .resizable()
                                     .frame(width: 30, height: 30)
                                     .clipShape(Circle())
+                                
                             }
                         }
                         .padding()
@@ -117,21 +112,18 @@ struct UpdateEventView: View {
                     .sheet(isPresented: $viewModel.isShowingImagePicker) {
                         ImagePicker(image: $viewModel.newEventImage, isPresented: $viewModel.isShowingImagePicker, didSelectImage: viewModel.imagePickerDidSelectImage)
                     }
-                }
-                
-                
-                
-                Button(action: viewModel.deleteEvent) {
-                    Text("Delete Event")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.red)
-                        .cornerRadius(8)
-                }
+                    
+                    
+                    Button(action: viewModel.deleteEvent) {
+                        Text("Delete Event")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.red)
+                            .cornerRadius(8)
+                    }
                     .frame(maxWidth: .infinity)
-                
-                // Submit the event update
-                Section {
+                    
+                    
                     Button(action: {
                         viewModel.updateEvent()
                     }) {
@@ -144,11 +136,10 @@ struct UpdateEventView: View {
                             .fontWeight(.bold)
                     }
                 }
+                
             }
         }
         .padding()
-        .navigationTitle("Update Event")
-        .background(Color.orange.opacity(0.2))
         .onAppear(){
             viewModel.fetchEventImage()
         }
