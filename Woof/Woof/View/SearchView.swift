@@ -36,6 +36,7 @@ struct SearchView: View {
                             Text($0)
                         }
                     }
+                    .frame(maxHeight: 100)
                     .pickerStyle(MenuPickerStyle())
                     .padding()
                     .background(Color.teal.opacity(0.2))
