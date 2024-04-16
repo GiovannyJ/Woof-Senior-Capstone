@@ -103,9 +103,18 @@ struct ProfileView: View {
             if sessionManager.isBusinessOwner {
                 if let ownedBusiness = sessionManager.ownedBusiness {
                     NavigationLink(destination: BusinessFullContext(business: ownedBusiness)) {
-                        Text("Owned Business: \(ownedBusiness.businessName)")
-                            .foregroundColor(.green)
-                            .font(.subheadline)
+                        VStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/){
+                            Text("Owned Business: ")
+                                .foregroundColor(.green)
+                                .font(.subheadline)
+                                .bold()
+                            Text("\(ownedBusiness.businessName)")
+                                .foregroundColor(.white)
+                                .font(.subheadline)
+                                .padding()
+                                .background(Color.green)
+                                .cornerRadius(8)
+                        }
                     }
                 } else {
                     Text("Owned Business: None")

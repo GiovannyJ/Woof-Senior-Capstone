@@ -18,9 +18,20 @@ What we want to show:
     -show that they saved
     -show that they are attending
 
-- OPTIONAL update ?
+---SCRIPT---
 
-!!Record Second video for user stories
+business user:
+-creating business: "Sign your business up with Woof"
+-creating events: "Create an event that will that your community will love"
+-profile view -> home view ->update business and update events: "Manage your businesses and events"
+
+regular user:
+-searching for business -> internal -> business full context: ""
+-searching for business -> yelp reviewd -> business full context: "Find reviews powered by yelp!"
+-searching for events -> events list -> event full context: "Create lasting memories at a pet friendly event"
+-searching for event  -> events map view -> event full context: "find pet friendly events in your area"
+-profile view: "keep track of all those evnets ur going to bro"
+
 
 What we want to talk ab in doc 
 -Features of the app
