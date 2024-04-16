@@ -9,11 +9,8 @@
 - Martin Genao:
     - contributions: backend, map asset
 ## Inspiration
-<<<<<<< Updated upstream
-Society is enduring a cultural shift; the bond between pets and their owners has never been stronger, with most pet owners considering their pets to be a member of the family. Woof helps pet owners by making it easy to find pet friendly businesses, travel accomodations, and events.
-=======
 Society is enduring a cultural shift; the bond between pets and their owners has never been stronger, with most pet owners considering their pets to be a member of the family. Woof helps pet owners by making it easy to find pet friendly businesses, travel accommodations, and events.
->>>>>>> Stashed changes
+
 ## Features
 + Regular User
     + Search Businesses
