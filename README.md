@@ -9,7 +9,7 @@
 - Martin Genao: Hes chill smart guy watches anime too
     - contributions: backend, map asset
 ## Inspiration
-we made woof bc they said we couldn't do it but we did it swag
+Society is enduring a cultural shift; the bond between pets and their owners has never been stronger, with most pet owners considering their pets to be a member of the family. Woof helps pet owners by making it easy to find pet friendly businesses, travel accomodations, and events.
 ## Features
 I can do this
 I can do that
