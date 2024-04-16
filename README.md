@@ -2,29 +2,67 @@
 ## Because Pets are Family Too
 
 ## About Us
-- Bo Nappie: shes cool she likes dogs
+- Bo Nappie:
     - contributions: frontend, designs
-- Giovanny Joseph: Nice dude loves to code and stuff
+- Giovanny Joseph:
     - contributions: backend, frontend, project management
-- Martin Genao: Hes chill smart guy watches anime too
+- Martin Genao:
     - contributions: backend, map asset
 ## Inspiration
+<<<<<<< Updated upstream
 Society is enduring a cultural shift; the bond between pets and their owners has never been stronger, with most pet owners considering their pets to be a member of the family. Woof helps pet owners by making it easy to find pet friendly businesses, travel accomodations, and events.
+=======
+Society is enduring a cultural shift; the bond between pets and their owners has never been stronger, with most pet owners considering their pets to be a member of the family. Woof helps pet owners by making it easy to find pet friendly businesses, travel accommodations, and events.
+>>>>>>> Stashed changes
 ## Features
-I can do this
-I can do that
-I can do this and that
++ Regular User
+    + Search Businesses
+        + Leave review on business
+        + Save Business
+    + Search Events
+        + Attend event
+    + Update Profile
+        + Change properties of account
+        + Delete account
++ Business User
+    + Regular User Privileges
+    + Create Business
++ Registered Business User
+    + Regular User Privileges
+    + Create Events
+    + Update Events
+        + Change properties
+        + Delete Event
+    + Update Business
+        + Change properties
+        + Delete Business
+
 ## Design Choices
 ### Session manager 
-the session manager is cool bc it holds a lot of info that is passed throughout the pages
++ Global object used to keep track of user variables
 ### Location manager
-the location manager is cool for the same reason but with users location data (if they let us have it)
++ Global object used to get users current location
 ### View/View Model Architecture
-we separated views and view models so that we can have design and functionality isolated and that allowed us to work on things at the same time making it more speedy
++ Views used to present data 
++ View Models used to manipulate data
 ### Assets
-we have multiple assets that we created to import into places, you can use them too if you want
++ Reusable assets that can be called upon on any page and generated procedurally
 ### API
-we have an api for database connection and making sure data is good in and out swag
++ Custom API connected to personal database used for CRUD operations
+
+## Diagrams
+- Woof Pages
+    - <img src="DOC/WoofPages-1.png" alt="pages" width="650"> 
+    
+
+- ER Diagram 
+    - <img src="DOC/Woof_ER_Diagram.PNG" alt="erdiagram" width="650">
+
+- Data Management Pipeline
+    - <img src="DOC/WOOF_data_management_diagram-1.png" alt="datamanagement" width="800">
+- 3rd Party API pipeline
+    - <img src="DOC/3rdPartyAPIPlan-1.png" alt="3rdpartyapiplan" width="500">
+
 ## Backend
 ### Woof API
 Our System is Powered By our internal API called WoofAPI
