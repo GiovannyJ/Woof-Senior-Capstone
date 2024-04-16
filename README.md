@@ -10,8 +10,10 @@
     - contributions: backend, map asset
 ## Inspiration
 we made woof bc they said we couldn't do it but we did it swag
-## User Stories
-- videos and stuff
+## Features
+I can do this
+I can do that
+I can do this and that
 ## Design Choices
 ### Session manager 
 the session manager is cool bc it holds a lot of info that is passed throughout the pages
@@ -21,9 +23,8 @@ the location manager is cool for the same reason but with users location data (i
 we separated views and view models so that we can have design and functionality isolated and that allowed us to work on things at the same time making it more speedy
 ### Assets
 we have multiple assets that we created to import into places, you can use them too if you want
-### Types
-we have the types separated and modeled directly off of the JSON data so that we can have data consistency
-
+### API
+we have an api for database connection and making sure data is good in and out swag
 ## Backend
 ### Woof API
 Our System is Powered By our internal API called WoofAPI
