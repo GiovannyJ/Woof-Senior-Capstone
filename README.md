@@ -1,5 +1,7 @@
 # Woof
+![woof logo](/DOC/woof_logo.jpeg)
 ## Because Pets are Family Too
+
 
 ## About Us
 - Bo Nappie:
