@@ -19,18 +19,46 @@ What we want to show:
     -show that they are attending
 
 ---SCRIPT---
-
+MAKE ALL VIDEOS LIKE 1.5x SPEED
 business user:
 -creating business: "Sign your business up with Woof"
+    -login as G, G -> create business: 
+        Dog Hotel, 
+        Hotel & Travel,
+        244 Herricks Rd,
+        1234567890,
+        Let your dog rest at a nice hotel while you enjoy our spa!
+        spa dog,
 -creating events: "Create an event that will that your community will love"
+    -login as sarahsmith87, p -> create event:
+        Hawaii day
+        Bring your hula skirts and your best Luau attire for this day of fun in the sun. Free dog treats and pictures for all.
+        849 Fenworth Blvd
+        12344567890
+        hula dog,
+
 -profile view -> home view ->update business and update events: "Manage your businesses and events"
+    -show owned business
+    -goto home view -> show update business -> show update event
+
 
 regular user:
 -searching for business -> internal -> business full context: ""
+    - show search for all
+    -show search for arts
+    -show search for _ -> business full context
+
 -searching for business -> yelp reviewd -> business full context: "Find reviews powered by yelp!"
+    -show search for yelp reviewed -> random one full context
+
 -searching for events -> events list -> event full context: "Create lasting memories at a pet friendly event"
+    -scroll on events list -> event full context -> attend event
+
 -searching for event  -> events map view -> event full context: "find pet friendly events in your area"
+    -events map -> scroll around -> event full context
+    
 -profile view: "keep track of all those evnets ur going to bro"
+    - show profile -> click saved business -> click saved event
 
 
 What we want to talk ab in doc 

@@ -113,13 +113,16 @@ struct BusinessFullContext: View {
                                                                 Text("Your Business")
                                                                     .foregroundColor(.orange)
                                                                     .padding()
-                                                                    .frame(maxWidth: .infinity)
+//                                                                    .frame(maxWidth: .infinity)
                                                                     
                                                                     .cornerRadius(8)
                                                                     .fontWeight(.heavy)
                                                             }
                                                         }
                                                         .padding()
+                                                        .padding(.horizontal, 30)
+                                                        .background(Color.teal.opacity(0.4))
+                                                        .cornerRadius(8)
                                                     } else {
                              
                                     Button(action: {
