@@ -13,6 +13,29 @@
 ## Inspiration
 Society is enduring a cultural shift; the bond between pets and their owners has never been stronger, with most pet owners considering their pets to be a member of the family. Woof helps pet owners by making it easy to find pet friendly businesses, travel accommodations, and events.
 
+## How to use
+- Requirements:
+    - Backend:
+        - GoLang
+        - Python
+    - Frontend:
+        - Swift
+        - Xcode (Version 15.2 Minium)
+- Steps:
+    - Launching App
+        1. start the API
+        2. open the "Woof" project in Xcode under the Woof directory
+        3. Launch the emulator in Xcode
+        4. Enjoy!
+    - Launching API
+        1. follow the instructions [here](API/layout.md)
+    - Launching 3rd Party Pipeline
+        1. follow the instructions [here](3rdParty_API/layout.md/)
+
+
+    
+
+
 ## Features
 + Regular User
     + Search Businesses
